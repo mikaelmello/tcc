@@ -69,3 +69,9 @@ class Config:
             self.gpu_modes = args.gpu_modes
 
         self.force_setup = args.force_setup
+
+    def is_compatible(self, language: str, library: str, gpu_mode: str):
+        if language == "python" and library == "deeplearning4j":
+            return False
+
+        return True

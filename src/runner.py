@@ -23,7 +23,7 @@ class Runner:
         formatter = RunnerLogFormatter(language, library, gpu_mode)
         logzero.setup_default_logger(formatter=formatter)
 
-        if not self._compatible(language, library, gpu_mode):
+        if not self.config.is_compatible(language, library, gpu_mode):
             logger.warn(f"skipping for incompatibility reasons")
             return
 
@@ -35,15 +35,6 @@ class Runner:
                 return self._run_python(library, gpu_mode)
         except Exception as ex:
             logger.error(f"exception: {ex}")
-
-    def _compatible(self, language: str, library: str, gpu_mode: str):
-        if language == "java" and library == "pytorch":
-            return False
-
-        if language == "python" and library == "deeplearning4j":
-            return False
-
-        return True
 
     def _run_python(self, library: str, gpu_mode: str):
         dir_path = os.path.join(self.config.runners_path, "python", library)
