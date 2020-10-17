@@ -10,13 +10,14 @@ class RunnerLogFormatter(logging.Formatter):
     * Timestamps on every log line.
     * Robust against str/bytes encoding problems.
     """
-    DEFAULT_DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
+
+    DEFAULT_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
     DEFAULT_COLORS = {
         logging.DEBUG: ForegroundColors.CYAN,
         logging.INFO: ForegroundColors.GREEN,
         logging.WARNING: ForegroundColors.YELLOW,
         logging.ERROR: ForegroundColors.RED,
-        logging.CRITICAL: ForegroundColors.RED
+        logging.CRITICAL: ForegroundColors.RED,
     }
 
     def __init__(self, language, library, gpu_mode):
@@ -35,9 +36,7 @@ class RunnerLogFormatter(logging.Formatter):
         """
         logging.Formatter.__init__(self, datefmt=self.DEFAULT_DATE_FORMAT)
 
-        self._fmt = f'%(color)s[%(levelname)1.1s %(asctime)s]%(end_color)s' + \
-            f'{ForegroundColors.CYAN} [{language}, {library}, gpu {gpu_mode}]' + \
-            f'{ForegroundColors.RESET} %(message)s'
+        self._fmt = f"%(color)s[%(levelname)1.1s %(asctime)s] [{language}, {library}, gpu {gpu_mode}]%(end_color)s %(message)s"
         self._colors = self.DEFAULT_COLORS
         self._normal = ForegroundColors.RESET
 
@@ -50,8 +49,7 @@ class RunnerLogFormatter(logging.Formatter):
     def format(self, record):
         try:
             message = record.getMessage()
-            assert isinstance(message,
-                              basestring_type)  # guaranteed by logging
+            assert isinstance(message, basestring_type)  # guaranteed by logging
             # Encoding notes:  The logging module prefers to work with character
             # strings, but only enforces that log messages are instances of
             # basestring.  In python 2, non-ascii bytestrings will make
@@ -78,7 +76,7 @@ class RunnerLogFormatter(logging.Formatter):
             record.color = self._colors[record.levelno]
             record.end_color = self._normal
         else:
-            record.color = record.end_color = ''
+            record.color = record.end_color = ""
 
         formatted = self._fmt % record.__dict__
 
@@ -90,7 +88,6 @@ class RunnerLogFormatter(logging.Formatter):
             # each line separately so that non-utf8 bytes don't cause
             # all the newlines to turn into '\n'.
             lines = [formatted.rstrip()]
-            lines.extend(
-                self._safe_unicode(ln) for ln in record.exc_text.split('\n'))
-            formatted = '\n'.join(lines)
+            lines.extend(self._safe_unicode(ln) for ln in record.exc_text.split("\n"))
+            formatted = "\n".join(lines)
         return formatted.replace("\n", "\n    ")
