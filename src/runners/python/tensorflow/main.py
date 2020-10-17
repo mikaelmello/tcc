@@ -1,5 +1,6 @@
 import tensorflow as tf
 import time
+import numpy as np
 from pathlib import Path
 from tensorflow.keras.models import load_model
 
@@ -7,9 +8,19 @@ from tensorflow.keras.models import load_model
 class Classifier:
     def __init__(self,):
         model_path = Path.joinpath(
-            Path(__file__).parent.absolute(), 'model.h5')
+            Path(__file__).parent.absolute(), 'saved_model')
 
-        self.classifier = load_model(model_path)
+        converter = tf.lite.TFLiteConverter.from_saved_model(str(model_path))
+        tflite_model = converter.convert()
+
+        print(model_path)
+        self.classifier = tf.lite.Interpreter(model_content=tflite_model)
+        self.classifier.allocate_tensors()
+        self.input_details = self.classifier.get_input_details()
+        self.output_details = self.classifier.get_output_details()
+        print("cool")
+        print(self.input_details)
+        print(self.output_details)
 
     def classify(self, values: list):
         scaled = [[0, 0, 0, 0, 0, 0, 0]]
@@ -20,20 +31,27 @@ class Classifier:
         for i in range(7):
             scaled[0][i] = (values[i] - mean[i]) / scale[i]
 
-        prediction = self.classifier.predict([scaled])
-
-        return int(prediction[0][0])
+        input_data = np.array(scaled, dtype=np.float32)
+        self.classifier.set_tensor(0, input_data)
+        self.classifier.invoke()
+        output_data = self.classifier.get_tensor(13)
+        return int(output_data[0][0])
 
 
 def classify(classifier, data):
+    for i in range(100000):
+        res = classifier.classify(data)
     start = time.time()
-    res = classifier.classify(data)
+    for i in range(1000000):
+        res = classifier.classify(data)
     end = time.time()
 
-    nanoseconds = int((end - start) * 1e6)
-    return (res, nanoseconds)
+    seconds = (end - start)
+    print(1000000/seconds)
+    return (res, seconds)
 
 
 if __name__ == "__main__":
     classifier = Classifier()
-    print(classify(classifier, [1, 2, 3, 4, 5, 6, 7]))
+    for i in range(1):
+        print(classify(classifier, [1, 2, 3, 4, 5, 6, 7]))
