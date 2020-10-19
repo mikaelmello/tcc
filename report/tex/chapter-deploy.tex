@@ -51,12 +51,12 @@ De acordo com a definição do sistema e as métricas de avaliação, são conhe
 \begin{itemize}
   \item Uso ou não uso da GPU - modelos de redes neurais profundas, dependendo de suas características e como são utilizados, podem beneficiar-se ou não da disponibilidade de uma GPU;
   \item Linguagem de programação usada para a inferência - Java, representando um sistema de inferência embutido na implementação do ONS, e Python, um serviço externo que se comunicaria com o ONS por meio de Unix Sockets; % TODO 1: detalhar melhor
-  \item Biblioteca usada para inferência - fator relacionado com a linguagem de programação, pois algumas bibliotecas não estão disponíveis para ambas linguagens. Na implementação com ambas linguagens Java e Python, serão avaliadas as bibliotecas OpenCV \cite{opencv} e TensorFlow \cite{tensorflow}; como terceiro nível deste fator, será avaliada a biblioteca deeplearning4j \cite{deeplearning4j} em Java e a biblioteca PyTorch \cite{pytorch} em Python;
+  \item Biblioteca usada para inferência - fator relacionado com a linguagem de programação, pois algumas bibliotecas não estão disponíveis para ambas linguagens. Serão simuladas execuções usando as bibliotecas ONNX \cite{onnx2019} (Java e Python), Tensorflow Lite (Python), Tensorflow (Java) e deeplearning4j \cite{deeplearning4j} (Java).
   \item Número e tamanho de parâmetros da chamada - também chamado de carga de trabalho, composto por 3 diferentes conjuntos de entradas representativas de um uso real do ONS, categorizados como alto, médio e baixo número de chamadas;
   \item Modelo DNN - serão usados dois modelos de redes neurais profundas já treinados: Deep-Quality-RSA \cite{deep_quality_rsa} e Deep-Quality-RSA-2 \cite{deep_quality_rsa}.
 \end{itemize}
 
-Tendo em vista a utilização de um desenho fatorial completo, óbserva-se que todas as combinações destes 5 fatores resulta em 72 simulações diferentes.
+Tendo em vista a utilização de um desenho fatorial completo, observa-se que todas as combinações destes 5 fatores resulta em 72 simulações diferentes.
 
 \section{Carga de Trabalho}
 
