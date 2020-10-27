@@ -38,7 +38,7 @@ class Runner:
             logger.error(f"exception: {ex}")
 
     def _run_python(self, library: str, gpu_mode: str):
-        logger.info(f"running")
+        logger.debug(f"running")
 
         dir_path = os.path.join(RUNNERS_DIR, "python", library)
         venv_path = os.path.join("venv", "bin", "activate")
@@ -55,13 +55,13 @@ class Runner:
             if gpu_mode == "on":
                 cmd += " --gpu"
 
-        logger.info(f"cmd: {cmd}")
+        logger.debug(f"cmd: {cmd}")
 
         try:
             subprocess.run(
                 cmd, shell=True, executable="/bin/bash", check=True, cwd=dir_path
             )
-            logger.info(f"done")
+            logger.debug(f"done")
         except CalledProcessError as ex:
             logger.error("run failed")
             raise ex

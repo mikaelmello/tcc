@@ -11,7 +11,7 @@ def parse_args():
     parser.add_argument("--model-path", "-m", required=True, type=str)
     parser.add_argument("--input-path", "-i", required=True, type=str)
     parser.add_argument("--output-path", "-o", required=True, type=str)
-    parser.add_argument("--gpu", "-g", type=bool, action="store_true", default=False)
+    parser.add_argument("--gpu", "-g", action="store_true", default=False)
 
     args = vars(parser.parse_args())
     return args
