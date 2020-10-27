@@ -6,6 +6,7 @@ from runner_log_formatter import RunnerLogFormatter
 from logzero import logger
 from setup import Setup
 from config import Config
+from constants import *
 
 
 class Runner:
@@ -37,13 +38,30 @@ class Runner:
             logger.error(f"exception: {ex}")
 
     def _run_python(self, library: str, gpu_mode: str):
-        dir_path = os.path.join(self.config.runners_path, "python", library)
-        venv_path = os.path.join(dir_path, "venv", "bin", "activate")
-        script_path = os.path.join(dir_path, "main.py")
+        logger.info(f"running")
 
-        cmd = f"source {venv_path}; python {script_path}"
+        dir_path = os.path.join(RUNNERS_DIR, "python", library)
+        venv_path = os.path.join("venv", "bin", "activate")
+        script_path = os.path.join("main.py")
+
+        input_path = INPUT_PATH
+        output_path = os.path.join(OUTPUT_DIR, f"python_{library}_{gpu_mode}.json")
+
+        cmd = f"source {venv_path}; python {script_path} -m {MODELS_DIR} -i {input_path} -o {output_path}"
+
+        if library in ["onnx"]:
+            dir_path = os.path.join(dir_path, gpu_mode)
+        else:
+            if gpu_mode == "on":
+                cmd += " --gpu"
+
+        logger.info(f"cmd: {cmd}")
+
         try:
-            subprocess.run(cmd, shell=True, executable="/bin/bash", check=True)
+            subprocess.run(
+                cmd, shell=True, executable="/bin/bash", check=True, cwd=dir_path
+            )
+            logger.info(f"done")
         except CalledProcessError as ex:
             logger.error("run failed")
             raise ex

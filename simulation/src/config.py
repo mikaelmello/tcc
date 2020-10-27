@@ -13,7 +13,6 @@ from constants import *
 
 class Config:
     def __init__(self):
-        self.runners_path = RUNNERS_PATH
         self.languages = LANGUAGES
         self.libraries = LIBRARIES
         self.gpu_modes = GPU_MODES
