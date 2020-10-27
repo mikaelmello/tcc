@@ -11,10 +11,11 @@ def parse_args():
     parser.add_argument("--model-path", "-m", required=True, type=str)
     parser.add_argument("--input-path", "-i", required=True, type=str)
     parser.add_argument("--output-path", "-o", required=True, type=str)
-    parser.add_argument("--gpu", "-g", type=bool, action="store_true", default=False)
+    parser.add_argument("--gpu", "-g", action="store_true", default=False)
 
     args = vars(parser.parse_args())
     return args
+
 
 class Input:
     def __init__(self, input_path):
@@ -79,11 +80,11 @@ def classify(classifier, data):
 if __name__ == "__main__":
     args = parse_args()
 
-    model_path = os.path.join(args["model_path"], "model.tflite")
+    model_path = os.path.join(args["model_path"], "model.onnx")
     input_path = args["input_path"]
     output_path = args["output_path"]
 
-    classifier = Classifier(model_path)
+    classifier = Classifier(model_path, args["gpu"])
     data = Input(input_path)
     output = Output(output_path)
 
