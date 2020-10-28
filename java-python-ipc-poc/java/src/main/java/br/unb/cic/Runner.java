@@ -28,10 +28,9 @@ public class Runner {
         stdIn = process.getOutputStream();
         stdOut = process.getInputStream();
 
-        int var = 2;
-
-        var inp = new float[27520]; // model's parameters length
-        for (int i = 0; i < 27520; i++) {
+        int len = 8000;
+        var inp = new float[len]; // model's parameters length
+        for (int i = 0; i < len; i++) {
             inp[i] = (i % 2 == 0 ? 0.0f : 1.0f);
         }
 
