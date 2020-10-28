@@ -1,3 +1,5 @@
+package br.unb.cic;
+
 import ai.onnxruntime.NodeInfo;
 import ai.onnxruntime.OnnxTensor;
 import ai.onnxruntime.OrtEnvironment;
@@ -15,19 +17,20 @@ public class Classifier {
    private final OrtEnvironment environment;
    private final String inputName;
 
-    public Classifier(String configPath) throws Exception {
-        var modelPath = Paths.get(configPath, "model.onnx").toString();
+    public Classifier(String modelDir) throws Exception {
+        var modelPath = Paths.get(modelDir, "model.onnx").toString();
         environment = OrtEnvironment.getEnvironment();
         session = environment.createSession(modelPath);
         inputName = session.getInputNames().iterator().next();
     }
 
-    public int classify(float[] raw_input) throws OrtException {
-        var testData = scaler(raw_input);
+    public int classify(float[][] testData) throws OrtException {
         try (OnnxTensor test = OnnxTensor.createTensor(environment, testData);
              Result output = session.run(Collections.singletonMap(inputName, test))) {
             var x = (float[][])output.get(0).getValue();
-            return round(x[0][0]);
+            if (x[0][0] >= x[0][1] && x[0][0] >= x[0][2]) return 0;
+            if (x[0][1] >= x[0][0] && x[0][1] >= x[0][2]) return 1;
+            return 2;
         }
     }
 

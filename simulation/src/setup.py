@@ -18,6 +18,37 @@ class Setup:
 
         if language == "python":
             return self._setup_python(library, gpu_mode)
+        else:
+            return self._setup_java(library, gpu_mode)
+
+    def _setup_java(self, library: str, gpu_mode: str):
+        dir_path = path.join(RUNNERS_DIR, "java", library, gpu_mode)
+        jar_path = path.join(
+            dir_path, "target", f"java-{library}-{gpu_mode}-1.0-SNAPSHOT-bin.jar"
+        )
+
+        cmd_package = "mvn package"
+
+        try:
+            exists = path.exists(jar_path)
+            if exists and not self.config.force_setup:
+                return logger.debug(f"setup exists")
+            elif exists:
+                logger.debug(f"setup exists, but force refresh is enabled")
+                shutil.rmtree(path.join(dir_path, "target"))
+            else:
+                logger.debug(f"missing setup")
+
+            subprocess.run(
+                cmd_package,
+                shell=True,
+                executable="/bin/bash",
+                check=True,
+                cwd=dir_path,
+            )
+        except CalledProcessError as ex:
+            logger.error("setup failed")
+            raise ex
 
     def _setup_python(self, library: str, gpu_mode: str):
         dir_path = path.join(RUNNERS_DIR, "python", library)

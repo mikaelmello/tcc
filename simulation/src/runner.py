@@ -34,8 +34,34 @@ class Runner:
 
             if language == "python":
                 return self._run_python(library, gpu_mode)
+            else:
+                return self._run_java(library, gpu_mode)
         except Exception as ex:
             logger.error(f"exception: {ex}")
+
+    def _run_java(self, library: str, gpu_mode: str):
+        logger.debug(f"running")
+
+        dir_path = os.path.join(RUNNERS_DIR, "java", library, gpu_mode)
+        jar_path = os.path.join(
+            dir_path, "target", f"java-{library}-{gpu_mode}-1.0-SNAPSHOT-bin.jar"
+        )
+
+        input_path = INPUT_PATH
+        output_path = os.path.join(OUTPUT_DIR, f"java_{library}_{gpu_mode}.json")
+
+        cmd = f"java -jar {jar_path} -m {MODELS_DIR} -i {input_path} -o {output_path}"
+
+        logger.debug(f"cmd: {cmd}")
+
+        try:
+            subprocess.run(
+                cmd, shell=True, executable="/bin/bash", check=True, cwd=dir_path
+            )
+            logger.debug(f"done")
+        except CalledProcessError as ex:
+            logger.error("run failed")
+            raise ex
 
     def _run_python(self, library: str, gpu_mode: str):
         logger.debug(f"running")
