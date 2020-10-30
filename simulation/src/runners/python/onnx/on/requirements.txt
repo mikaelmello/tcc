@@ -1,5 +1,5 @@
 numpy==1.18.5
 keras2onnx==1.7.0
-onnxruntime-gpu==1.5.2
+onnxruntime-gpu==1.4.0
 onnx==1.7.0
 tensorflow==2.3.1
