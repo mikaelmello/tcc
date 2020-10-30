@@ -76,7 +76,10 @@ class Config:
         if language == "java" and library == "opencv":
             return False
 
-        if language == "java" and library == "tensorflow":
+        if language == "java" and library == "tensorflowlite":
+            return False
+
+        if library == "tensorflowlite" and gpu_mode == "on":
             return False
 
         return True
