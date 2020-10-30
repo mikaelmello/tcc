@@ -20,7 +20,10 @@ public class Classifier {
     public Classifier(String modelDir) throws Exception {
         var modelPath = Paths.get(modelDir, "model.onnx").toString();
         environment = OrtEnvironment.getEnvironment();
-        session = environment.createSession(modelPath);
+        int gpuDeviceId = 0; // The GPU device ID to execute on
+        var sessionOptions = new OrtSession.SessionOptions();
+        sessionOptions.addCUDA(gpuDeviceId);
+        session = environment.createSession(modelPath, sessionOptions);
         inputName = session.getInputNames().iterator().next();
     }
 
