@@ -62,7 +62,7 @@ class Setup:
             dir_path = os.path.join(dir_path, gpu_mode)
 
         try:
-            exists = path.exists(dir_path, venv_path)
+            exists = path.exists(path.join(dir_path, venv_path))
             if exists and not self.config.force_setup:
                 return logger.debug(f"setup exists")
             elif exists:
