@@ -73,4 +73,10 @@ class Config:
         if language == "python" and library == "deeplearning4j":
             return False
 
+        if language == "java" and library == "opencv":
+            return False
+
+        if language == "java" and library == "tensorflow":
+            return False
+
         return True

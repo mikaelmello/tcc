@@ -25,7 +25,6 @@ class Runner:
         logzero.setup_default_logger(formatter=formatter)
 
         if not self.config.is_compatible(language, library, gpu_mode):
-            logger.warn(f"skipping for incompatibility reasons")
             return
 
         try:
