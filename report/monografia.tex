@@ -10,7 +10,14 @@
 \documentclass[bacharelado]{UnB-CIC}%
 
 \usepackage{pdfpages}% incluir PDFs, usado no apêndice
+\usepackage{xcolor}
+\usepackage{ifthen}
 
+\newcommand{\todo}[1][]{%
+  \ifthenelse{\equal{#1}{}}
+    {\textcolor{red}{TODO} }
+    {\textcolor{red}{#1} }%
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Informações do Trabalho
@@ -23,9 +30,9 @@
 \membrobanca{\prof \dr Donald Knuth}{Stanford University}%
 \membrobanca{\dr Leslie Lamport}{Microsoft Research}%
 
-\autor{Mikael M.}{Mello}%
+\autor{Mikael Marques}{Mello}%
 
-\titulo{Avaliação de desempenho do pipeline de aprendizagem de máquina para o treinamento e aplicação de redes neurais profundas em diferentes arcabouços de programação}%
+\titulo{Avaliação de desempenho da aplicação de modelos de redes neurais profundas para integração com o Optical Network Simulator}%
 
 \palavraschave{LaTeX, metodologia científica, trabalho de conclusão de curso}%
 \keywords{LaTeX, scientific method, thesis}%
@@ -37,7 +44,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}%
 \capitulo{chapter-introduction}{Introdução}%
-\capitulo{chapter-ml}{Redes Neurais Profundas (mais específico)}%
+\capitulo{chapter-theory}{Fundamentação Teórica}%
 \capitulo{chapter-deploy}{Avaliação de Desempenho de Sistemas de Inferência}%
 \capitulo{chapter-analysis}{Análise dos Resultados}%
 \capitulo{chapter-conclusion}{Conclusão}%

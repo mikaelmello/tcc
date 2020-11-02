@@ -1,0 +1,36 @@
+Este capítulo apresenta conceitos básicos fundamentais para o entendimento do trabalho. Primeiramente, são introduzidos o conceito de EONs e suas aplicações. Então, na seção \ref{ft_ons} é visto o ONS, uma ferramenta para avaliação de redes ópticas \cite{costa2016ons}.
+
+Em \ref{ft_ml}, é introduzida a história e os conceitos básicos de \textit{Machine Learning} (ML), ou aprendizagem de máquina. Sendo o método de ML atualmente em uso pelo grupo de pesquisa, na seção \ref{ft_dl} é apresentado o conceito de \textit{Deep Learning} (DL), ou aprendizagem profunda. Por fim, na seção \ref{ft_dnn} é introduzida a arquitetura de DL utilizada especificamente para nossos propósitos, \textit{Deep Neural Network} (DNN), ou rede neural profunda.
+
+\section{Elastic Optical Networks}%
+\label{ft_eon}
+
+\section{Optical Network Simulator}%
+\label{ft_ons}
+
+\section{Machine Learning}%
+\label{ft_ml}
+
+\textit{Machine Learning} (ML), ou aprendizagem de máquina, é o estudo de algoritmos de computação que se auto-otimizam de acordo com um critério de desempenho, usando dados de exemplo ou a própria experiência. \cite{mitchell1997ml} \cite{alpaydin2020introduction}
+
+Em sua forma mais básica, o método de ML constitui-se em coletar um grande número de dados do domínio do problema a ser resolvido, entitulado de \textit{training set}, ou conjunto de treinamento, que são usados por um algoritmo de aprendizagem, o modelo.
+
+Este modelo é definido com parâmetros iniciais que são otimizados com o consumo do \textit{training set}. O objetivo do modelo pode ser tanto preditivo, para realizar predições no futuro sobre dados potencialmente desconhecidos, descritivo, para obter-se conhecimento novo acerca dos dados, ou ambos. O processo de obter resultados, sejam preditivos ou descritivos, de um modelo é chamado de inferência.
+
+Há dois grandes desafios no campo de ML: primeiramente, são necessários algoritmos eficientes para o problema de otimização do modelo inicial, de modo que a fase de treinamento seja completada em tempo viável; segundamente, uma vez que um modelo tenha sido aprendido, sua representação e solução algorítimica para a inferência também devem ser eficientes. \cite{alpaydin2020introduction} \cite{brief_introduction_to_ml}
+
+Normalmente, o campo de ML é dividido em três principais categorias:
+
+\begin{itemize}
+  \item \textbf{Supervised learning} - em português, aprendizagem supervisionada, é a categoria em que o conjunto de dados de entrada possui um mapeamento para o comportamento esperado, rotulado por um supervisor. O objetivo é aprender uma regra geral que mapeie as entradas para as saídas. \cite{alpaydin2020introduction}
+  \item \textbf{Unsupervised learning} - em português, aprendizagem não-supervisionada, é a categoria em que existem apenas dados de entrada e o objetivo é encontrar regularidades presentes nos mesmos. \cite{alpaydin2020introduction}
+  \item \textbf{Reinforcement learning} - em português, aprendizagem por reforço, é a categoria em que o algoritmo de aprendizagem tem como objetivo aprender uma política de ações que maximizem a recompensa em um dado ambiente. \cite{alpaydin2020introduction}
+\end{itemize}
+
+Para efeitos desta pesquisa, o principal aspecto a ser comparado entre bibliotecas de ML é a implementação de uma representação e solução aoglorítimica do modelo previamente treinado e escolhido, permitindo-nos escolher a melhor alternativa.
+
+\section{Deep Learning}%
+\label{ft_dl}
+
+\section{Deep Neural Network}%
+\label{ft_dnn}
