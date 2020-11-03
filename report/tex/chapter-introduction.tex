@@ -1,29 +1,66 @@
 
+% Utilidade de EONs no cenário atual
+
+Estudos mostram que há uma tendência de alto crescimento de demanda de tráfego de dados conforme a internet evolui, sendo estimado que a quantidade de dados criados, replicados e capturados ao redor do mundo atinja 175ZB em 2025 \cite{reinsel_gantz_rydning_2018}.
+
+Outra demanda sobre conexões se trata de uma fina granularidade requerida por clientes, não satisfeita pela estrutura comumente usada em redes de transporte, \textit{Wavelength Switched Optical Networks} (WSON). Em WSON, os recursos alocados para uma conexão e não usados por ela geralmente não são compartilhados com outras conexões, \cite{dantaschallenges2014}. \textit{Elastic Optical Networks} (EONs), ou redes ópticas elásticas, surgiram como uma das tecnologias mais promissoras para atender esta demanda. Comparadas com esquemas tradicionais rígidos, como WSON, EONs conseguem alocar recursos de forma flexível e adaptar facilmente conforme os cenários são alterados. \cite{deeplearning4j}
+
+A avaliação de desempenho dos sistemas de comunicação óptica é um desafio para os especialistas, restando-os a simulação como alternativa viável, \cite{costa2016ons}. Por isto, a ferramenta \textit{Optical Network Simulator} (ONS), criada com o propósito de proporcionar um ambiente para a exploração do desenvolvimento de novos algoritmos, é frequentemente usada pelos pesquisadores do Laboratório de Redes de Computadores da Universidade de Brasília (COMNET-UnB).
+
+Graças à sua natureza dinâmica, EON enfrenta desafios no processo de alocação de recursos como rotas ou espectros, uma vez que estratégias estáticas não se adaptam bem aos cenários dinâmicos de uma rede óptica,  \cite{deep_quality_rsa}. Recentemente, técnicas de \textit{Machine Learning} (ML), ou aprendizagem de máquina, têm sido amplamente investigadas no contexto de transmissões e redes ópticas, capacitando a implementação mais poderosa de monitoramento e modelagem de \textit{links}, assim como operações de redes mais inteligentes, \cite{eon_ml_application}.
 
 \section{Problema}
 \label{intro-problem}
 
-% Utilidade de EONs no cenário atual
+Atualmente, membros do COMNET-UnB realizam continuamente novos estudos acerca da aplicação de modelos de ML, particularmente modelos com estruturas intituladas \textit{Deep Neural Networks} (DNNs), ou redes neurais profundas, em EONs. Entretanto, a ferramenta ONS ainda não possui uma implementação que permita a simulação de redes ópticas utilizando resultados obtidos a partir de modelos de ML, também conhecido como inferência de modelos, em seus algoritmos.
 
-
-
-% ONS como ferramenta para pesqiusa sobre EONs
-
-% Pesquisa sobre o uso de ML para EONs
+Assim, serão buscadas no mercado soluções de inferência de modelos de ML e serão feitas análises quantitativas e qualitativas para a escolha de tecnologias apropriadas para a implementação da integração com o ONS.
 
 \section{Objetivos}
+\label{intro-goals}
+
+Face ao preâmbulo já elencado, este trabalho tem por objetivo realizar uma avaliação das tecnologias de inferência de modelos de DNNs e definir uma solução para a integração de modelos de DNNs com o ONS.
+
+O processo de escolha da solução recomendada deve considerar as seguintes características:
+
+\begin{itemize}
+  \item \textbf{Flexibilidade}. A solução recomendada deve ser adaptável ao uso de diferentes modelos desenvolvidos, atuais ou futuros, de modo que auxilie continuamente os pesquisadores em seus estudos.
+  \item \textbf{Fácil uso}. Usuários interessados devem ser capazes de executar o ONS com a nova integração sem configurações específicas da máquina, preocupando-se apenas com o uso ou não de GPU para inferência.
+  \item \textbf{Domínio das tecnologias}. Tal integração será continuamente mantida pelos pesquisadores e por isto, deve ser desenvolvida com tecnologias dominadas por membros do COMNET-UnB de modo que sua implementação seja facilmente realizada e mantida.
+  \item \textbf{Velocidade}. A simulação de redes ópticas é uma operação de alta intensidade computacional, evidenciando a importância do uso de algoritmos e tecnologias eficientes em questão de complexidade de tempo e espaço \cite{chehab_2019}. A solução recomendada deve possuir um curto tempo de inferência de modelos previamente treinados, ao comparada com outras alternativas.
+  \item \textbf{Acurácia}. Ao treinar um modelo de ML, um dos principais objetivos em aprendizagem supervisionada é aumentar a acurácia do modelo, ao validar o mesmo com um conjunto de testes. A solução recomendada não deve possuir perda de acurácia, comparada com outras alternativas. Esta perda de acurácia pode ser originada de detalhes de implementação das tecnologias usadas.
+\end{itemize}
 
 \section{Metodologia}
+\label{intro-methodology}
+
+Tendo em vistas os objetivos previamente mencionados, a seleção das tecnologias recomendadas será feita em duas etapas.
+
+Na primeira etapa, é realizada uma pesquisa extensa acerca de todas as tecnologias existentes que servem ao propósito principal: capacitar o ONS com a possibilidade de utilizar inferências de modelos de DNNs em seus algoritmos. Assim, nesta etapa as tecnologias serão avaliadas de acordo com as três características qualitativas: flexibilidade; fácil uso; e domínio das tecnologias.
+
+De acordo com a necessidade dos pesquisadores do COMNET-UnB manterem tal implementação, serão consideradas apenas bibliotecas dos ecossistemas das linguagens Java, a linguagem em que o ONS é implementado, e Python, a linguagem mais usada e priorizada para desenvolvimento em inteligência artificial \cite{developer_nation_q1_2017}. Também serão considerados fatores como a dificuldade de instalação das bibliotecas, a necessidade de configurações adicionais na máquina, existência de integração com gerenciadores de pacotes comuns aos respectivos ecossistemas, fatores estes importantes para que a solução seja tão portátil quanto o ONS. Além disto, outros fatores individuais considerados são detalhados no capítulo \todo[X (onde detalhamos as escolhas)].
+
+Dentre as tecnologias candidatas ao caso de uso especificado, será realizada uma avaliação de desempenho de modo a avaliar-se a velocidade e a acurácia das tecnologias em diferentes combinações de fatores.
+
+De acordo com Raj Jain \cite{jain1991art}, há três métodos de avaliação de desempenho: modelagem analítica, simulação e medição.
+
+O sistema a ser avaliado, devido à presença de modelos de redes neurais profundas, é complexo o suficiente para tornar a modelagem analítica inviável. Além disso, devido ao alto tempo de execução de simulações do ONS, a escolha do método de medição é inviabilizada pelo alto número de combinações a serem testadas. Pelo fato de ser possível simular apenas o módulo do ONS responsável por realizar a inferência dos modelos de DNNs, a avaliação de desempenho será então realizada através de simulações, descritas em detalhe no capítulo \todo[Y (análise)].
 
 \section{Organização do trabalho}
+\label{intro-org}
 
-O trabalho está organizado em N \todo capítulos com os seguintes propósitos:
+O trabalho está organizado em \todo[?] capítulos com os seguintes propósitos:
 
 \begin{itemize}
   \item Capítulo 2 - Introdução de conceitos considerados essenciais para o entendimento do trabalho. São descritos os propósitos de redes ópticas elásticas (EONs), do Optical Network Simulator (ONS) \cite{costa2016ons}, conceitos básicos de aprendizagem de máquina, de aprendizagem profundo, e de redes neurais profundas.
 
+  \item Capítulo \todo[?] - Descrição das tecnologias de aprendizado de máquina e redes neurais profundas popularizadas no mercado, sendo explicadas suas principais características e a motivação para a consideração delas ou não na análise de desempenho.
 
-  \item Capítulo X \todo - Descrição das tecnologias de aprendizado de máquina e redes neurais profundas popularizadas no mercado, sendo explicadas suas principais características e a motivação para a consideração delas ou não na análise de desempenho.
+  \item Capítulo \todo[análise] - Serão descritas as propriedades da análise de desempenho como métricas, parâmetros, fatores, carga de trabalho, e a máquina em que os testes foram realizados, assim como detalhes da implementação do ambiente de simulação.
+
+  \item Capítulo \todo[resultados] - Serão avaliados os resultados quantitativos das simulações, assim como ponderados com outros aspectos qualitativos de cada possibilidade.
+
+  \item Capítulo \todo[conclusão] - Será apresentada a recomendação do conjunto de tecnologias e implementações que melhor satisfazem os objetivos da integração do ONS com os modelos de ML desenvolvidos.
 \end{itemize}
 
 
