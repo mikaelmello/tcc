@@ -1,7 +1,7 @@
 
 % Utilidade de EONs no cenário atual
 
-Estudos mostram que há uma tendência de alto crescimento de demanda de tráfego de dados conforme a internet evolui, sendo estimado que a quantidade de dados criados, replicados e capturados ao redor do mundo atinja 175ZB em 2025 \cite{reinsel_gantz_rydning_2018}.
+Historicamente, o tráfego de internet global cresce de forma exponencial, possuindo uma taxa composta de crescimento anual de 45\% nos anos 2000 \cite{network_evolution_2020} e aproximadamente 30\% nos anos 2010 \cite{cisco2011cisco, cisco2012cisco, cisco2013cisco, cisco2014cisco, cisco2015cisco, cisco2016cisco, cisco2017cisco, cisco2018cisco}. Uma fatia significativa deste crescimento anual se deve ao tráfego de dados em redes móveis, cujas taxas de crescimento anuais na última década tem variado entre 50\% a 60\% e são motivadas pelo crescente número assinaturas de \textit{smartphones} e o volume de dados consumido por assinatura, este alavancado principalmente pelo crescente consumo de conteúdos de vídeo \cite{ericsson_mobility_report_2020}. Além disso, circunstâncias especiais podem incentivar a população a aumentar ainda vez mais seu uso de internet: Em Abril de 2020, a empresa Akamai relatou um crescimento de 30\% do tráfego global em apenas um mês, aproximadamente dez vezes a taxa de crescimento esperada, atribuindo o pico de crescimento às mudanças de estilo de vida causadas pela pandemia do COVID-19 \cite{mckeay_2020}.
 
 Outra demanda sobre conexões se trata de uma fina granularidade requerida por clientes, não satisfeita pela estrutura comumente usada em redes de transporte, \textit{Wavelength Switched Optical Networks} (WSON). Em WSON, os recursos alocados para uma conexão e não usados por ela geralmente não são compartilhados com outras conexões, \cite{dantaschallenges2014}. \textit{Elastic Optical Networks} (EONs), ou redes ópticas elásticas, surgiram como uma das tecnologias mais promissoras para atender esta demanda. Comparadas com esquemas tradicionais rígidos, como WSON, EONs conseguem alocar recursos de forma flexível e adaptar facilmente conforme os cenários são alterados. \cite{deeplearning4j}
 
@@ -12,9 +12,9 @@ Graças à sua natureza dinâmica, EON enfrenta desafios no processo de alocaç�
 \section{Problema}
 \label{intro-problem}
 
-Atualmente, membros do COMNET-UnB realizam continuamente novos estudos acerca da aplicação de modelos de ML, particularmente modelos com estruturas intituladas \textit{Deep Neural Networks} (DNNs), ou redes neurais profundas, em EONs. Entretanto, a ferramenta ONS ainda não possui uma implementação que permita a simulação de redes ópticas utilizando resultados obtidos a partir de modelos de ML, também conhecido como inferência de modelos, em seus algoritmos.
+Atualmente, membros do COMNET-UnB realizam continuamente novos estudos acerca da aplicação de modelos de ML, particularmente modelos com estruturas intituladas \textit{Deep Neural Nemtworks} (DNNs), ou redes neurais profundas, em EONs. Entretanto, a ferramenta ONS ainda não possui uma implementação que permita a simulação de redes ópticas utilizando resultados obtidos a partir de modelos de ML, também conhecido como inferência de modelos, em seus algoritmos.
 
-Assim, serão buscadas no mercado soluções de inferência de modelos de ML e serão feitas análises quantitativas e qualitativas para a escolha de tecnologias apropriadas para a implementação da integração com o ONS.
+Assim, serão coletadas as bibliotecas capazes de realizar inferência de modelos DNN mais populares e serão feitas análises quantitativas e qualitativas para a escolha de tecnologias apropriadas para a implementação da integração com o ONS.
 
 \section{Objetivos}
 \label{intro-goals}
@@ -46,6 +46,9 @@ De acordo com Raj Jain \cite{jain1991art}, há três métodos de avaliação de 
 
 O sistema a ser avaliado, devido à presença de modelos de redes neurais profundas, é complexo o suficiente para tornar a modelagem analítica inviável. Além disso, devido ao alto tempo de execução de simulações do ONS, a escolha do método de medição é inviabilizada pelo alto número de combinações a serem testadas. Pelo fato de ser possível simular apenas o módulo do ONS responsável por realizar a inferência dos modelos de DNNs, a avaliação de desempenho será então realizada através de simulações, descritas em detalhe no capítulo \todo[Y (análise)].
 
+\section{Contribuições}
+\label{intro-contributions}
+
 \section{Organização do trabalho}
 \label{intro-org}
 
@@ -54,7 +57,7 @@ O trabalho está organizado em \todo[?] capítulos com os seguintes propósitos:
 \begin{itemize}
   \item Capítulo 2 - Introdução de conceitos considerados essenciais para o entendimento do trabalho. São descritos os propósitos de redes ópticas elásticas (EONs), do Optical Network Simulator (ONS) \cite{costa2016ons}, conceitos básicos de aprendizagem de máquina, de aprendizagem profundo, e de redes neurais profundas.
 
-  \item Capítulo \todo[?] - Descrição das tecnologias de aprendizado de máquina e redes neurais profundas popularizadas no mercado, sendo explicadas suas principais características e a motivação para a consideração delas ou não na análise de desempenho.
+  \item Capítulo \todo[?] - Descrição das tecnologias de aprendizado de máquina e redes neurais profundas populares entre a comunidade, sendo explicadas suas principais características e a motivação para a consideração delas ou não na análise de desempenho.
 
   \item Capítulo \todo[análise] - Serão descritas as propriedades da análise de desempenho como métricas, parâmetros, fatores, carga de trabalho, e a máquina em que os testes foram realizados, assim como detalhes da implementação do ambiente de simulação.
 
