@@ -9,5 +9,6 @@
     "markdown",
     "latex",
     "plaintext"
-  ]
+  ],
+  "workbench.colorTheme": "clearTex"
 }
