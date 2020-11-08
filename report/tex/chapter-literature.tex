@@ -1,0 +1,77 @@
+Pela visão de auxiliar pesquisadores em suas integrações de modelos de ML com simuladores de redes ópticas elásticas, as análises aqui feitas devem buscar o aumento de produtividade do pesquisador. Para isto, as tecnologias de ML analisadas serão avaliadas de forma qualitativa, sendo esta avaliação guiada pelas seguintes questões:
+
+\begin{itemize}
+  \item Há algum custo para usar a tecnologia?
+  \item O código da tecnologia é aberto?
+  \item A tecnologia é ativamente mantida por \textit{maintainers} e/ou pela comunidade?
+  \item O uso da tecnologia é amplamente documentado?
+  \item A instalação e uso da tecnologia é simples?
+  \item A tecnologia permite a execução de modelos pré-treinados?
+  \item A tecnologia permite a execução de modelos pré-treinados com outras tecnologias?
+\end{itemize}
+
+Nesta análise, apenas tecnologias com licenças de código aberto serão consideradas de modo que os pesquisadores tenham livre acesso às recomendações e sejam capazes de manipulá-las em seus projetos, caso seja necessário. Dentre essas, apenas tecnologias disponíveis para uso em programas Java ou Python serão consideradas.
+
+A linguagem Java é amplamente utilizada para a implementação de simuladores de redes ópticas elásticas, como em \cite{costa2016ons}, \cite{ceons2015} e \cite{net2plan}, por isto, a integração de modelos de ML de forma embutida no simulador permite uma integração performática ao excluir-se a necessidade de comunicação com outros serviços ou processos para executar os modelos.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{img/languages-ml.png}
+  \caption{Porcentagem de cientistas de dados e desenvolvedores de inteligência artificial que usam ou priorizam cada linguagem \cite{developer_nation_q1_2017}}
+  \label{fig:languagesml}
+\end{figure}
+
+A linguagem Python é a mais usada e priorizada para desenvolvimento em ML entre trabalhadores da área, como evidenciado na figura \ref{fig:languagesml}. Assim, uma integração de simuladores com um processo ou serviço independente escrito em Python, responsável por executar os modelos, pode ser mais fácil de ser desenvolvida e mantida por um pesquisador de ML na área de EONs, apesar do custo de tempo da execução graças ao tempo necessário para comunicação entre os processos ou serviços.
+
+As tecnologias também devem ser fáceis de serem instaladas, configuradas e manipuladas de acordo com as necessidades de cada pesquisador. Para isto, é fundamental que suas APIs sejam bem documentadas e que a instalação exija o mínimo de modificações de configurações da máquina, externas ao simulador.
+
+Por fim, o uso de ML se expande por diversos problemas relacionados à EONs, de modo que estes problemas podem beneficiar-se de diferentes tipos de aplicações de ML, de acordo com suas características. Assim, é ideal que a tecnologia de ML escolhida para integração com o ML tenha suporte a diferentes tipos de modelos.
+
+\section{OpenCV}
+
+OpenCV (Open Source Computer Vision Library) é uma biblioteca de código aberto voltada para visão computacional e aprendizagem de máquina, construída para fornecer uma infraestrutura comum para aplicações de visão computacional e acelerar o uso de percepção de máquina em produtos comerciais \cite{ml_site_opencv}.
+
+Apesar do foco principal de OpenCV ser visão computacional, a biblioteca possui um módulo de redes neurais profundas e interfaces para as linguagens Python e Java. Adicionalmente, também é possível realizar a importação de modelos serializados em diversos formatos, como Darknet \cite{ml_site_darknet}, Torch7 \cite{ml_site_torch}, ONNX \cite{ml_site_onnx} e TensorFlow \cite{ml_site_tensorflow}.
+
+A API da biblioteca é extensamente documentada, porém com poucos tutoriais sobre o uso do módulo de DNNs. Entretanto, no quesito facilidade de instalação e configuração os resultados foram variados:
+
+Em Python, para a execução de modelos com apenas o uso da CPU a instalação se resume a instalar o pacote \texttt{opencv-python-headless}, a versão sem dependências de bibliotecas de interfaces de usuário gráficas, e está pronto para uso. Porém, se há interesse em utilizar a GPU na execução dos modelos, o processo de instalação se torna bastante complexo, sendo necessário compilar manualmente a biblioteca considerando diversas configurações do ambiente da máquina, de modo que a criação de uma solução generalizada se torne inviável.
+
+Em Java, o processo de instalação é complexo independente do uso ou não de GPU, sendo necessário o mesmo processo de compilação manual do projeto considerando configurações da máquina, não havendo nenhuma integração com gerenciadores de pacotes populares como \textit{Maven} ou \textit{Gradle}.
+
+Assim, pelas dificuldades presentes na instalação, o único uso de OpenCV considerado é o de Python com as execuções sendo realizadas apenas pela CPU da máquina, sem uso de GPU.
+
+\section{PyTorch}
+
+PyTorch é uma biblioteca de ML de código aberto que provê uma plataforma de pesquisas em aprendizagem profunda, oferecendo máxima flexibilidade e velocidade \cite{pytorch_what_is}, sendo considerada a biblioteca de aprendizagem profunda que mais cresce no mundo \cite{course_fast_ai}. Na análise da biblioteca, não foram encontrados métodos nativos de conversão de modelos para serem inferidos com o uso de PyTorch e por este motivo o seu uso foi descartado.
+
+\section{Scikit Learn}
+
+\section{TensorFlow}
+
+\section{TensorFlow Lite}
+
+TensorFlow Lite \cite{ml_site_tensorflow_lite} é uma \textit{framework} de aprendizagem profunda para execução de modelos em dispositivos. Se trata da versão da popular \textit{framework} TensorFlow que é projetada para execuções em dispositivos com menor poder computacional.
+
+A importação de gráficos é limitada apenas a arquivos do tipo TFLite, porém existem ferramentas para realizar a conversão de formatos comuns em Tensorflow, como Keras e SavedModel. Atualmente, a biblioteca não fornece suporte a execução com uso de GPUs NVIDIA \cite{ml_site_tensorflow_lite_gpus}.
+
+Tendo os fatores acima em consideração, a instalação e uso da biblioteca são simples e amplamente documentados para programas Python. Para a instalação, é necessário instalar a versão do pacote específica para a versão do interpretador Python instalado na máquina, sendo possível configurar uma detecção automática. A biblioteca não possui versões para uso em programas Java que não sejam voltados para Android.
+
+Apesar da limitação de importação de modelos e a impossibilidade de uso em programas Java, TensorFlow Lite será avaliado de forma quantitativa pelo seu foco específico de execução rápida de modelos em dispositivos de borda.
+
+\section{ONNX}
+
+\section{DeepLearning4j}
+
+Eclipse DeepLearning4j \cite{ml_site_deeplearning4j} é uma biblioteca de código-aberto para aprendizagem de máquina distribuída, disponível para Java e Scala. Seu desenvolvimento está ativo e é conduzido pela empresa Konduit.
+
+A biblioteca possui ampla documentação da API e diversos tutoriais que explicam os diferentes usos da biblioteca. É possível importar modelos no formato ONNX, HDF5 e TensorFlow, além de seu próprio formato.
+
+A instalação da biblioteca é extremamente simples para uso de CPU e se dá por meio do gerenciador de pacotes Maven, sendo necessário apenas adicionar apenas algumas linhas na configuração do projeto para que seja possível executar o DeepLearning4j. Para uso de GPU, apenas máquinas com placas de vídeo NVIDIA e com CUDA configurado são suportadas. Neste caso, o processo de instalação é quase o mesmo, tendo como diferença o identificador da biblioteca que depende da versão da GPU instalada na máquina.
+
+A biblioteca DeepLearning4j será avaliada em um programa Java com uso de ambas CPU e GPU.
+
+\section{Keras}
+
+\section{Outras tecnologias}
+
