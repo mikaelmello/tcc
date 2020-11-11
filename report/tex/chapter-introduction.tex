@@ -15,36 +15,34 @@ Por estas dificuldades, o conceito de \textit{Elastic Optical Networks} (EONs), 
 
 A nível de design e otimização de EONs, um dos principais desafios em seu desenvolvimento se trata da alocação eficiente de recursos. Algoritmos e ferramentas de planejamento de rede convencionais (WDM) não podem ser aplicados devido à natureza flexível das redes. Assim, de modo a aproveitar completamente a flexibilidade disponibilizada pelos avanços de tecnologias na camada física, novos algoritmos de alocação de recursos têm sido explorados \cite{eon_tutorial_2014, eon_allocation_2011, eon_allocation_2011_2, eon_allocation_2016, eon_allocation_2017}. Por exemplo, com flexibilidade apenas no número de subportadoras disponíveis para alocação técnicas de roteamento e alocação de espectro, \textit{Routing and Spectrum Assignment} (RSA), devem ser usadas. Caso haja flexibilidade na seleção do formato de modulação, então técnicas de roteamento e atribuição de espectro com modulação adaptativa, \textit{Routing, Modulation Level and Spectrum Allocation} (RMLSA), devem ser escolhidas.
 
+A avaliação de desempenho de sistemas de comunicação óptica é um desafio para os pesquisadores. A dinamicidade e complexidade, especialmente em redes ópticas elásticas, torna inviável uma modelagem analítica precisa e o uso de ambientes reais para medições torna a avaliação bastante custosa, devido a principalmente aos equipamentos e ferramentas envolvidos. Assim, a simulação é a alternativa disponível para atividades de teste, validação e avaliação de novos protoclos de controle para o ambiente de redes ópticas \cite{costa2016ons}.
+
+Diferentes ferramentas de simulação de redes ópticas elásticas foram desenvolvidas para auxiliar os pesquisadores a implementar, testar e analisar novos algoritmos ou soluções de problemas diferentes da área. Como por exemplo, \textit{Optical Network Simulator} (ONS) \cite{costa2016ons}, \textit{ElasticO++} \cite{TESSINARI201695}, \textit{Complex Elastic Optical Network Simulator} (CEONS) \cite{ceons2015} e \textit{Net2Plan} \cite{net2plan}.
+
 Recentemente, com a crescente popularização do uso de \textit{Machine Learning} (ML), ou aprendizagem de máquina, na academia, estudos sobre a aplicação de ML para solução de problemas relacionados a EONs também têm se popularizado.
 
-ML é o estudo de algoritmos de computação que se auto-otimizam de acordo com um critério de desempenho, usando dados de exemplo ou a própria experiência \cite{mitchell1997ml, alpaydin2020introduction}. Em sua forma mais básica, o método de ML constitui-se em coletar dados relevantes ao domínio do problema a ser resolvido para serem usados por um algoritmo de aprendizagem, o modelo. Este modelo é definido com parâmetros iniciais que são otimizados automaticamente a partir do consumo dos dados coletados. O objetivo do modelo pode ser tanto preditivo, para realizar predições no futuro sobre dados potencialmente desconhecidos; descritivo, para obter-se conhecimento novo acerca dos dados; ou ambos \cite{alpaydin2020introduction, brief_introduction_to_ml}. O processo de realizar predições é chamado de inferência.
+\textit{Machine Learning} é o estudo de algoritmos de computação que se auto-otimizam de acordo com um critério de desempenho, usando dados de exemplo ou a própria experiência \cite{mitchell1997ml, alpaydin2020introduction}. Em sua forma mais básica, o método de ML constitui-se em coletar dados relevantes ao domínio do problema a ser resolvido para serem usados por um algoritmo de aprendizagem, o modelo. Este modelo é definido com parâmetros iniciais que são otimizados automaticamente a partir do consumo dos dados coletados. O objetivo do modelo pode ser tanto preditivo, para realizar predições no futuro sobre dados potencialmente desconhecidos; descritivo, para obter-se conhecimento novo acerca dos dados; ou ambos \cite{alpaydin2020introduction, brief_introduction_to_ml}. O processo de realizar predições é chamado de inferência.
 
 Dentre recentes usos de ML em pesquisas relacionadas a EONs, pode-se citar a pesquisa de Yu et al., que desenvolveu uma estratégia RSA baseada em \textit{deep learning} (DL) \cite{eon_ml_rsa_dl_2019}, ou aprendizagem profunda, um subgrupo de ML. Guilherme et al. desenvolveram um modelo de DL capaz de identificar estratégias RSA em EONs com 98\% de acurácia \cite{eon_ml_classifier_2020}. Outras pesquisas podem ser encontradas no relatório de recentes desenvolvimentos em EONs que utilizam ML, autorado por Panchali et al. \cite{eon_ml_recent_2019}.
 
-A avaliação de desempenho de sistemas de comunicação óptica é um desafio para os pesquisadores. A dinamicidade e complexidade, especialmente em redes ópticas elásticas, torna inviável uma modelagem analítica precisa e o uso de ambientes reais para medições torna a avaliação bastante custosa, devido a principalmente aos equipamentos e ferramentas envolvidos. Assim, a simulação é a alternativa disponível para atividades de teste, validação e avaliação de novos protoclos de controle para o ambiente de redes ópticas \cite{costa2016ons}.
-
-Diferentes ferramentas de simulação de redes ópticas elásticas foram desenvolvidas para auxiliar os pesquisadores a implementar, testar e analisar novos algoritmos ou soluções. Como por exemplo, \textit{Optical Network Simulator} (ONS) \cite{costa2016ons}, \textit{ElasticO++} \cite{TESSINARI201695}, \textit{Complex Elastic Optical Network Simulator} (CEONS) \cite{ceons2015} e \textit{Net2Plan} \cite{net2plan}.
-
-Devido ao recente crescimento do uso de ML em pesquisas no campo de EONs, os simuladores de redes ópticas elásticas disponíveis na literatura ainda não possuem integração com modelos de ML para uso durante as simulações. O presente trabalho visa analisar na literatura atual as tecnologias de ML capazes de importar modelos pré-treinados, como o desenvolvido por Guilherme et al. \cite{eon_ml_classifier_2020}, no contexto de integrá-las à execução de simulações de EONs.
+Devido ao recente crescimento do uso de ML em pesquisas no campo de EONs, os simuladores de redes ópticas elásticas disponíveis na literatura ainda não possuem integração com modelos de ML para uso durante as simulações. O presente trabalho visa analisar na literatura atual as bibliotecas de ML capazes de importar modelos pré-treinados, especificamente no campo de aprendizagem profunda como o desenvolvido por Yu et al. \cite{eon_ml_rsa_dl_2019}, no contexto de integrá-las à execução de simulações de EONs.
 
 \section{Problema}
 \label{intro-problem}
 
-Devido ao recente crescimento do uso de ML em pesquisas no campo de EONs, os simuladores de redes ópticas elásticas disponíveis na literatura ainda não possuem integração com modelos de ML para uso durante as simulações.
-
-O presente trabalho visa analisar na literatura atual as tecnologias de ML capazes de importar modelos pré-treinados, como o desenvolvido por Guilherme et al. \cite{eon_ml_classifier_2020}, no contexto de integrá-las à execução de simulações de EONs, sendo feitas análises qualitativas e quantitativas para a recomendação das escolhas mais apropriadas.
+Devido ao recente crescimento do uso de ML em pesquisas no campo de EONs, os simuladores de redes ópticas elásticas disponíveis na literatura ainda não possuem suporte nativo à execução de modelos de ML para uso durante as simulações. Assim, pesquisas que envolvem o uso de ML para a solução de problemas como RSA não possuem um \textit{framework} definido para analisar o desempenho de seus algoritmos ou soluções.
 
 \section{Objetivos}
 \label{intro-goals}
 
-Face ao preâmbulo já elencado, este trabalho tem por objetivo realizar uma avaliação das tecnologias de ML disponíveis na literatura, com foco na capacidade da execução destes modelos pré-treinados e definir uma solução para a integração de ML em simuladores de EONs.
-
-O processo de escolha da solução recomendada deve considerar as seguintes características:
+O objetivo geral deste trabalho é a análise das bibliotecas de ML disponíveis na literatura, com foco na capacidade de execução de modelos de ML pré-treinados em simulações de EONs executadas por simuladores conhecidos na literatura, como o ONS \cite{costa2016ons}. Sendo atingido por meio dos seguintes objetivos específicos:
 
 \begin{itemize}
-  \item \textbf{Flexibilidade}. A solução recomendada deve ser adaptável ao uso de diferentes modelos desenvolvidos, atuais ou futuros, de modo que auxilie diversos perfis de pesquisas no âmbito de EONs.
-  \item \textbf{Fácil uso}. Pesquisadores devem ser capazes de importar e integrar seus modelos desenvolvidos em simuladores de interesse, tendo idealmente um trabalho mínimo de configuração e implementação.
-  \item \textbf{Velocidade}. A simulação de redes ópticas é uma operação de alta intensidade computacional, evidenciando a importância do uso de algoritmos e tecnologias eficientes em questão de complexidade de tempo e espaço \cite{chehab_2019}. A solução recomendada deve possuir um baixo tempo de execução de modelos previamente treinados, ao comparada com outras alternativas.
+  \item Estudar as bibliotecas existentes na literatura capazes de executar modelos de ML;
+  \item Selecionar bibliotecas apropriadas para o caso de uso de integração com simuladores de EONs;
+  \item Avaliar de forma quantitativa o desempenho das bibliotecas com métricas e parâmetros pré-definidos.
+  \item Analisar os resultados das avaliações e elencar as bibliotecas recomendadas para diferentes casos de uso.
+        % TODO: \item Realizar uma implementação de integração de ML com o ONS como prova de conceito e contribuição para a comunidade acadêmica.
 \end{itemize}
 
 \section{Contribuições}
@@ -60,45 +58,11 @@ O trabalho está organizado em 6 capítulos com os seguintes propósitos:
 \begin{itemize}
   \item Capítulo 2 - Introdução de conceitos considerados essenciais para o entendimento do trabalho. São descritos de forma mais profunda o uso de simuladores para pesquisas no campo de redes ópticas elásticas e conceitos de ML usados ao longo do trabalho.
 
-  \item Capítulo 3 - Descrição das tecnologias de ML populares na literatura, sendo explicadas suas principais características e o racional para a consideração delas ou não na análise de desempenho.
+  \item Capítulo 3 - Descrição das bibliotecas de ML populares na literatura, sendo explicadas suas principais características e o racional para a consideração delas ou não na análise de desempenho.
 
   \item Capítulo 4 - Serão descritas as propriedades da análise de desempenho como métricas, parâmetros, fatores, carga de trabalho, e a máquina em que os testes foram realizados, assim como detalhes da implementação do ambiente de simulação.
 
   \item Capítulo 5 - Serão avaliados os resultados quantitativos das simulações, assim como ponderados com outros aspectos qualitativos de cada possibilidade.
 
-  \item Capítulo 6 - Será apresentado qual foi o resultado obtido, o conjunto de recomendações que melhor satisfazem os objetivos da integração de modelos de ML com simuladores de redes ópticas elásticass.
+  \item Capítulo 6 - Será apresentado qual foi o resultado obtido, o conjunto de recomendações que melhor satisfazem os objetivos da integração de modelos de ML com simuladores de redes ópticas elásticas.
 \end{itemize}
-
-
-% % Uma introdução é organizada em um conjunto de parágrafos, incluindo: 
-
-% % - contexto (domínio da pesquisa)
-% % - problema / motivação da pesquisa (algo que ainda não foi explorado) 
-% % - visão geral da contribuição (para resolver esse problema, neste artigo...)
-
-% % - contexto (domínio da pesquisa)
-
-% - Como EON fornece valor
-% - Como o simulador fornece valor para pesquisas em EON
-% - Como os modelos de ML fornecem valor para o simulador e para casos de uso reais.
-
-% - Modelos de ML no contexto deste TCC são úteis apenas para simulação ou também para uso real?
-% - Sim. Seriam. A pesquisa é ver exatamente isso. A ideia é que sejam utilizados em aplicações reais
-
-% Assim, a motivação deste trabalho é propor, no contexto das pesquisas mencionadas acima, uma definição de tecnologias e plataformas que diminuam o tempo de treinamento e de aplicação dos modelos de aprendizado de máquina desenvolvidos pelos pesquisadores.
-
-
-% % - problema / motivação da pesquisa (algo que ainda não foi explorado) 
-
-% Falar da falta de estrutura de treinamento? Falta de conhecimento sobre a pipeline?
-% Falta de otimização dessa pipeline e consequentemente perda de produtividade?
-
-% % - visão geral da metodologia de pesquisa (a proposta foi avaliada usando...) 
-
-
-% % - visão geral dos principais achados (não precisa incluir nesse momento)
-
-
-% % - organização do trabalho (o que tem nas próximas seções [opcional])
-
-% Assim, o capítulo \ref{chapter-ml}
