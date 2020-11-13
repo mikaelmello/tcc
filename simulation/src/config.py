@@ -73,10 +73,7 @@ class Config:
         if language == "python" and library == "deeplearning4j":
             return False
 
-        if language == "java" and library == "opencv":
-            return False
-
-        if language == "java" and library == "tensorflowlite":
+        if language == "java" and library in ["opencv", "tensorflow", "tensorflowlite"]:
             return False
 
         if library == "tensorflowlite" and gpu_mode == "on":

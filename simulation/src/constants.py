@@ -11,5 +11,5 @@ INPUT_PATH = os.path.join(
 )
 
 LANGUAGES = ["java", "python"]
-LIBRARIES = ["opencv", "tensorflowlite", "onnx", "deeplearning4j"]
+LIBRARIES = ["opencv", "tensorflowlite", "tensorflow", "onnx", "deeplearning4j"]
 GPU_MODES = ["on", "off"]
