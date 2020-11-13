@@ -52,7 +52,9 @@ class Runner:
         cmd = f"java -jar {jar_path} -m {MODELS_DIR} -i {input_path} -o {output_path}"
 
         if gpu_mode == "off":
-            cmd = f"CUDA_VISIBLE_DEVICES=-1 {cmd}"
+            cmd = f"export CUDA_VISIBLE_DEVICES=-1; {cmd}"
+        else:
+            cmd = f"export CUDA_VISIBLE_DEVICES=0; {cmd}"
 
         logger.debug(f"cmd: {cmd}")
 
@@ -79,6 +81,8 @@ class Runner:
 
         if gpu_mode == "off":
             cmd = f"export CUDA_VISIBLE_DEVICES=-1; {cmd}"
+        else:
+            cmd = f"export CUDA_VISIBLE_DEVICES=0; {cmd}"
 
         if library in ["onnx", "tensorflow"]:
             dir_path = os.path.join(dir_path, gpu_mode)
