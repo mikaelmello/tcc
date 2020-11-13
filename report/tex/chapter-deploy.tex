@@ -38,17 +38,17 @@ Além disso, como a execução dos modelos em diferentes bibliotecas exigem algu
 
 \subsection{Execução}
 
-Foram testadas 8 combinações de linguagens, bibliotecas e uso ou não de GPU:
+Foram testadas 8 combinações de linguagens, bibliotecas, uso ou não de GPU e formato do modelo executado:
 
 \begin{itemize}
-  \item Java, DeepLearning4j, sem GPU;
-  \item Java, DeepLearning4j, com GPU;
-  \item Java, ONNX Runtime, sem GPU;
-  \item Java, ONNX Runtime, com GPU;
-  \item Python, OpenCV, sem GPU;
-  \item Python, Tensorflow Lite, sem GPU;
-  \item Python, ONNX Runtime, sem GPU;
-  \item Python, ONNX Runtime, com GPU;
+  \item Java, DeepLearning4j, sem GPU, modelo original no formato HDF5 (TensorFlow)
+  \item Java, DeepLearning4j, com GPU, modelo original no formato HDF5 (TensorFlow);
+  \item Java, ONNX Runtime, sem GPU, modelo convertido para o formato ONNX;
+  \item Java, ONNX Runtime, com GPU, modelo convertido para o formato ONNX;
+  \item Python, OpenCV, sem GPU, modelo convertido para o formato ONNX;
+  \item Python, Tensorflow Lite, sem GPU, modelo convertido para o formato TFLite;
+  \item Python, ONNX Runtime, sem GPU, modelo convertido para o formato ONNX;
+  \item Python, ONNX Runtime, com GPU, modelo convertido para o formato ONNX;
 \end{itemize}
 
 Cada uma destas combinações, aqui chamada de simulação, foi realizada cinco vezes apresentando intervalos de confiança 95\% de confiabilidade.
