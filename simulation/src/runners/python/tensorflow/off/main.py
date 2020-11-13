@@ -94,6 +94,7 @@ if __name__ == "__main__":
             print(f"\r{count} registered...", end="")
         result = classify(classifier, inp["data"])
         output.register_result(result[1], result[0], inp)
+        print(result)
         count += 1
 
     print("\nSaving!")

@@ -11,6 +11,9 @@ class Classifier:
         self.model = load_model(model_path)
 
     def classify(self, values: list):
-        input_data = np.array(values, dtype=np.float32)
-        output_data = self.model(input_data, training=False)
+
+        input_data = np.asarray(values, dtype=np.float32)
+        output_data = self.model.__call__(
+            tf.convert_to_tensor(input_data), training=False
+        )
         return int(numpy.argmax(output_data))

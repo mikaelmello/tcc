@@ -80,7 +80,7 @@ class Runner:
         if gpu_mode == "off":
             cmd = f"export CUDA_VISIBLE_DEVICES=-1; {cmd}"
 
-        if library in ["onnx"]:
+        if library in ["onnx", "tensorflow"]:
             dir_path = os.path.join(dir_path, gpu_mode)
         else:
             if gpu_mode == "on":
