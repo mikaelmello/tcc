@@ -1,85 +1,54 @@
-Este capítulo tem como objetivo apresentar a metodologia da avaliação de desempenho dos diferentes sistemas de inferência propostos.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Este capítulo tem como objetivo apresentar a metodologia da avaliação de desempenho das diferentes bibliotecas de ML selecionadas.
 
 \section{Motivação}%
+\label{3-motivation}
 
-Avaliações são importantes na busca pelo máximo desempenho de um sistema com os recursos disponíveis. Seus resultados auxiliam tanto nas decisões de escolhas entre diferentes sistemas ou simplesmente entender o funcionamento de um sistema já existente.
+Avaliações são importantes na busca pelo máximo desempenho de um sistema com os recursos disponíveis. Seus resultados auxiliam tanto nas decisões de escolhas entre diferentes sistemas ou simplesmente entender o funcionamento de um sistema já existente. Devido à grande diversidade de sistemas, não existe um procedimento padrão comum em que seja possível analisar eficientemente um sistema qualquer, sendo necessário conhecer o sistema a ser avaliado e escolher as métricas, carga de trabalho e técnicas de avaliação apropriadas. \cite{jain1991art}
 
-Devido à grande diversidade de sistemas, não existe um procedimento padrão comum em que seja possível analisar eficientemente um sistema qualquer. Por este motivo é necessário conhecer o sistema a ser avaliado e escolher as métricas, carga de trabalho e técnicas de avaliação apropriadas. \cite{jain1991art}
+Uma simulação executada por simuladores de EONs costuma envolver dezenas de milhares de eventos como requisições de conexões. Tamanha magnitude do número de eventos representa a importância de um bom desempenho na execução de modelos, como por exemplo em propostas de soluções para problemas de alocação de recursos (e.g. RSA) cujos modelos seriam executados em cada evento.
 
-Em uma simulação, o ONS pode realizar um número significativo de chamadas para obter resultados inferidos de modelos de redes neurais profundas. Um dos modelos de interesse se trata da classificação da qualidade dos algoritmos de alocação de recursos em EONs, tendo como entrada a topologia da rede simulada no ONS.
-
-O objetivo desta avaliação de desempenho é escolher um conjunto de fatores que minimizem principalmente o tempo total percorrido durante o processo de inferência, aqui mencionado como tempo de inferência. Além disso, os resultados de cada inferência serão comparados com os valores esperados de modo a verificar se há perda de acurácia em certas combinações de fatores.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Assim, uma análise quantitativa do desempenho de bibliotecas de ML é importante na busca por uma solução de integração de ML com simuladores que seja flexível de acordo com as necessidades de cada pesquisa e que possua um bom desempenho de modo a acelerar a obtenção de resultados.
 
 \section{Metodologia}%
-\label{analysis-motivation}
+\label{3-methodology}
 
-De acordo com Raj Jain \cite{jain1991art}, há três métodos de avaliação de desempenho: modelagem analítica, simulação e medição.
+De acordo com Raj Jain \cite{jain1991art}, há três métodos de avaliação de desempenho: modelagem analítica, simulação e medição. O sistema a ser avaliado, devido à presença de modelos de redes neurais profundas, é complexo o suficiente para tornar a modelagem analítica inviável. A medição foi descartada pelo fato de não buscar-se uma solução para apenas um simulador e haver um alto custo de implementação para cada possibilidade de integração. Por estes motivos, os resultados serão obtidos por meio de simulações.
 
-O sistema a ser avaliado, devido à presença de modelos de redes neurais profundas, é complexo o suficiente para tornar a modelagem analítica inviável. Além disso, uma instância de simulação do ONS pode levar horas para ser finalizada, inviabilizando também a escolha do método de medição. Sendo possível simular apenas a execução do ONS responsável por inferir a partir de modelos de inteligência artificial, a avaliação de desempenho será então realizada através de simulações.
+\subsection{Ambiente de Simulação}
 
-A simulação será executada em um programa Java, representando a seção do ONS responsável por receber a entrada apropriada (e.g. topologia da rede simulada) e realizar a inferência. Java é a linguagem escolhida por ser a linguagem em que o ONS é desenvolvido. Este programa será responsável por carregar a carga de trabalho em memória e realizar múltiplas inferências, registrando o resultado e o tempo de execução de cada uma.
+Para a realização da simulação, 8 programas foram desenvolvidos considerando todas as combinações de linguagens (Java e Python), bibliotecas (ONNX Runtime, Tensorflow Lite, OpenCV e DeepLearning4j) e o uso ou não da GPU para execução de modelos. Estes programas realizam o mesmo conjunto de tarefas: 1. carregar o modelo e inicializar procedimentos necessários para futuras execuções; 2. carregar a carga de trabalho usada como entrada do modelo; 3. executar o modelo com as entradas carregadas.
 
-Nesta avaliação, serão consideradas duas opções para a realização da inferência:
+Cada programa trata de medir apenas o intervalo de tempo em que a execução do modelo ocorre, sem considerar outros fatores como o tempo de carregamento da carga de trabalho ou do modelo em si. A execução de cada instância de simulação foi orquestrada por \textit{scripts} auxiliares feitos em Python, responsáveis por instalar dependências, compilar e executar os programas de simulação.
 
-\begin{itemize}
-  \item \textbf{Programa externo escrito em Python}. Como é possível ver na figura \ref{fig:languagesml}, entre desenvolvedores da área, Python é a linguagem mais usada e priorizada para desenvolvimento em inteligência artificial. Os desenvolvedores dos modelos de inteligência artificial do grupo de pesquisa COMNET utilizam primariamente Python, um aspecto importante ao considerar futuras manutenções e implementações de sistemas de inferência.
-  \item \textbf{Módulo interno em Java}. Devido ao fato do ONS ser escrito em Java, sistemas de inferência em Python seriam necessariamente externos, necessitando-se então a implementação de comunicação entre os processos. O tempo extra ocupado pela transferência dos dados de saída e entrada do sistema de inferência pode se tornar um gargalo de desempenho. Deste modo executar a inferência no mesmo processo poderia resultar em um ganho significativo de tempo de inferência.
-\end{itemize}
+As simulações foram realizadas em uma máquina com processador Intel Core i3-8100, placa de vídeo GeForce RTX 2060 e memória RAM de 32 GB (2x16GB 3000Mhz DDR4). O código-fonte dos programas de simulação e de programas auxiliares pode ser encontrado na url \url{tcc.mikaelmello.com}.
 
-Neste estudo, com o objetivo de analisar o impacto de cada um dos fatores descritos na seção \ref{paramsfactors}, será realizado um desenho experimental do tipo fatorial completo, onde é realizada uma simulação para cada combinação diferente dos fatores. O principal benefício deste tipo de desenho experimental é a possibilidade de analisar o impacto individual dos fatores assim como impactos de combinações específicas de um subconjunto dos fatores.
+\subsection{Modelos e Cargas de Trabalho}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Para a simulação, um classificador baseado em \textit{deep learning} para identificação de estratégias de RSA em EONs, desenvolvido por Guilherme et. al \cite{eon_ml_classifier_2020}, será utilizado para comparação.
 
-\section{Métricas}
+Este modelo recebe como entrada o estado de uma EON e tem como saída a classificação da estratégia RSA em utilização, de acordo com o estado. O modelo pode retornar 7 diferentes estratégias como saída: \textit{First-Fit}, \textit{Last-Fit}, \textit{Random-Fit}, \textit{Exact-Fit}, \textit{Best-Fit}, \textit{Pseudo Partitioning}, \textit{Dedicated Partition} e \textit{FirstLastExactFit}.
 
-Em uma execução comum de uma simulação do ONS, a inferência de um modelo pode ser requisitada até centenas de milhares de vezes, de acordo com o contexto. Este comportamento torna as seguintes métricas de desempenho importantes:
+A carga de trabalho consiste de 29991 diferentes estados de rede, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}.
 
-\begin{itemize}
-  \item \textbf{Tempo de inferência} — o tempo total percorrido desde a chamada do serviço de inferência até a obtenção do resultado. Pelo possível alto número de chamadas realizadas por uma execução do ONS, é crucial que cada chamada tome o menor tempo possível para diminuir o tempo de execução total do ONS;
-  \item \textbf{Acurácia} — taxa de acerto dos resultados das inferências, comparado com o resultado esperado. O resultado de uma inferência impacta as ações da simulação sendo executada no ONS, tornando importante avaliar se certas combinações de fatores do sistema diminuem a acurácia do serviço de inferência para um valor abaixo do esperado.
-\end{itemize}
+\subsection{Métricas}
 
-\section{Parâmetros e Fatores}
-\label{paramsfactors}
+Devido à necessidade de diminuir o tempo de inferência dos modelos como elencado na seção \ref{3-motivation}, esta será a métrica de desempenho avaliada, sendo definida como o tempo total percorrido desde a chamada do serviço de execução de modelos, o método \texttt{classify} da classe \texttt{Classifier} na implementação das simulações, até o retorno da chamada.
 
-Em uma análise de desempenho, é importante estar ciente dos parâmetros do sistema que podem afetar o desempenho do serviço \cite{jain1991art}. Os parâmetros são categorizados de duas maneiras: os que serão variados durante a avaliação e os que não serão. Os variados são chamados de \textbf{fatores} e seus valores de \textbf{níveis}.
+Além disso, como a execução dos modelos em diferentes bibliotecas exigem algumas conversões do formato de serialização, será avaliado se em alguma das simulações, o resultado de execuções do modelo difere de outras simulações.
 
-De acordo com a definição do sistema e as métricas de avaliação, são conhecidos os seguintes parâmetros, com suas definições descritas, com possível impacto nos resultados:
+\subsection{Execução}
+
+Foram testadas 8 combinações de linguagens, bibliotecas e uso ou não de GPU:
 
 \begin{itemize}
-  \item Velocidade da CPU — Intel Core i3-8100;
-  \item Velocidade da GPU — GeForce RTX 2060;
-  \item Número e tamanho de parâmetros de chamada — definidos na seção \ref{workload};
-  \item Linguagem de programação usada para a inferência;
-  \item Framework usada para a inferência;
-  \item Uso da CPU ou da GPU para a inferência;
-  \item Modelo de inteligência artificial usado na inferência — classificação da qualidade dos algoritmos de alocação de recursos em EONs, tendo como entrada a topologia da rede simulada no ONS;
-  \item Cargas diversas na máquina onde a simulação é feita.
+  \item Java, DeepLearning4j, sem GPU;
+  \item Java, DeepLearning4j, com GPU;
+  \item Java, ONNX Runtime, sem GPU;
+  \item Java, ONNX Runtime, com GPU;
+  \item Python, OpenCV, sem GPU;
+  \item Python, Tensorflow Lite, sem GPU;
+  \item Python, ONNX Runtime, sem GPU;
+  \item Python, ONNX Runtime, com GPU;
 \end{itemize}
 
-Dentre os parâmetros, os seguintes fatores e seus níveis são escolhidos:
-
-\begin{itemize}
-  \item \textbf{Uso da CPU ou da GPU para a inferência}. Modelos de redes neurais profundas, dependendo de suas características e como são utilizados, podem beneficiar-se ou não da disponibilidade de uma GPU;
-  \item \textbf{Linguagem de programação usada para a inferência} — Java e Python. Descritas na seção \ref{analysis-motivation}.
-  \item \textbf{Framework usada para inferência} — fator relacionado com a linguagem de programação, pois algumas frameworks não estão disponíveis para ambas linguagens. Serão simuladas execuções usando as bibliotecas ONNX \cite{onnx2019} (Java e Python), Tensorflow Lite (Python), Tensorflow (Java) e deeplearning4j \cite{deeplearning4j} (Java).
-\end{itemize}
-
-Tendo em vista a utilização de um desenho fatorial completo, ao descartar combinações incompatíveis, observa-se que as combinações destes fatores resultam em 10 simulações diferentes.
-
-\section{Carga de Trabalho}
-\label{workload}
-
-É importante que a simulação seja o mais fiel possível à execução real do sistema. Assim, a carga de trabalho selecionada para a simulação é coletada de execuções prévias do ONS a um classificador de qualidade dos algoritmos de alocação de recursos em EONs.
-
-A carga de trabalho consiste em 29991 entradas, onde cada uma delas possui 27520 parâmetros, representando a topologia da rede simulada no ONS.
+Cada uma destas combinações, aqui chamada de simulação, foi realizada cinco vezes apresentando intervalos de confiança 95\% de confiabilidade.
