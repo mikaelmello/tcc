@@ -1,3 +1,4 @@
+import random
 import numpy as np
 import pandas as pd
 import re
@@ -43,10 +44,13 @@ def progressBar(iterable):
     print()
 
 
+file_id = 0
+
+
 def parse_file(file, content):
+    global file_id
     matches = re.findall(file_regex, file)
     seed, alg, load, it = matches[0]
-    id = hashlib.md5(file.encode()).hexdigest()
 
     tlc = 86
     tfc = 86 * 320
@@ -71,23 +75,18 @@ def parse_file(file, content):
     }
 
     payload = {
-        "id": id,
+        "id": file_id,
         "seed": seed,
         "alg": alg,
         "load": load,
         "it": it,
         "data": actual_data,
-        "expected_output": expected_output[alg],
+        "expected_output": expected_output.setdefault(alg, 3),
     }
+    file_id += 1
 
     return payload
 
-
-workload = {
-    "id": uuid.uuid4().hex,
-    "count": 0,
-    "inputs": [],
-}
 
 input_zip = ZipFile("dataset.zip")
 output_zip = ZipFile("workload.zip", "w", ZIP_DEFLATED)
@@ -96,19 +95,24 @@ batch = 500
 cur = []
 cur_i = 0
 
+workload_id = 0
+
 
 def process():
     global cur_i
     global cur
     global output_zip
+    global workload_id
 
     if not cur:
         return
     workload = {
-        "id": uuid.uuid4().hex,
+        "id": workload_id,
         "count": len(cur),
         "inputs": cur,
     }
+
+    workload_id += 1
 
     content = json.dumps(workload, separators=(",", ":"))
     output_zip.writestr(f"{cur_i}.json", content)
@@ -116,7 +120,10 @@ def process():
     cur_i += 1
 
 
-for filename in progressBar(input_zip.namelist()):
+namelist = input_zip.namelist()
+random.shuffle(namelist)
+
+for filename in progressBar(namelist):
     content = input_zip.read(filename)
     parsed = parse_file(filename, content)
 
