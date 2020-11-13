@@ -57,7 +57,18 @@ Apesar da facilidade de se desenvolver modelos de ML com \textit{Scikit Learn}, 
 
 \section{TensorFlow}
 
+TensorFlow é uma interface para a expressão de algoritmos de ML e uma implementação para a execução de tais algoritmos \cite{tensorflow-2015}. Além da biblioteca principal (TensorFlow Core), a organização possui vários produtos para a execução de algoritmos de ML em larga-escala (TensorFlow Extended), execução de modelos em sistemas embarcados, mobile ou de baixa potência (Tensorflow Lite) e execução de modelos em JavaScript, para ser usado em browsers ou em Node.js (TensorFlow.js).
+
+TensorFlow é uma das bibliotecas mais populares na área de ML, sua biblioteca principal possui ampla documentação além de diversos guias e tutoriais desenvolvidos pela comunidade. Está em ativo desenvolvimento e tem o apoio de diversas empresas de tecnologia reconhecidas.
+
+O uso de TensorFlow Extended está fora do escopo desta pesquisa pelo objetivo de integração com a execução de um simulador e não um sistema de larga-escala. TensorFlow Lite será avaliado de forma mais profunda na seção \ref{tensorflow-lite} e TensorFlow.js também está fora do escopo por ser exclusivo para JavaScript. Restando apenas considerar a biblioteca principal, que possui suporte para Python, C, Go e Java.
+
+O suporte para Java está em uma fase de transição, onde a biblioteca antiga está deprecada para uso e a biblioteca nova ainda está em fase experimental. O uso da biblioteca em fase experimental é complexo e não existe quase nenhuma documentação, sendo encontrada até uma recomendação de ler os testes unitários da implementação para aprender como usar certos elementos da API \cite{tensorflow-unit-test-recommendation}. Por estes motivos, o uso de TensorFlow em Java foi descartado.
+
+O suporte para Python é a base da implementação da biblioteca, logo a biblioteca de Python satisfaz todos os requisitos de nossa análise quualitativa, pelo que mencionado anteriormente nesta seção, sendo considerada para execução de modelos com e sem GPU.
+
 \section{TensorFlow Lite}
+\label{tensorflow-lite}
 
 TensorFlow Lite \cite{ml_site_tensorflow_lite} é uma \textit{framework} de aprendizagem profunda para execução de modelos em dispositivos. Se trata da versão da popular \textit{framework} TensorFlow que é projetada para execuções em dispositivos com menor poder computacional.
 

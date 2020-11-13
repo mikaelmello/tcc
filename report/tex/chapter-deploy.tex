@@ -16,7 +16,7 @@ De acordo com Raj Jain \cite{jain1991art}, há três métodos de avaliação de 
 
 \subsection{Ambiente de Simulação}
 
-Para a realização da simulação, 8 programas foram desenvolvidos considerando todas as combinações de linguagens (Java e Python), bibliotecas (ONNX Runtime, Tensorflow Lite, OpenCV e DeepLearning4j) e o uso ou não da GPU para execução de modelos. Estes programas realizam o mesmo conjunto de tarefas: 1. carregar o modelo e inicializar procedimentos necessários para futuras execuções; 2. carregar a carga de trabalho usada como entrada do modelo; 3. executar o modelo com as entradas carregadas.
+Para a realização da simulação, 10 programas foram desenvolvidos considerando todas as combinações de linguagens (Java e Python), bibliotecas (ONNX Runtime, Tensorflow Lite, OpenCV e DeepLearning4j) e o uso ou não da GPU para execução de modelos. Estes programas realizam o mesmo conjunto de tarefas: 1. carregar o modelo e inicializar procedimentos necessários para futuras execuções; 2. carregar a carga de trabalho usada como entrada do modelo; 3. executar o modelo com as entradas carregadas.
 
 Cada programa trata de medir apenas o intervalo de tempo em que a execução do modelo ocorre, sem considerar outros fatores como o tempo de carregamento da carga de trabalho ou do modelo em si. A execução de cada instância de simulação foi orquestrada por \textit{scripts} auxiliares feitos em Python, responsáveis por instalar dependências, compilar e executar os programas de simulação.
 
@@ -24,11 +24,9 @@ As simulações foram realizadas em uma máquina com processador Intel Core i3-8
 
 \subsection{Modelos e Cargas de Trabalho}
 
-Para a simulação, um classificador baseado em \textit{deep learning} para identificação de estratégias de RSA em EONs, desenvolvido por Guilherme et. al \cite{eon_ml_classifier_2020}, será utilizado para comparação.
+Para a simulação, um classificador de estratégias de RSA em EONs, baseado em \textit{deep learning}, será utilizado para comparação. Este modelo recebe como entrada o estado de uma EON e tem como saída a classificação da estratégia RSA em utilização, de acordo com o estado. O modelo possui como saída uma classificação da estratégia de alocação identificada pelo estado como ruim, média ou boa.
 
-Este modelo recebe como entrada o estado de uma EON e tem como saída a classificação da estratégia RSA em utilização, de acordo com o estado. O modelo pode retornar 7 diferentes estratégias como saída: \textit{First-Fit}, \textit{Last-Fit}, \textit{Random-Fit}, \textit{Exact-Fit}, \textit{Best-Fit}, \textit{Pseudo Partitioning}, \textit{Dedicated Partition} e \textit{FirstLastExactFit}.
-
-A carga de trabalho consiste de 29991 diferentes estados de rede, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}.
+A carga de trabalho consiste de 97301 diferentes estados de rede, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}.
 
 \subsection{Métricas}
 
@@ -38,17 +36,19 @@ Além disso, como a execução dos modelos em diferentes bibliotecas exigem algu
 
 \subsection{Execução}
 
-Foram testadas 8 combinações de linguagens, bibliotecas, uso ou não de GPU e formato do modelo executado:
+Foram testadas 10 combinações de linguagens, bibliotecas, uso ou não de GPU e formato do modelo executado:
 
 \begin{itemize}
-  \item Java, DeepLearning4j, sem GPU, modelo original no formato HDF5 (TensorFlow)
+  \item Java, DeepLearning4j, sem GPU, modelo original no formato HDF5 (TensorFlow);
   \item Java, DeepLearning4j, com GPU, modelo original no formato HDF5 (TensorFlow);
   \item Java, ONNX Runtime, sem GPU, modelo convertido para o formato ONNX;
   \item Java, ONNX Runtime, com GPU, modelo convertido para o formato ONNX;
   \item Python, OpenCV, sem GPU, modelo convertido para o formato ONNX;
   \item Python, Tensorflow Lite, sem GPU, modelo convertido para o formato TFLite;
+  \item Python, Tensorflow, sem GPU, modelo original no formato HDF5 (TensorFlow);
+  \item Python, Tensorflow, com GPU, modelo original no formato HDF5 (TensorFlow);
   \item Python, ONNX Runtime, sem GPU, modelo convertido para o formato ONNX;
-  \item Python, ONNX Runtime, com GPU, modelo convertido para o formato ONNX;
+  \item Python, ONNX Runtime, com GPU, modelo convertido para o formato ONNX.
 \end{itemize}
 
 Cada uma destas combinações, aqui chamada de simulação, foi realizada cinco vezes apresentando intervalos de confiança 95\% de confiabilidade.
