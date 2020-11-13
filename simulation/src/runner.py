@@ -51,6 +51,9 @@ class Runner:
 
         cmd = f"java -jar {jar_path} -m {MODELS_DIR} -i {input_path} -o {output_path}"
 
+        if gpu_mode == "off":
+            cmd = f"CUDA_VISIBLE_DEVICES=-1 {cmd}"
+
         logger.debug(f"cmd: {cmd}")
 
         try:
@@ -73,6 +76,9 @@ class Runner:
         output_path = os.path.join(OUTPUT_DIR, f"python_{library}_{gpu_mode}.json")
 
         cmd = f"source {venv_path}; python {script_path} -m {MODELS_DIR} -i {input_path} -o {output_path}"
+
+        if gpu_mode == "off":
+            cmd = f"export CUDA_VISIBLE_DEVICES=-1; {cmd}"
 
         if library in ["onnx"]:
             dir_path = os.path.join(dir_path, gpu_mode)

@@ -70,7 +70,7 @@ class Config:
         self.force_setup = args.force_setup
 
     def is_compatible(self, language: str, library: str, gpu_mode: str):
-        if language == "python" and library == "deeplearning4j":
+        if language == "python" and library in ["deeplearning4j"]:
             return False
 
         if language == "java" and library in ["opencv", "tensorflow", "tensorflowlite"]:
