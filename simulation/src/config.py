@@ -40,6 +40,15 @@ class Config:
         )
 
         parser.add_argument(
+            "--count",
+            "-c",
+            dest="count",
+            action="store",
+            default=5,
+            help="decides how many times the simulation is run",
+        )
+
+        parser.add_argument(
             "--gpu-mode",
             "-g",
             dest="gpu_modes",
@@ -68,6 +77,7 @@ class Config:
             self.gpu_modes = args.gpu_modes
 
         self.force_setup = args.force_setup
+        self.count = int(args.count)
 
     def is_compatible(self, language: str, library: str, gpu_mode: str):
         if language == "python" and library in ["deeplearning4j"]:

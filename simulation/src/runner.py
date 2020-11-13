@@ -18,10 +18,11 @@ class Runner:
         for language in self.config.languages:
             for library in self.config.libraries:
                 for gpu_mode in self.config.gpu_modes:
-                    self._run(language, library, gpu_mode)
+                    for i in range(self.config.count):
+                        self._run(language, library, gpu_mode, i)
 
-    def _run(self, language: str, library: str, gpu_mode: str):
-        formatter = RunnerLogFormatter(language, library, gpu_mode)
+    def _run(self, language: str, library: str, gpu_mode: str, id: int):
+        formatter = RunnerLogFormatter(language, library, gpu_mode, id)
         logzero.setup_default_logger(formatter=formatter)
 
         if not self.config.is_compatible(language, library, gpu_mode):
@@ -29,16 +30,17 @@ class Runner:
 
         try:
             logger.info(f"starting")
-            self.setup.setup(language, library, gpu_mode)
+            if id == 0:
+                self.setup.setup(language, library, gpu_mode)
 
             if language == "python":
-                return self._run_python(library, gpu_mode)
+                return self._run_python(library, gpu_mode, id)
             else:
-                return self._run_java(library, gpu_mode)
+                return self._run_java(library, gpu_mode, id)
         except Exception as ex:
             logger.error(f"exception: {ex}")
 
-    def _run_java(self, library: str, gpu_mode: str):
+    def _run_java(self, library: str, gpu_mode: str, id: int):
         logger.debug(f"running")
 
         dir_path = os.path.join(RUNNERS_DIR, "java", library, gpu_mode)
@@ -47,7 +49,7 @@ class Runner:
         )
 
         input_path = INPUT_PATH
-        output_path = os.path.join(OUTPUT_DIR, f"java_{library}_{gpu_mode}.json")
+        output_path = os.path.join(OUTPUT_DIR, f"java_{library}_{gpu_mode}_{id}.json")
 
         cmd = f"java -jar {jar_path} -m {MODELS_DIR} -i {input_path} -o {output_path}"
 
@@ -67,7 +69,7 @@ class Runner:
             logger.error("run failed")
             raise ex
 
-    def _run_python(self, library: str, gpu_mode: str):
+    def _run_python(self, library: str, gpu_mode: str, id: int):
         logger.debug(f"running")
 
         dir_path = os.path.join(RUNNERS_DIR, "python", library)
@@ -75,7 +77,7 @@ class Runner:
         script_path = os.path.join("main.py")
 
         input_path = INPUT_PATH
-        output_path = os.path.join(OUTPUT_DIR, f"python_{library}_{gpu_mode}.json")
+        output_path = os.path.join(OUTPUT_DIR, f"python_{library}_{gpu_mode}_{id}.json")
 
         cmd = f"source {venv_path}; python {script_path} -m {MODELS_DIR} -i {input_path} -o {output_path}"
 

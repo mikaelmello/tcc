@@ -20,7 +20,7 @@ class RunnerLogFormatter(logging.Formatter):
         logging.CRITICAL: ForegroundColors.RED,
     }
 
-    def __init__(self, language, library, gpu_mode):
+    def __init__(self, language, library, gpu_mode, id):
         r"""
         :arg bool color: Enables color support.
         :arg string fmt: Log message format.
@@ -36,7 +36,7 @@ class RunnerLogFormatter(logging.Formatter):
         """
         logging.Formatter.__init__(self, datefmt=self.DEFAULT_DATE_FORMAT)
 
-        self._fmt = f"%(color)s[%(levelname)1.1s %(asctime)s] [{language}, {library}, gpu {gpu_mode}]%(end_color)s %(message)s"
+        self._fmt = f"%(color)s[%(levelname)1.1s %(asctime)s] [{language}, {library}, gpu {gpu_mode}, {id}]%(end_color)s %(message)s"
         self._colors = self.DEFAULT_COLORS
         self._normal = ForegroundColors.RESET
 
