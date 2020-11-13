@@ -58,7 +58,7 @@ class Setup:
         cmd_venv = "virtualenv -p /usr/bin/python3 venv"
         cmd_pip = f"source {activate_path}; pip install -r requirements.txt"
 
-        if library in ["onnx"]:
+        if library in ["onnx", "tensorflow"]:
             dir_path = os.path.join(dir_path, gpu_mode)
 
         try:
