@@ -28,8 +28,8 @@ class Input:
                 if not self.to_open:
                     return
 
-                filename = self.to_open[-1]
-                self.to_open.pop()
+                filename = self.to_open[0]
+                self.to_open = self.to_open[1:]
                 content = self.input_zip.read(filename)
                 self.cur_file = json.loads(content.decode("utf8"))
                 self.open = True
