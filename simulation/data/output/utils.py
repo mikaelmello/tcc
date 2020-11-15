@@ -14,14 +14,14 @@ expected_delta_unit = "us"
 runs = []
 for filename in json_files:
     props = filename.split(".")[0]
-    lang, lib, gpu = props.split("_")
+    lang, lib, gpu, it = props.split("_")
     with open(path.join(DIR, filename), "r") as f:
         parsed = json.load(f)
         for idx, run in enumerate(parsed):
             run["lang"] = lang
             run["lib"] = lib
             run["gpu"] = gpu
-            run["cmb"] = f"{lang},{lib},{gpu}"
+            run["it"] = int(it)
             run["i"] = idx
 
             if run["du"] != expected_delta_unit:
