@@ -1,0 +1,3 @@
+[submodule "ons"]
+	path = ons
+	url = https://github.com/comnetunb/ons-maven.git
