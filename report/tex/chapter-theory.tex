@@ -1,30 +1,39 @@
-Este capítulo apresenta conceitos básicos fundamentais para o entendimento do trabalho. Primeiramente, são introduzidos detalhes do funcionamento de simulações de EONs e a relevância deles para o trabalho. Então, na seção \ref{ft_dl} são aprofundados conceitos de \textit{deep learning} como suas aplicações, seu funcionamento e sua relevância para EONs. Por fim, na seção \ref{ft_dl_run}, são discutidos detalhes da execução de modelos de \textit{deep learning} importantes para o entendimento de considerações feitas neste trabalho.
+Este capítulo apresenta conceitos básicos fundamentais para o melhor entendimento do trabalho. Na seção \ref{ml} são introduzidos conceitos fundamentais de aprendizagem de máquina e uma breve descrição de suas principais categorias.
 
-\section{Simulações de EONs}%
-\label{ft_eon}
+São introduzidos detalhes do funcionamento de simulações de EONs e a relevância deles para o trabalho, aprofundados são aprofundados conceitos de machine learning como suas aplicações, seu funcionamento e sua relevância para EONs. Por fim, na seção \ref{ft_dl_run}, são discutidos detalhes da execução de modelos de \textit{deep learning} importantes para o entendimento de considerações feitas neste trabalho.
 
-\section{Deep Learning}%
-\label{ft_dl}
+\section{Aprendizagem de Máquina}
+\label{ml}
 
-\section{Execução de modelos Deep Learning}%
-\label{ft_dl_run}
+\textit{Machine Learning} (ML), ou aprendizagem de máquina, é o estudo de algoritmos de computação que se auto-otimizam de acordo com um critério de desempenho, usando dados de exemplo ou a própria experiência \cite{mitchell1997ml, alpaydin2020introduction}.
 
-\section{ML}
-
-\textit{Machine Learning} (ML), ou aprendizagem de máquina, é o estudo de algoritmos de computação que se auto-otimizam de acordo com um critério de desempenho, usando dados de exemplo ou a própria experiência. \cite{mitchell1997ml} \cite{alpaydin2020introduction}
-
-Em sua forma mais básica, o método de ML constitui-se em coletar um grande número de dados do domínio do problema a ser resolvido, entitulado de \textit{training set}, ou conjunto de treinamento, que são usados por um algoritmo de aprendizagem, o modelo.
-
-Este modelo é definido com parâmetros iniciais que são otimizados com o consumo do \textit{training set}. O objetivo do modelo pode ser tanto preditivo, para realizar predições no futuro sobre dados potencialmente desconhecidos, descritivo, para obter-se conhecimento novo acerca dos dados, ou ambos. O processo de obter resultados, sejam preditivos ou descritivos, de um modelo é chamado de inferência.
+Em sua forma mais básica, o método de ML constitui-se em coletar um grande número de dados do domínio do problema a ser resolvido e usá-los em um algoritmo de aprendizagem, o modelo. Este modelo é definido com parâmetros iniciais que são otimizados com o consumo do dos dados. O objetivo do modelo pode ser tanto preditivo, para realizar predições no futuro sobre dados potencialmente desconhecidos, descritivo, para obter-se conhecimento novo acerca dos dados, ou ambos. O processo de obter resultados de um modelo, sejam preditivos ou descritivos, é chamado de inferência.
 
 Há dois grandes desafios no campo de ML: primeiramente, são necessários algoritmos eficientes para o problema de otimização do modelo inicial, de modo que a fase de treinamento seja completada em tempo viável; segundamente, uma vez que um modelo tenha sido aprendido, sua representação e solução algorítimica para a inferência também devem ser eficientes. \cite{alpaydin2020introduction} \cite{brief_introduction_to_ml}
 
-Normalmente, o campo de ML é dividido em três principais categorias:
+Normalmente, o campo de ML é dividido em três principais categorias: \textit{supervised learning}; \textit{unsupervised learning}; e \textit{reinforcement learning}.
 
-\begin{itemize}
-  \item \textbf{Supervised learning} - em português, aprendizagem supervisionada, é a categoria em que o conjunto de dados de entrada possui um mapeamento para o comportamento esperado, rotulado por um supervisor. O objetivo é aprender uma regra geral que mapeie as entradas para as saídas. \cite{alpaydin2020introduction}
-  \item \textbf{Unsupervised learning} - em português, aprendizagem não-supervisionada, é a categoria em que existem apenas dados de entrada e o objetivo é encontrar regularidades presentes nos mesmos. \cite{alpaydin2020introduction}
-  \item \textbf{Reinforcement learning} - em português, aprendizagem por reforço, é a categoria em que o algoritmo de aprendizagem tem como objetivo aprender uma política de ações que maximizem a recompensa em um dado ambiente. \cite{alpaydin2020introduction}
-\end{itemize}
+\subsection{Aprendizado supervisionado}
 
-Para efeitos desta pesquisa, o principal aspecto a ser comparado entre bibliotecas de ML é a implementação de uma representação e solução aoglorítimica do modelo previamente treinado e escolhido, permitindo-nos escolher a melhor alternativa.
+Em inglês, \textit{supervised learning}, é a categoria em que o conjunto de dados de entrada (\textit{training set}) possui um mapeamento para o comportamento esperado, rotulado por um "supervisor" \cite{alpaydin2020introduction}. O objetivo é aprender uma regra geral que mapeie os valores de entrada para os respectivos valores esperados de saída. Os valores de saída podem ser contínuos (problemas de regressão) ou discretos (problemas de classificação) \cite{8527529}.
+
+\subsection{Aprendizado não-supervisionado}
+
+Em inglês, \textit{unsupervised learning}, é a categoria em que existe apenas o conjunto de dados de entrada e o objetivo é encontrar regularidades presentes nos mesmos \cite{alpaydin2020introduction}. Este tipo de aprendizagem é capaz de desempanhar várias tarefas, porém a mais comum é \textit{clustering} \cite{8527529}.
+
+\textit{Clustering} é o processo de agrupar dados de modo que a similaridade de dados nos grupos (\textit{clusters}) é alta, porém a similaridade de dados entre grupos diferentes é baixa. Esta similaridade é tipicamente expressada como uma função de distância, que depende do tipo de dados presente no conjunto \cite{8527529}.
+
+Dentre os usos de aprendizagem não-supervisionada, pode-se destacar análise de redes sociais, agrupamento de genes e pesquisa de mercado como aplicações bem-sucedidas \cite{8527529}.
+
+\subsection{Aprendizado por reforço}
+
+Em inglês, \textit{reinforcement learning}, é a categoria em que o algoritmo de aprendizagem tem como objetivo aprender uma política de ações que maximizem a recompensa em um dado ambiente \cite{alpaydin2020introduction}.
+
+O paradigma de \textit{reinforcement learning} permite que agentes explorem possíveis ações e refinem seu comportamento utilizando apenas uma avaliação, conhecida como recompensa, tendo como objetivo maximizar seu desempenho de longo prazo \cite{8527529}.
+
+Esta técnica é comumente usada em aplicações como robótica, área de finanças como decisões de investimentos e gerenciamento de estoque \cite{8527529}.
+
+\section{Aprendizagem profunda}
+
+\section{Simulações de EONs}%
+\label{ft_eon}

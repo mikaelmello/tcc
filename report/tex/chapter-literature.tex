@@ -65,7 +65,13 @@ O uso de TensorFlow Extended está fora do escopo desta pesquisa pelo objetivo d
 
 O suporte para Java está em uma fase de transição, onde a biblioteca antiga está deprecada para uso e a biblioteca nova ainda está em fase experimental. O uso da biblioteca em fase experimental é complexo e não existe quase nenhuma documentação, sendo encontrada até uma recomendação de ler os testes unitários da implementação para aprender como usar certos elementos da API \cite{tensorflow-unit-test-recommendation}. Por estes motivos, o uso de TensorFlow em Java foi descartado.
 
-O suporte para Python é a base da implementação da biblioteca, logo a biblioteca de Python satisfaz todos os requisitos de nossa análise quualitativa, pelo que mencionado anteriormente nesta seção, sendo considerada para execução de modelos com e sem GPU.
+O suporte para Python é a base da implementação da biblioteca, logo a biblioteca de Python satisfaz todos os requisitos de nossa análise qualitativa, pelo que mencionado anteriormente nesta seção, sendo considerada para execução de modelos com e sem GPU, utilizando a biblioteca Keras como a API de alto nível para implementação do programa de simulação.
+
+\section{Keras}
+
+Keras \cite{chollet2015keras} é uma biblioteca de \textit{deep learning} de alto nível, desenvolvida usando a plataforma Tensorflow como base, sendo seu foco principal foco a capacidade de fácil experimentação.
+
+A biblioteca é uma interface de alto nível para a criação e execução de modelos, instalada por meio da biblioteca do TensorFlow, sendo então utilizada como interface para a implementação do programa de simulação responsável por avaliar o desempenho da biblioteca TensorFlow.
 
 \section{TensorFlow Lite}
 \label{tensorflow-lite}
@@ -108,7 +114,6 @@ Entretanto, o suporte para Java é limitado primeiramente no quesito disponibili
 
 A versão em Python da biblioteca MXNet é bastante completa, contando com diversos tutoriais para diferentes casos de uso, além de prover uma fácil instalação por meio do gerenciador de pacotes \textit{pip}. Entretanto, em testes iniciais para avaliar a viabilidade de uso da biblioteca, foi descoberto que a bibliteca dispara erros ao tentar executar o modelo usado pelo autor \cite{eon_ml_classifier_2020} para a comparação de desempenho entre as bibliotecas, logo o uso de MXNet para Python também foi descartado.
 
-\section{Keras}
-
 \section{Outras tecnologias}
 
+Além das bibliotecas previamente mencionadas, outras bibliotecas foram brevemente avaliadas mas descartadas por motivos desclassificatórios, como Paddle Lite, cuja documentação está disponível apenas em chinês, a biblioteca Caffe2 disponível para Python que foi descontinuada em favor de PyTorch, entre outras não disponíveis para Python ou Java ou sem atual expressão na literatura.
