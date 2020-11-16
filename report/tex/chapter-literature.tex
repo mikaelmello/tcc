@@ -23,9 +23,9 @@ A linguagem Java é amplamente utilizada para a implementação de simuladores d
 
 A linguagem Python é a mais usada e priorizada para desenvolvimento em ML entre trabalhadores da área, como evidenciado na figura \ref{fig:languagesml}. Assim, uma integração de simuladores com um processo ou serviço independente escrito em Python, responsável por executar os modelos, pode ser mais fácil de ser desenvolvida e mantida por um pesquisador de ML na área de EONs, apesar do custo de tempo da execução graças ao tempo necessário para comunicação entre os processos ou serviços.
 
-As tecnologias também devem ser fáceis de serem instaladas, configuradas e manipuladas de acordo com as necessidades de cada pesquisador. Para isto, é fundamental que suas APIs sejam bem documentadas e que a instalação exija o mínimo de modificações de configurações da máquina, externas ao simulador.
+As tecnologias também devem ser fáceis de serem instaladas, configuradas e manipuladas de acordo com as necessidades de cada pesquisador. Para isto, é fundamental que suas \acrshort{API}s sejam bem documentadas e que a instalação exija o mínimo de modificações de configurações da máquina, externas ao simulador.
 
-Por fim, o uso de ML se expande por diversos problemas relacionados à EONs, de modo que estes problemas podem beneficiar-se de diferentes tipos de aplicações de ML, de acordo com suas características. Assim, é ideal que a tecnologia de ML escolhida para integração com o ML tenha suporte a diferentes tipos de modelos.
+Por fim, é ideal que a análise considere a flexibilidade das bibliotecas à respeito dos diversos tipos de modelos de \textit{machine learning}, uma vez que pesquisas sobre o uso de ML em EONs utilizam diversas técnicas.
 
 \section{OpenCV}
 
@@ -33,7 +33,7 @@ OpenCV (Open Source Computer Vision Library) é uma biblioteca de código aberto
 
 Apesar do foco principal de OpenCV ser visão computacional, a biblioteca possui um módulo de redes neurais profundas e interfaces para as linguagens Python e Java. Adicionalmente, também é possível realizar a importação de modelos serializados em diversos formatos, como Darknet \cite{ml_site_darknet}, Torch7 \cite{ml_site_torch}, ONNX \cite{ml_site_onnx} e TensorFlow \cite{ml_site_tensorflow}.
 
-A API da biblioteca é extensamente documentada, porém com poucos tutoriais sobre o uso do módulo de DNNs. Entretanto, no quesito facilidade de instalação e configuração os resultados foram variados:
+A \acrshort{API} da biblioteca é extensamente documentada, porém com poucos tutoriais sobre o uso do módulo de DNNs. Entretanto, no quesito facilidade de instalação e configuração os resultados foram variados:
 
 Em Python, para a execução de modelos com apenas o uso da CPU a instalação se resume a instalar o pacote \texttt{opencv-python-headless}, a versão sem dependências de bibliotecas de interfaces de usuário gráficas, e está pronto para uso. Porém, se há interesse em utilizar a GPU na execução dos modelos, o processo de instalação se torna bastante complexo, sendo necessário compilar manualmente a biblioteca considerando diversas configurações do ambiente da máquina, de modo que a criação de uma solução generalizada se torne inviável.
 
@@ -63,9 +63,9 @@ TensorFlow é uma das bibliotecas mais populares na área de ML, sua biblioteca 
 
 O uso de TensorFlow Extended está fora do escopo desta pesquisa pelo objetivo de integração com a execução de um simulador e não um sistema de larga-escala. TensorFlow Lite será avaliado de forma mais profunda na seção \ref{tensorflow-lite} e TensorFlow.js também está fora do escopo por ser exclusivo para JavaScript. Restando apenas considerar a biblioteca principal, que possui suporte para Python, C, Go e Java.
 
-O suporte para Java está em uma fase de transição, onde a biblioteca antiga está deprecada para uso e a biblioteca nova ainda está em fase experimental. O uso da biblioteca em fase experimental é complexo e não existe quase nenhuma documentação, sendo encontrada até uma recomendação de ler os testes unitários da implementação para aprender como usar certos elementos da API \cite{tensorflow-unit-test-recommendation}. Por estes motivos, o uso de TensorFlow em Java foi descartado.
+O suporte para Java está em uma fase de transição, onde a biblioteca antiga está deprecada para uso e a biblioteca nova ainda está em fase experimental. O uso da biblioteca em fase experimental é complexo e não existe quase nenhuma documentação, sendo encontrada até uma recomendação de ler os testes unitários da implementação para aprender como usar certos elementos da \acrshort{API} \cite{tensorflow-unit-test-recommendation}. Por estes motivos, o uso de TensorFlow em Java foi descartado.
 
-O suporte para Python é a base da implementação da biblioteca, logo a biblioteca de Python satisfaz todos os requisitos de nossa análise qualitativa, pelo que mencionado anteriormente nesta seção, sendo considerada para execução de modelos com e sem GPU, utilizando a biblioteca Keras como a API de alto nível para implementação do programa de simulação.
+O suporte para Python é a base da implementação da biblioteca, logo a biblioteca de Python satisfaz todos os requisitos de nossa análise qualitativa, pelo que mencionado anteriormente nesta seção, sendo considerada para execução de modelos com e sem GPU, utilizando a biblioteca Keras como a \acrshort{API} de alto nível para implementação do programa de simulação.
 
 \section{Keras}
 
@@ -86,11 +86,11 @@ Apesar da limitação de importação de modelos e a impossibilidade de uso em p
 
 \section{ONNX Runtime}
 
-A ONNX Runtime \cite{ml_site_onnx_runtime} se trata de um acelerador de treinamento e execução de modelos de ML salvos em formatos ONNX \cite{ml_site_onnx}. O formato ONNX é um formato aberto construído para ser uma representação comum de modelos de ML, possuindo amplo suporte em s bibliotecas de ML.
+A ONNX Runtime \cite{ml_site_onnx_runtime} se trata de um acelerador de treinamento e execução de modelos de ML salvos em formatos ONNX \cite{ml_site_onnx}. \acrfull{ONNX} é um formato aberto construído para ser uma representação comum de modelos de ML, possuindo amplo suporte em s bibliotecas de ML.
 
-A ONNX Runtime é desenvolvida com foco em suporte cross-plataforma, fornecendo uma API comum para diversas linguagens como C, C++, Java e Python. Seu desenvolvimento é apoiado por diversas empresas como Microsoft, Facebook, IBM, Intel, NVIDIA, entre outras.
+A ONNX Runtime é desenvolvida com foco em suporte cross-plataforma, fornecendo uma \acrshort{API} comum para diversas linguagens como C, C++, Java e Python. Seu desenvolvimento é apoiado por diversas empresas como Microsoft, Facebook, IBM, Intel, NVIDIA, entre outras.
 
-Graças ao foco de implementações cross-plataforma, a instalação das bibliotecas para Java e Python são simples e exigem pouca ou nenhuma configuração. Em ambos os casos, é necessário apenas instalar o respectivo pacote caso a intenção seja usar apenas a CPU para inferências. Se houver interesse em usar uma GPU NVIDIA, é necessário instalar a versão da \textit{runtime} compatível com a versão de CUDA instalada.
+Graças ao foco de implementações cross-plataforma, a instalação das bibliotecas para Java e Python são simples e exigem pouca ou nenhuma configuração. Em ambos os casos, é necessário apenas instalar o respectivo pacote caso a intenção seja usar apenas a CPU para inferências. Se houver interesse em usar uma GPU NVIDIA, é necessário instalar a versão da \textit{runtime} compatível com a versão de \acrshort{CUDA} instalada.
 
 A documentação da biblioteca possui poucos guias ou tutoriais mas conta com diversos exemplos de código em Python para operações comuns e um exemplo de código em Java, além da completa referência dos pacotes de ambas versões da biblioteca.
 
@@ -100,9 +100,9 @@ Apesar da documentação limitada, a ONNX Runtime será considerada na avaliaç�
 
 Eclipse DeepLearning4j \cite{ml_site_deeplearning4j} é uma biblioteca de código-aberto para aprendizagem de máquina distribuída, disponível para Java e Scala. Seu desenvolvimento está ativo e é conduzido pela empresa Konduit.
 
-A biblioteca possui ampla documentação da API e diversos tutoriais que explicam os diferentes usos da biblioteca. É possível importar modelos no formato ONNX, HDF5 e TensorFlow, além de seu próprio formato.
+A biblioteca possui ampla documentação da \acrshort{API} e diversos tutoriais que explicam os diferentes usos da biblioteca. É possível importar modelos no formato ONNX, HDF5 e TensorFlow, além de seu próprio formato.
 
-A instalação da biblioteca é extremamente simples para uso de CPU e se dá por meio do gerenciador de pacotes Maven, sendo necessário apenas adicionar apenas algumas linhas na configuração do projeto para que seja possível executar o DeepLearning4j. Para uso de GPU, apenas máquinas com placas de vídeo NVIDIA e com CUDA configurado são suportadas. Neste caso, o processo de instalação é quase o mesmo, tendo como diferença o identificador da biblioteca que depende da versão da GPU instalada na máquina.
+A instalação da biblioteca é extremamente simples para uso de CPU e se dá por meio do gerenciador de pacotes Maven, sendo necessário apenas adicionar apenas algumas linhas na configuração do projeto para que seja possível executar o DeepLearning4j. Para uso de GPU, apenas máquinas com placas de vídeo NVIDIA e com \acrshort{CUDA} configurado são suportadas. Neste caso, o processo de instalação é quase o mesmo, tendo como diferença o identificador da biblioteca que depende da versão da GPU instalada na máquina.
 
 A biblioteca DeepLearning4j será avaliada em um programa Java com uso de ambas CPU e GPU.
 

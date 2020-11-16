@@ -16,7 +16,7 @@ De acordo com Raj Jain \cite{jain1991art}, há três métodos de avaliação de 
 
 \subsection{Ambiente de Simulação}
 
-Para a realização da simulação, 10 programas foram desenvolvidos considerando todas as combinações de linguagens (Java e Python), bibliotecas (ONNX Runtime, Tensorflow Lite, OpenCV e DeepLearning4j) e o uso ou não da GPU para execução de modelos. Estes programas realizam o mesmo conjunto de tarefas: 1. carregar o modelo e inicializar procedimentos necessários para futuras execuções; 2. carregar a carga de trabalho usada como entrada do modelo; 3. executar o modelo com as entradas carregadas.
+Para a realização da simulação, 10 programas foram desenvolvidos considerando todas as combinações de linguagens (Java e Python), bibliotecas (ONNX Runtime, Tensorflow Lite, Tensorflow, OpenCV e DeepLearning4j) e o uso ou não da GPU para execução de modelos. Estes programas realizam o mesmo conjunto de tarefas: 1. carregar o modelo e inicializar procedimentos necessários para futuras execuções; 2. carregar a carga de trabalho usada como entrada do modelo; 3. executar o modelo com as entradas carregadas.
 
 Cada programa trata de medir apenas o intervalo de tempo em que a execução do modelo ocorre, sem considerar outros fatores como o tempo de carregamento da carga de trabalho ou do modelo em si. A execução de cada instância de simulação foi orquestrada por \textit{scripts} auxiliares feitos em Python, responsáveis por instalar dependências, compilar e executar os programas de simulação.
 
