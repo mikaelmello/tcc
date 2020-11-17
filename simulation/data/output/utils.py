@@ -2,52 +2,71 @@ import os
 from os import path
 from pathlib import Path
 import json
+import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
 
-DIR = Path(__file__).parent.absolute()
-
-json_files = [f for f in os.listdir(DIR) if f.endswith(".json")]
-json_files.sort()
-expected_delta_unit = "us"
-
-runs = []
-for filename in json_files:
-    props = filename.split(".")[0]
-    lang, lib, gpu, it = props.split("_")
-
-    # if lang != "java" or lib != "deeplearning4j" or gpu != "off":
-    #     continue
-
-    print(f"loading {filename}")
-    with open(path.join(DIR, filename), "r") as f:
-        parsed = json.load(f)
-        for idx, run in enumerate(parsed):
-            run["lang"] = lang
-            run["lib"] = lib
-            run["gpu"] = gpu
-            run["it"] = int(it)
-            run["i"] = idx
-
-            if run["du"] != expected_delta_unit:
-                print(f"{run} does not have expected du us")
-
-            run.pop("du")
-            run.pop("iid")
-            runs.append(run)
-
-print(f"loading dataframe")
-df = pd.DataFrame(runs).groupby(["lang", "lib", "gpu", "i"], as_index=False).median()
+plt.rc("text", usetex=True)
+# font = {'family':'serif','size':16}
+font = {"family": "sans-serif", "size": 18, "serif": ["computer modern roman"]}
+plt.rc("font", **font)
+plt.rc("legend", **{"fontsize": 16})
+matplotlib.rcParams["text.latex.preamble"] = [r"\usepackage{amsmath}"]
 
 
-def plot(queries=[], groupby=["lang", "lib", "gpu"]):
+def get_runtime(key):
+    return {
+        "onnx": "ONNX Runtime",
+        "tensorflow": "TensorFlow",
+        "tensorflowlite": "TensorFlow Lite",
+        "opencv": "OpenCV",
+        "deeplearning4j": "Deeplearning4j",
+    }[key]
+
+
+def get_language(key):
+    return {"java": "Java", "python": "Python"}[key]
+
+
+def get_gpu_status(key):
+    return {
+        "off": "sem GPU",
+        "on": "com GPU",
+    }[key]
+
+
+def get_label(key):
+    print(key)
+    return f"{get_language(key[0])}, {get_runtime(key[1])}, {get_gpu_status(key[2])}"
+
+
+def plot_lines(df, queries=[], groupby=["lang", "lib", "gpu"], kind="line"):
     fig, ax = plt.subplots()
 
-    ddf = df
     for i in queries:
-        ddf = ddf.query(i)
+        df = df.query(i)
 
-    for key, grp in ddf.groupby(groupby):
-        ax = grp.plot(ax=ax, kind="line", x="i", y="d", label=key)
+    for key, grp in df.groupby(groupby):
+        if key == (None, None, None):
+            print(key, grp)
+
+        ax = grp.plot(ax=ax, kind=kind, x="i", y="d", label=get_label(key))
+
+    plt.xlabel("Execução")
+    plt.ylabel("Tempo de execução (µs)")
+    plt.show()
+
+
+def plot_box(df, queries=[], groupby=["lang", "lib", "gpu"]):
+    fig, ax = plt.subplots()
+
+    for i in queries:
+        df = df.query(i)
+
+    for key, grp in df.groupby(groupby):
+        if key == (None, None, None):
+            print(key, grp)
+
+        ax = grp.boxplot(ax=ax, by="d")
 
     plt.show()
