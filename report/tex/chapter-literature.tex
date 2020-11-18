@@ -21,21 +21,19 @@ A linguagem Java é amplamente utilizada para a implementação de simuladores d
   \label{fig:languagesml}
 \end{figure}
 
-A linguagem Python é a mais usada e priorizada para desenvolvimento em ML entre trabalhadores da área, como evidenciado na figura \ref{fig:languagesml}. Assim, uma integração de simuladores com um processo ou serviço independente escrito em Python, responsável por executar os modelos, pode ser mais fácil de ser desenvolvida e mantida por um pesquisador de ML na área de EONs, apesar do custo de tempo da execução graças ao tempo necessário para comunicação entre os processos ou serviços.
+A linguagem Python é a mais usada e priorizada para desenvolvimento em ML entre trabalhadores da área, como evidenciado na figura \ref{fig:languagesml}. Assim, uma integração de simuladores com um processo ou serviço independente escrito em Python, responsável por executar os modelos, pode estar sob um maior domínio de um pesquisador de ML na área de EONs, apesar do custo de tempo da execução graças ao tempo necessário para comunicação entre os processos ou serviços.
 
 As tecnologias também devem ser fáceis de serem instaladas, configuradas e manipuladas de acordo com as necessidades de cada pesquisador. Para isto, é fundamental que suas \acrshort{API}s sejam bem documentadas e que a instalação exija o mínimo de modificações de configurações da máquina, externas ao simulador.
 
-Por fim, é ideal que a análise considere a flexibilidade das bibliotecas à respeito dos diversos tipos de modelos de \textit{machine learning}, uma vez que pesquisas sobre o uso de ML em EONs utilizam diversas técnicas.
+Por fim, é ideal que a análise considere a flexibilidade das bibliotecas à respeito dos diversos tipos de modelos de \textit{machine learning}, uma vez que pesquisas sobre o uso de ML em EONs são diversas e podem utilizar diferentes técnicas \cite{eon_ml_survey_2020}.
 
 \section{OpenCV}
 
 OpenCV (Open Source Computer Vision Library) é uma biblioteca de código aberto voltada para visão computacional e aprendizagem de máquina, construída para fornecer uma infraestrutura comum para aplicações de visão computacional e acelerar o uso de percepção de máquina em produtos comerciais \cite{ml_site_opencv}.
 
-Apesar do foco principal de OpenCV ser visão computacional, a biblioteca possui um módulo de redes neurais profundas e interfaces para as linguagens Python e Java. Adicionalmente, também é possível realizar a importação de modelos serializados em diversos formatos, como Darknet \cite{ml_site_darknet}, Torch7 \cite{ml_site_torch}, ONNX \cite{ml_site_onnx} e TensorFlow \cite{ml_site_tensorflow}.
+Apesar do foco principal de OpenCV ser visão computacional, a biblioteca possui um módulo de redes neurais profundas e interfaces para as linguagens Python e Java. Adicionalmente, também é possível realizar a importação de modelos serializados em diversos formatos, como Darknet \cite{ml_site_darknet}, Torch7 \cite{ml_site_torch}, ONNX \cite{ml_site_onnx} e TensorFlow \cite{ml_site_tensorflow}. A \acrshort{API} da biblioteca é extensamente documentada, porém com poucos tutoriais sobre o uso do módulo de DNNs, evidenciando o foco em problemas de visão computacional.
 
-A \acrshort{API} da biblioteca é extensamente documentada, porém com poucos tutoriais sobre o uso do módulo de DNNs. Entretanto, no quesito facilidade de instalação e configuração os resultados foram variados:
-
-Em Python, para a execução de modelos com apenas o uso da CPU a instalação se resume a instalar o pacote \texttt{opencv-python-headless}, a versão sem dependências de bibliotecas de interfaces de usuário gráficas, e está pronto para uso. Porém, se há interesse em utilizar a GPU na execução dos modelos, o processo de instalação se torna bastante complexo, sendo necessário compilar manualmente a biblioteca considerando diversas configurações do ambiente da máquina, de modo que a criação de uma solução generalizada se torne inviável.
+No quesito facilidade de instalação e configuração os resultados foram variados: Em Python, para a execução de modelos com apenas o uso da CPU a instalação se resume a instalar o pacote \texttt{opencv-python-headless}, a versão sem dependências de bibliotecas de interfaces de usuário gráficas, e está pronto para uso. Porém, se há interesse em utilizar a GPU na execução dos modelos, o processo de instalação se torna bastante complexo, sendo necessário compilar manualmente a biblioteca considerando diversas configurações do ambiente da máquina, de modo que a criação de uma solução generalizada se torne inviável.
 
 Em Java, o processo de instalação é complexo independente do uso ou não de GPU, sendo necessário o mesmo processo de compilação manual do projeto considerando configurações da máquina, não havendo nenhuma integração com gerenciadores de pacotes populares como \textit{Maven} ou \textit{Gradle}.
 

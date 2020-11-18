@@ -26,7 +26,7 @@ As simulações foram realizadas em uma máquina com processador Intel Core i3-8
 
 Para a simulação, um classificador de estratégias de RSA em EONs, baseado em \textit{deep learning}, será utilizado para comparação. Este modelo recebe como entrada o estado de uma EON e tem como saída a classificação da estratégia RSA em utilização, de acordo com o estado. O modelo possui como saída uma classificação da estratégia de alocação identificada pelo estado como ruim, média ou boa.
 
-A carga de trabalho consiste de 97301 diferentes estados de rede, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}.
+A carga de trabalho é formada por 97301 diferentes estados de rede, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}.
 
 \subsection{Métricas}
 
@@ -89,6 +89,8 @@ As simulações com bibliotecas da família TensorFlow mostram um desempenho exp
 As simulações de ambas bibliotecas ONNX Runtime e TensorFlow mostram uma melhora de desempenho significativa ao utilizar a GPU da máquina para a execução dos modelos, com ganhos que variam de 100 a 300 microsegundos em média, ao contrário de Deeplearning4j que se mostrou mais devagar com o uso da CPU. Apesar da GPU ser em geral mais rápida na execução de modelos pelas suas características, um dos motivos para este cenário se trata da sobrecarga adicional de tempo ao transferir dados da CPU para a GPU que se torna mais significativa quando o tempo de execução do Deeplearning4j na CPU é em média de duas a três vezes menor comparado com as outras bibliotecas.
 
 Também é possível observar que o tempo de execução para as combinações "Python, ONNX Runtime, sem GPU", "Python, TensorFlow Lite, sem GPU" e "Java, ONNX Runtime, com GPU" é virtualmente igual. Assim como os tempos das combinações "Python, OpenCV, sem GPU" e "Python, ONNX Runtime, com GPU", apesar deste último par possuir tempos menores em 300 microsegundos em média. Após estudos e experimentos adicionais, não foi possível achar uma explicação satisfatória para a inesperada similaridade entre combinações tão diversas.
+
+Todas as execuções com entradas iguais para o modelo resultaram em saídas iguais, sinalizando que não houve perda ou ganho de precisão ao converter o modelo original no formato HDF5 para os formatos TFLite e ONNX.
 
 Por fim, pode-se concluir que o uso de CPU em programas Java é suscetível a diversas interrupções, gerando uma alta variância no tempo de execução do modelo. O uso de GPU não necessariamente representa um ganho de desempenho, sendo importante observar fatores como a sobrecarga de transferência de dados. Programas Python ou que utilizam a GPU para inferência possuem uma baixa variância de tempos de execuções.
 

@@ -1,0 +1,21 @@
+A área de aprendizagem de máquina é extensa e diversa, modelos são em sua maioria desenvolvidos de forma personalizada para um problema único que buscam resolver. Esta diversidade é refletida na atual literatura sobre o uso de ML em EONs. Pesquisas como \cite{eon_ml_survey_2020} e \cite{8527529} mostram as diversas aplicações em diferentes problemas de EONs, apesar da pesquisa na área estar em sua infância.
+
+Ao propor soluções que busquem auxiliar pesquisadores no uso de ML em simuladores, é necessário considerar os diversos casos de uso e suas características, fundamentais para definir a importância de fatores como desempenho do tempo de execução, facilidade de execução, disponibilidade da GPU, entre outros.
+
+A solução com maior flexibilidade, capaz de atender os mais diversos tipos de demanda para a integração, é a implementação de uma interface genérica de comunicação entre processos ou serviços.
+
+A principal vantagem deste método é o controle que o pesquisador tem sobre o ambiente de execução do modelo, ideal em cenários onde o pesquisador ainda está testando e treinando seu modelo e precisa realizar modificações e melhorias pontuais, podendo integrar o simulador para executar seu modelo nesta etapa intermediária, sem a necessidade de exportar o modelo para ser carregado em outros ambientes e em outras bibliotecas.
+
+Sua principal desvantagem consiste em maiores tempos de execução do modelo, do ponto de vista do simualdor. Isto acontece pela sobrecarga de operações para transferir os dados de entrada e saída do modelo entre processos. Esta sobrecarga pode ser significativa ou não dependendo do caso de uso do pesquisador.
+
+A solução com foco em desempenho busca diminuir o tempo total de execução de modelos, o que torna importante que os modelos possam ser executados de forma nativa pelo simulador uma vez que isto elimina a sobrecarga de tempo por comunicação externa.
+
+Para simuladores desenvolvidos em Java, vimos no capítulo \ref{chapter-deploy} que para o modelo selecionado, executá-lo com a biblioteca Deeplearning4j sem o uso de GPU exibiu o melhor desempenho em média. A biblioteca ONNX Runtime, apesar de mais lenta, é capaz de importar modelos em formato ONNX, tornando-a atrativa para a execução nativa de modelos em simuladores Java que permite uma alta flexibilidade de tipos de modelos possíveis de serem importados.
+
+Em Python, a biblioteca ONNX Runtime com o uso de GPU exibiu um desempenho tão bom quanto OpenCV sem o uso de GPU. Ambas combinações possuem suas vantagens e desvantagens em relação a facilidade e flexibilidade no uso: OpenCV é voltada para uso na área de visão computacional, o que torna o uso dela em outros contextos sub-óptimo se ela não for a melhor escolha no quesito desempenho; ONNX Runtime precisa do uso da GPU para ter um desempenho tão bom quanto OpenCV com este modelo, porém tem suporte para fácil configuração de uso da GPU e uma API mais amigável.
+
+Como prova de conceito, foram implementadas no \acrfull{ONS} interfaces e classes para a execução nativa de modelos, cujo código pode ser encontrado no repositório sob a URL \url{https://github.com/comnetunb/ons-maven/}. A interface \texttt{Model} define a API de um modelo, especificando a assinatura de funções para carregar e executar o modelo. As classes \texttt{Dl4jModel} e \texttt{OnnxModel} implementam as funções de inicialização e carregamento do modelo, restando às implementações de modelos específicos a definição de como o modelo é executado.
+
+O modelo utilizado na avaliação de desempenho deste trabalho foi implementado sob as classes \texttt{Dl4jClassifier} e \texttt{OnnxClassifier}, representando seu carregamento e execução com as bibliotecas Deeplearning4j e ONNX Runtime, respectivamente. A classe \texttt{FF\_DIS} possui a implementação de um algoritmo RSA que, além de definir a ação sobre a chegada de um novo fluxo, envia o estado da topologia da rede para ambas versões do modelo e imprime ambas saídas, a classificação do algoritmo RSA.
+
+Deste modo, usuários atuais do ONS podem utilizar modelos de ML pré-treinados em suas simulações assim como pesquisadores de ML na área de EONs podem utilizar o ONS para auxiliar-los em suas pesquisas.
