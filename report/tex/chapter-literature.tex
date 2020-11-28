@@ -14,14 +14,7 @@ Nesta análise, apenas tecnologias com licenças de código aberto serão consid
 
 A linguagem Java é amplamente utilizada para a implementação de simuladores de redes ópticas elásticas, como em \cite{costa2016ons}, \cite{ceons2015} e \cite{net2plan}, por isto, a integração de modelos de ML de forma embutida no simulador permite uma integração performática ao excluir-se a necessidade de comunicação com outros serviços ou processos para executar os modelos.
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=1\textwidth]{img/languages-ml.png}
-  \caption{Porcentagem de cientistas de dados e desenvolvedores de inteligência artificial que usam ou priorizam cada linguagem \cite{developer_nation_q1_2017}}
-  \label{fig:languagesml}
-\end{figure}
-
-A linguagem Python é a mais usada e priorizada para desenvolvimento em ML entre trabalhadores da área, como evidenciado na figura \ref{fig:languagesml}. Assim, uma integração de simuladores com um processo ou serviço independente escrito em Python, responsável por executar os modelos, pode estar sob um maior domínio de um pesquisador de ML na área de EONs, apesar do custo de tempo da execução graças ao tempo necessário para comunicação entre os processos ou serviços.
+A linguagem Python é a mais usada e priorizada para desenvolvimento em ML entre trabalhadores da área \cite{developer_nation_q1_2017}. Assim, uma integração de simuladores com um processo ou serviço independente escrito em Python, responsável por executar os modelos, pode estar sob um maior domínio de um pesquisador de ML na área de EONs, apesar do custo de tempo da execução graças ao tempo necessário para comunicação entre os processos ou serviços.
 
 As tecnologias também devem ser fáceis de serem instaladas, configuradas e manipuladas de acordo com as necessidades de cada pesquisador. Para isto, é fundamental que suas \acrshort{API}s sejam bem documentadas e que a instalação exija o mínimo de modificações de configurações da máquina, externas ao simulador.
 
