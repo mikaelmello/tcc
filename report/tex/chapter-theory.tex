@@ -36,6 +36,76 @@ Esta técnica é comumente usada em aplicações como robótica, área de finan�
 \section{Aprendizagem profunda}
 
 
-
 \section{Simulações de EONs}%
 \label{ft_eon}
+
+\section{Avaliações de Desempenho}
+
+Avaliações são importantes na busca pelo melhor desempenho de um sistema com os recursos disponíveis. Seus resultados auxiliam tanto nas decisões de escolhas entre diferentes sistemas ou simplesmente entender o funcionamento de um sistema já existente. Devido à grande diversidade de sistemas, não existe um procedimento padrão comum em que seja possível analisar eficientemente um sistema qualquer, sendo necessário conhecer o sistema a ser avaliado e escolher as métricas, carga de trabalho e técnicas de avaliação apropriadas \cite{jain1991art}.
+
+Uma simulação executada por simuladores de EONs costuma envolver dezenas de milhares de eventos como requisições de conexões. Tamanha magnitude do número de eventos representa a importância de um bom desempenho na execução de modelos, como por exemplo em propostas de soluções para problemas de alocação de recursos (e.g. RSA) cujos modelos seriam executados em cada evento. Assim, uma análise quantitativa do desempenho de bibliotecas de ML é importante na busca por uma solução de integração de ML com simuladores que seja flexível de acordo com as necessidades de cada pesquisa e que possua um bom desempenho de modo a acelerar a obtenção de resultados.
+
+Na análise quantitativa das bibliotecas de ML, este trabalho seguirá a abordagem sistemática para planejamento de análises de desempenho, proposta por Raj Jain \cite{jain1991art}.
+
+\subsection{Definição dos objetivos do estudo e do sistema}
+
+A primeira etapa se trata de definir o objetivo do estudo e os limites do sistema a ser analisado. A definição do sistema consiste em delinear os limites do sistema, como por exemplo uma biblioteca de serialização em JSON cujos serviços são funções para serializar e desserializar um conjunto de dados.
+
+Definir o sistema e os objetivos do estudo é importante pois as métricas de desempenho e as cargas de trabalho usuadas na análise de desempenho depende da definição do sistema.
+
+\subsection{Listar serviços e resultados}
+
+Cada sistema fornece um conjunto de serviços, como as funções da biblioteca de serialização em JSON previamente mencionadas. Os serviços fornecidos pelo sistema possuem um conjunto de possíveis resultados que podem ou não ser desejáveis (i.e. erros). A listagem dos serviços e de seus resultados considerados é importante para definir as métricas e cargas de trabalho da análise de desempenho.
+
+\subsection{Selecionar métricas}
+
+As métricas são os critérios usados para avaliar o desempenho de um sistema ou comparar alternativas de sistema. Normalmente, as métricas são relacionadas à velocidade, acurácia e disponibilidade de serviços.
+
+\subsection{Listar parâmetros e fatores}
+
+A lista de parâmetros representa os componentes de uma análise de desempenho que podem afetar o desempenho. Esta lista pode ser dividida entre parâmetros de sistema, que podem incluir parâmetros de ambos tipos \textit{software} e \textit{hardware} e não variam entre instâncias do sistema e parâmetros de carga de trabalho, que podem variar entre instâncias, como por exemplos requisições de usuário.
+
+Os fatores são os parâmetros que são variados durante a avaliação de desempenho, como por exemplo quantidade de usuários ou tipos de requisição, e os valores que cada um dos fatores pode assumir são chamados de níveis.
+
+\subsection{Escolher a técnica de avaliação}
+
+Há três métodos de avaliação de desempenho: modelagem analítica, simulação e medição \cite{jain1991art}. A escolha de uma destas técnicas depende de vários critérios a serem considerados de acordo com o sistema a ser avaliado, como por exemplo o estágio do sistema, tempo disponível para a análise e a acurácia requerida. A tabela \ref{tab:analysistech} lista de forma resumida as considerações para a escolha de uma técnica de avaliação de desempenho.
+
+\begin{table}
+  \centering
+  \begin{tabular}{llll}
+    \toprule
+    Critério            & Modelagem Analítica & Simulação            & Medição        \\
+    \midrule
+    1. Estágio          & Qualquer            & Qualquer             & Pós-protótipo  \\
+    2. Tempo necessário & Pequeno             & Médio                & Variado        \\
+    3. Ferramentas      & Analistas           & Ling. de programação & Instrumentação \\
+    4. Acurácia         & Baixa               & Moderada             & Variada        \\
+    5. Comparações      & Fácil               & Moderado             & Difícil        \\
+    6. Custo            & Baixo               & Médio                & Alto           \\
+    7. Vendabilidade    & Baixo               & Média                & Alta           \\
+    \bottomrule
+  \end{tabular}
+  \caption{Critérios para a seleção de uma técnica de avaliação de desempenho \cite{jain1991art}.}
+  \label{tab:analysistech}
+\end{table}
+
+\subsection{Selecionar carga de trabalho}
+
+A carga de trabalho consiste de uma lista de requisições de serviço do sistema e pode ser representada de diferentes modos de acordo com a técnica de avaliação escolhida.
+
+Em avaliações realizadas por modelagem analítica, a carga de trabalho pode ser definida como a probabilidade de várias requisições. Para simulações, pode ser uma lista de requisições de usuário coletadas de um sistema real. Para medições, podem ser \textit{scripts} automatizados representando usuários no sistema real. É de fundamental importância que a carga de trabalho represente casos de uso reais do sistema.
+
+\subsection{Desenho de experimentos}
+
+Ao definir a lista de fatores é necessário decidir uma sequência de experimentos que forneça o máximo de informações com o mínimo de esforço necessário. Existem várias formas de desenhar experimentos sendo os 3 mais comuns o desenho simples, desenho fatorial completo e desenho fatorial fracionário.
+
+Em um desenho simples, o primeiro experimento é realizado com uma configuração comum do sistema e um fator é variado de cada vez. Este desenho não é eficiente estatisticamente e se os fatores interagirem entre si, pode levar a conclusões erradas.
+
+Em um desenho fatorial completo, todas as combinações possíveis de t odos os níveis de todos os fatores são considerados. A principal vantagem é que todas as combinações são examinadas permitindo a análise do impacto de cada fator, incluindo fatores secundários e suas interações. A principal desvantagem é o custo do estudo pelo alto número de experimentos a serem realizados. É comum a utilização de técnicas para reduzir o número de combinações e consequentemente o custo.
+
+Desenhos fatorial fracionário são utilizados quando o número de experimentos necessário para a realização do fatorial completo é muito alto. Este desenho consiste em escolher um subconjunto (fração) das combinações de um fatorial completo, levando em conta o fato de que experimentos de um desenho fatorial completo são normalmente redundantes.
+
+\subsection{Apresentação de resultados}
+
+A última etapa se trata de apresentar os resultados de modo que seja facilmente entendido pelo público-alvo.
