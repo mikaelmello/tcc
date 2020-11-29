@@ -40,12 +40,13 @@ Esta técnica é comumente usada em aplicações como robótica, área de finan�
 \label{ft_eon}
 
 \section{Avaliações de Desempenho}
+\label{performance_analysis_theory}
 
 Avaliações são importantes na busca pelo melhor desempenho de um sistema com os recursos disponíveis. Seus resultados auxiliam tanto nas decisões de escolhas entre diferentes sistemas ou simplesmente entender o funcionamento de um sistema já existente. Devido à grande diversidade de sistemas, não existe um procedimento padrão comum em que seja possível analisar eficientemente um sistema qualquer, sendo necessário conhecer o sistema a ser avaliado e escolher as métricas, carga de trabalho e técnicas de avaliação apropriadas \cite{jain1991art}.
 
 Uma simulação executada por simuladores de EONs costuma envolver dezenas de milhares de eventos como requisições de conexões. Tamanha magnitude do número de eventos representa a importância de um bom desempenho na execução de modelos, como por exemplo em propostas de soluções para problemas de alocação de recursos (e.g. RSA) cujos modelos seriam executados em cada evento. Assim, uma análise quantitativa do desempenho de bibliotecas de ML é importante na busca por uma solução de integração de ML com simuladores que seja flexível de acordo com as necessidades de cada pesquisa e que possua um bom desempenho de modo a acelerar a obtenção de resultados.
 
-Na análise quantitativa das bibliotecas de ML, este trabalho seguirá a abordagem sistemática para planejamento de análises de desempenho, proposta por Raj Jain \cite{jain1991art}.
+Raj Jain em seu livro \cite{jain1991art} propôs uma abordagem sistemática para a realização de análises de desempenho, descrita passo a passo nas próximas subseções.
 
 \subsection{Definição dos objetivos do estudo e do sistema}
 

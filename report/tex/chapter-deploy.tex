@@ -1,42 +1,44 @@
 Este capítulo tem como objetivo apresentar a metodologia da avaliação de desempenho das diferentes bibliotecas de ML selecionadas.
 
-\section{Motivação}%
-\label{3-motivation}
+\section{Metodologia}
 
-Avaliações são importantes na busca pelo máximo desempenho de um sistema com os recursos disponíveis. Seus resultados auxiliam tanto nas decisões de escolhas entre diferentes sistemas ou simplesmente entender o funcionamento de um sistema já existente. Devido à grande diversidade de sistemas, não existe um procedimento padrão comum em que seja possível analisar eficientemente um sistema qualquer, sendo necessário conhecer o sistema a ser avaliado e escolher as métricas, carga de trabalho e técnicas de avaliação apropriadas. \cite{jain1991art}
+A avaliação de desempenho seguirá a abordagem sistemática para a realização de avaliações de desempenho, proposta por Raj Jain e descrita na seção \ref{performance_analysis_theory}.
 
-Uma simulação executada por simuladores de EONs costuma envolver dezenas de milhares de eventos como requisições de conexões. Tamanha magnitude do número de eventos representa a importância de um bom desempenho na execução de modelos, como por exemplo em propostas de soluções para problemas de alocação de recursos (e.g. RSA) cujos modelos seriam executados em cada evento.
+O objetivo desta análise consiste em comparar diversas bibliotecas de aprendizagem de máquina, utilizadas em programas Java e Python, de modo a escolher a melhor alternativa no quesito velocidade na realização de inferência de modelos de ML.
 
-Assim, uma análise quantitativa do desempenho de bibliotecas de ML é importante na busca por uma solução de integração de ML com simuladores que seja flexível de acordo com as necessidades de cada pesquisa e que possua um bom desempenho de modo a acelerar a obtenção de resultados.
+O sistema a ser avaliado consiste de um módulo de programação, programado em Python ou Java de acordo com a análise realizada no capítulo \ref{chapter-literature}, que fornece um serviço de inferência de modelos pré-treinados e carregados em memória, onde ao receber dados de entrada de um tipo especificado pelo modelo, executa o modelo com a entrada recebida e retorna o valor inferido do modelo.
 
-\section{Metodologia}%
-\label{3-methodology}
+Nesta análise, erros e falhas durante a execução do serviço não serão consideradas. Em cada execução do serviço, serão registrados o tempo de total de execução e o resultado da mesma. As alternativas serão comparadas de acordo com a métrica principal de desempenho: o tempo de execução por chamada; devido à necessidade de diminuir o tempo de inferência dos modelos como elencado na seção \ref{3-motivation}. Além disso, os resultados de cada alternativa serão comparados entre si para verificar se há perda ou ganho de precisão do modelo de acordo com o formato em que se encontra serializado e a biblioteca de ML utilizada para a execução.
 
-De acordo com Raj Jain \cite{jain1991art}, há três métodos de avaliação de desempenho: modelagem analítica, simulação e medição. O sistema a ser avaliado, devido à presença de modelos de redes neurais profundas, é complexo o suficiente para tornar a modelagem analítica inviável. A medição foi descartada pelo fato de não buscar-se uma solução para apenas um simulador e haver um alto custo de implementação para cada possibilidade de integração. Por estes motivos, os resultados serão obtidos por meio de simulações.
+Diversos parâmetros influenciam o desempenho do sistema:
 
-\subsection{Ambiente de Simulação}
+\begin{itemize}
+  \item Velocidade da CPU da máquina;
+  \item Velocidade e funcionalidades da GPU da máquina, em execuções de modelo que utilizam a GPU para inferência;
+  \item Formato de serialização em que o modelo está salvo;
+  \item Biblioteca utilizada para a execução do modelo;
+  \item Uso ou não da GPU para a execução do modelo;
+  \item Número, tamanho e valor dos dados de entrada de uma execução de modelo;
+  \item Número e tamanho dos dados de saída de uma execução de modelo;
+  \item Ambiente de execução, ou \textit{runtime environment} em que o programa é executado.
+\end{itemize}
 
-Para a realização da simulação, 10 programas foram desenvolvidos considerando todas as combinações de linguagens (Java e Python), bibliotecas (ONNX Runtime, Tensorflow Lite, Tensorflow, OpenCV e Deeplearning4j) e o uso ou não da GPU para execução de modelos. Estes programas realizam o mesmo conjunto de tarefas: 1. carregar o modelo e inicializar procedimentos necessários para futuras execuções; 2. carregar a carga de trabalho usada como entrada do modelo; 3. executar o modelo com as entradas carregadas.
+Dentre estes parâmetros, foram selecionados 3 parâmetros como fatores:
 
-Cada programa trata de medir apenas o intervalo de tempo em que a execução do modelo ocorre, sem considerar outros fatores como o tempo de carregamento da carga de trabalho ou do modelo em si. A execução de cada instância de simulação foi orquestrada por \textit{scripts} auxiliares feitos em Python, responsáveis por instalar dependências, compilar e executar os programas de simulação.
+\begin{itemize}
+  \item Ambiente de execução. Serão executados programas escritos em Python, executados com \textit{runtime} Python 3.8.5, e em Java, executados com \textit{runtime} OpenJDK 11.0.7+10.
+  \item Biblioteca utilizada para a execução do modelo. Como avaliado na seção \ref{chapter-literature}, serão consideradas as bibliotecas ONNX Runtime, Tensorflow Lite, TensorFlow, OpenCV e Deeplearning4j.
+  \item Uso de GPU. Haverão experimentos com uso de GPU na execução dos modelos e sem o uso de GPU.
+  \item Formato de serializção em que o modelo está salvo. Onde será utilizado o arquivo original do modelo em formato HDF5 e outros arquivos convertidos quando necessário, em formatos ONNX e tflite.
+\end{itemize}
 
-As simulações foram realizadas em uma máquina com processador Intel Core i3-8100, placa de vídeo GeForce RTX 2060 e memória RAM de 32 GB (2x16GB 3000Mhz DDR4). O código-fonte dos programas de simulação e de programas auxiliares pode ser encontrado na url \url{tcc.mikaelmello.com}.
-
-\subsection{Modelos e Cargas de Trabalho}
+A medição será a técnica de avaliação de desempenho escolhida pelo fato do autor se especializar em programação. Assim, as diferentes alternativas de sistemas a serem comparadas serão implementadas e instrumentadas na execução da análise de desempenho, sendo cada uma das implementações um programa desenvolvido em Python ou Java.
 
 Para a simulação, um classificador de estratégias de RSA em EONs, baseado em \textit{deep learning}, será utilizado para comparação. Este modelo recebe como entrada o estado de uma EON e tem como saída a classificação da estratégia RSA em utilização, de acordo com o estado. O modelo possui como saída uma classificação da estratégia de alocação identificada pelo estado como ruim, média ou boa.
 
-A carga de trabalho é formada por 97301 diferentes estados de rede, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}.
+A carga de trabalho é formada por 97301 diferentes estados de rede coletados de execuções reais do ONS, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}.
 
-\subsection{Métricas}
-
-Devido à necessidade de diminuir o tempo de inferência dos modelos como elencado na seção \ref{3-motivation}, esta será a métrica de desempenho avaliada, sendo definida como o tempo total percorrido desde a chamada do serviço de execução de modelos, o método \texttt{classify} da classe \texttt{Classifier} na implementação das simulações, até o retorno da chamada.
-
-Além disso, como a execução dos modelos em diferentes bibliotecas exigem algumas conversões do formato de serialização, será avaliado se em alguma das simulações, o resultado de execuções do modelo difere de outras simulações.
-
-\subsection{Execução}
-
-Foram testadas 10 combinações de linguagens, bibliotecas, uso ou não de GPU e formato do modelo executado:
+Os experimentos a serem realizados consistem em um desenho fatorial fracionário, onde diversas combinações foram descartadas por incompatibilidade de fatores, como o uso de Deeplearning4j em Python, ou motivos diversos detalhados no capítulo \ref{chapter-literature}. Assim, serão realizadas as seguintes combinações de experimentos:
 
 \begin{itemize}
   \item Java, Deeplearning4j, sem GPU, modelo original no formato HDF5 (TensorFlow);
@@ -52,6 +54,14 @@ Foram testadas 10 combinações de linguagens, bibliotecas, uso ou não de GPU e
 \end{itemize}
 
 Cada elemento da carga de trabalho foi executado 5 vezes por todas as combinações de simulação, sendo selecionada a mediana de cada uma destas 5 execuções com o objetivo de remover ruídos arbitrários causados pela máquina durante a execução.
+
+\section{Ambiente de Medição}
+
+Para a realização das medições, 10 programas foram desenvolvidos considerando todas as combinações de linguagens (Java e Python), bibliotecas (ONNX Runtime, Tensorflow Lite, Tensorflow, OpenCV e Deeplearning4j) e o uso ou não da GPU para execução de modelos. Estes programas realizam o mesmo conjunto de tarefas: 1. inicializar o sistema ao carregar o modelo; 2. inicializar procedimentos necessários para a execução da carga de trabalho; 3. carregar a carga de trabalho usada como entrada do modelo; 4. realizar as chamadas de serviço com as entradas carregadas para executar o modelo.
+
+Cada programa trata de medir apenas o intervalo de tempo em que a execução do modelo ocorre. A execução de um dos programas foi orquestrada por \textit{scripts} auxiliares feitos em Python, responsáveis por instalar dependências, e executar os programas de simulação.
+
+As simulações foram realizadas em uma máquina com processador Intel Core i3-8100, placa de vídeo GeForce RTX 2060 e memória RAM de 32 GB (2x16GB 3000Mhz DDR4). O código-fonte dos programas de simulação e de programas auxiliares pode ser encontrado na url \url{tcc.mikaelmello.com}.
 
 \section{Resultados}
 
