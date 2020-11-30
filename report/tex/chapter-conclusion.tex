@@ -1,4 +1,4 @@
-Com a crescente demanda de tráfego global, \acrfull{EON} surgiu como uma nova solução para o gerencimento eficiente de recursos em redes ópticas. Uma das principais ferramentas de pesquisa em EONs são os simuladores, ideais pelo baixo custo e baixa complexidade de implementação.
+Com a crescente demanda de tráfego global, \acrfull{EON} surgiu como uma nova solução para o gerenciamento eficiente de recursos em redes ópticas. Uma das principais ferramentas de pesquisa em EONs são os simuladores, ideais pelo baixo custo e baixa complexidade de implementação.
 
 Pelo crescente desenvolvimento de ambas áreas de \acrfull{EONs} e \acrfull{ML}, o estudo das aplicações de algoritmos de aprendizagem de mágina em redes ópticas elásticas tem se popularizado. Entretanto, pelo fato de esta área de pesquisa ainda estar em seus estágios iniciais, há lacunas a serem preenchidas na academia, como por exemplo a falta de suporte a execução de modelos de ML em simuladores de EONs.
 
@@ -6,6 +6,8 @@ Este trabalho teve como objetivo analisar a literatura atual de bibliotecas de M
 
 Para isso, fez-se uma análise qualitativa de diversas bibliotecas populares, filtrando-as por critérios como facilidade de instalação e configuração, documentação, e disponibilidade. Em seguida, o desempenho das bibliotecas selecionadas foi avaliado tendo como critério o tempo de execução de um modelo pré-selecionado.
 
-Na análise de desempenho, a biblioteca Deeplearning4j possuiu o menor tempo de execução em média dentre todas as outras, enquanto que ONNX Runtime (com GPU) e OpenCV (sem GPU) exibiram os menores tempos de execução entre os programas Python.
+Na análise de desempenho, a biblioteca Deeplearning4j apresentou o melhor desempenho ao ser comparada com outras alternativas. Em ambientes de execução Python, ONNX Runtime (com GPU) e OpenCV (sem GPU) apresentaram os melhores desempenhos.
 
-Por fim, foi feita uma proposta sobre como implementar uma integração flexível de simuladores com modelos de ML, permitindo que pesquisadores tenham controle sobre a execução de seus modelos e sejam capazes de executá-los durante uma simulação. Visando o melhor desempenho, foi realizada a implementação de uma integração nativa de modelos de ML com o \acrfull{ONS}, permitindo o uso de modelos em simulações.
+Este trabalho por fim apresentou recomendações e direções acerca de implementações de suporte de aprendizagem de máquina a simuladores de redes ópticas elásticas, onde interfaces genéricas de comunicação foram recomendadas para casos de uso que exigem alta flexibilidade na integração de modelos, como por exemplo modelos ainda sendo desenvolvidos, e bibliotecas nativas de alto desempenho foram recomendadas, como Deeplearning4j para simuladores em Java, para casos de uso que exigem alto desempenho.
+
+Por fim, foram apresentadas contribuições de implementações para adicionar ao \acrfull{ONS} o suporte para uso de modelos de aprendizagem de máquina em suas simulações. Estas contribuições cobrem ambos casos em que ou a flexibilidade ou o desempenho são priorizados, sendo fornecido o código-fonte por meio de um repositório hospedado na plataforma GitHub.

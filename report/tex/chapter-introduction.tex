@@ -50,9 +50,9 @@ Estes objetivos gerais serão atingidos por meio dos seguintes objetivos especí
 \section{Contribuições}
 \label{intro-contributions}
 
-A partir das análises qualitativas e quantitativas das bibliotecas de \textit{machine learning} populares na literatura, este trabalho contribui com diversas recomendações acerca de como realizar a integração de um simulador de EONs com modelos de ML, considerando diversos casos de uso de acordo com o tipo de pesquisa sendo realizada.
+A partir das análises qualitativas e quantitativas das bibliotecas de \textit{machine learning} populares na literatura, este trabalho contribui com diversas recomendações acerca de como adicionar suporte para uso de modelos de aprendizagem de máquina em simuladores de EONs, considerando diversos casos de uso de acordo com as necessidades do usuário.
 
-Adicionalmente, é feita uma contribuição para o repositório do simulador ONS, onde são realizadas as seguintes implementações: configuração do projeto para utilização do Maven como ferramenta de gerenciamento de projetos; implementação de classes abstratas para implementação de modelos de ML utilizando as bibliotecas ONNX e Deeplearning4j; implementação do uso de um modelo de ML para classificar a topologia da rede e imprimir a avaliação durante a execução de um algoritmo RSA. É esperado que esta implementação sirva de base para futuros estudos da aplicação de ML em EONs.
+Adicionalmente, são feitas contribuições ao repositório do simulador ONS, onde são realizadas as seguintes implementações: configuração do projeto para utilização do Maven como ferramenta de gerenciamento de projetos; implementação de funcionalidades que permitem a execução de modelos de forma nativa em Java, com as bibliotecas ONNX Runtime e Deeplearning4j; implementação da funcionalidade que permite a comunicação do ONS com um serviço externo por meio de HTTP, possiblitando a executação de modelos de ML de forma genérica. É esperado que estas implementações sejam a base para futuros estudos da aplicação de ML em EONs.
 
 \section{Organização do trabalho}
 \label{intro-org}
@@ -60,13 +60,13 @@ Adicionalmente, é feita uma contribuição para o repositório do simulador ONS
 O trabalho está organizado em 6 capítulos com os seguintes propósitos:
 
 \begin{itemize}
-  \item Capítulo 2 - Introdução de conceitos considerados essenciais para o entendimento do trabalho. São descritos de forma mais profunda o uso de simuladores para pesquisas no campo de redes ópticas elásticas e conceitos de ML usados ao longo do trabalho.
+  \item Capítulo 2 - Introdução de conceitos considerados essenciais para o entendimento do trabalho. Serão descritos de forma mais profunda o uso de simuladores para pesquisas no campo de redes ópticas elásticas, conceitos de ML usados ao longo do trabalho e a metodologia de avaliação de desempenho utilizada neste trabalho.
 
   \item Capítulo 3 - Descrição das bibliotecas de ML populares na literatura, sendo explicadas suas principais características e o racional para a consideração delas ou não na análise de desempenho.
 
-  \item Capítulo 4 - Serão descritas as propriedades da análise de desempenho como métricas, parâmetros, fatores, carga de trabalho, e a máquina em que os testes foram realizados, detalhes da implementação do ambiente de simulação e os resultados das simulações.
+  \item Capítulo 4 - Descrição da avaliação de desempenho das bibliotecas selecionadas, como métricas utilizadas, carga de trabalho, a máquina em que os testes foram realizados, entre outros, além da análise dos resultados da avaliação.
 
-  \item Capítulo 5 - Serão avaliados os resultados quantitativos das simulações e os aspectos qualitativos de cada possibilidade para a definição de propostas e recomendações de integração de simuladores com ML.
+  \item Capítulo 5 - Considerando o apresentado nos capítulos 3 e 4, serão descritas as recomendações para o suporte do uso de ML em simuladores de acordo com diferentes casos de uso, e as contribuições feitas para o \acrfull{ONS}.
 
-  \item Capítulo 6 - Será apresentado qual foi o resultado obtido, o conjunto de recomendações que melhor satisfazem os objetivos da integração de modelos de ML com simuladores de redes ópticas elásticas.
+  \item Capítulo 6 - Será apresentado qual foi o resultado obtido nas avaliações e as recomendações que melhor satisfazem os objetivos da integração de modelos de ML com simuladores de redes ópticas elásticas.
 \end{itemize}
