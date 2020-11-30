@@ -4,17 +4,17 @@ Este capítulo tem como objetivo apresentar a metodologia da avaliação de dese
 
 A avaliação de desempenho seguirá a abordagem sistemática para a realização de avaliações de desempenho, proposta por Raj Jain e descrita na seção \ref{performance_analysis_theory}.
 
-O objetivo desta análise consiste em comparar diversas bibliotecas de aprendizagem de máquina, utilizadas em programas Java e Python, de modo a escolher a melhor alternativa no quesito velocidade na realização de inferência de modelos de ML.
+O objetivo desta análise consiste em comparar diversas bibliotecas de aprendizagem de máquina, utilizadas em programas Java e Python, de modo a escolher a melhor alternativa no quesito velocidade na execução de modelos de ML.
 
-O sistema a ser avaliado consiste de um módulo de programação, programado em Python ou Java de acordo com a análise realizada no capítulo \ref{chapter-literature}, que fornece um serviço de inferência de modelos pré-treinados e carregados em memória, onde ao receber dados de entrada de um tipo especificado pelo modelo, executa o modelo com a entrada recebida e retorna o valor inferido do modelo.
+O sistema a ser avaliado consiste de um módulo de programação, programado em Python ou Java de acordo com a análise realizada no capítulo \ref{chapter-literature}, que fornece um serviço de execução de modelos pré-treinados e carregados em memória, onde ao receber dados de entrada de um tipo especificado pelo modelo, executa o modelo com a entrada recebida e retorna o resultado da execução do modelo.
 
-Nesta análise, erros e falhas durante a execução do serviço não serão consideradas. Em cada execução do serviço, serão registrados o tempo de total de execução e o resultado da mesma. As alternativas serão comparadas de acordo com o tempo de execução por chamada, devido ao interesse em diminuir o tempo de execução para inferência de modelos. Além disso, os resultados das inferências realizadas por cada alternativa serão comparados entre si para verificar se há perda ou ganho de precisão do modelo, de acordo com o formato em que se encontra serializado e a biblioteca de ML utilizada para a execução.
+Nesta análise, erros e falhas durante a execução do serviço não serão consideradas. Em cada execução do serviço, serão registrados o tempo de total de execução e o resultado da mesma. As alternativas serão comparadas de acordo com o tempo de execução por chamada, devido ao interesse em diminuir o tempo de execução de modelos. Além disso, os resultados das execuções realizadas por cada alternativa serão comparados entre si para verificar se há perda ou ganho de precisão do modelo, de acordo com o formato em que se encontra serializado e a biblioteca de ML utilizada para a execução.
 
 Assim, diversos parâmetros influenciam o desempenho do sistema:
 
 \begin{itemize}
   \item Velocidade da CPU da máquina;
-  \item Velocidade e funcionalidades da GPU da máquina, em execuções de modelo que utilizam a GPU para inferência;
+  \item Velocidade e funcionalidades da GPU da máquina, em execuções de modelo que utilizam a GPU na execução;
   \item Formato de serialização em que o modelo está salvo;
   \item Biblioteca utilizada para a execução do modelo;
   \item Uso ou não da GPU para a execução do modelo;
@@ -97,9 +97,9 @@ De acordo com a tabela \ref{tab:all}, a execução do modelo com a biblioteca De
   \label{tab:all}
 \end{table}
 
-A simulação com a biblioteca ONNX Runtime, sendo a única presente em programas Java e Python, foi importante para observar o melhor desempenho de programas Python em versões que utilizam e não utilizam a GPU para inferência.
+A simulação com a biblioteca ONNX Runtime, sendo a única presente em programas Java e Python, foi importante para observar o melhor desempenho de programas Python em versões que utilizam e não utilizam a GPU na execução de modelos.
 
-As simulações com bibliotecas da família TensorFlow mostram um desempenho expressivamente maior da biblioteca TensorFlow Lite, evidenciando o fato de que Tensorflow Lite é uma biblioteca desenvolvida especificamente para melhores desempenhos em inferências de modelos, comparada com TensorFlow.
+As simulações com bibliotecas da família TensorFlow mostram um desempenho expressivamente maior da biblioteca TensorFlow Lite, evidenciando o fato de que Tensorflow Lite é uma biblioteca desenvolvida especificamente para melhores desempenhos em execuções de modelos, comparada com TensorFlow.
 
 As simulações de ambas bibliotecas ONNX Runtime e TensorFlow mostram uma melhora de desempenho significativa ao utilizar a GPU da máquina para a execução dos modelos, com ganhos que variam de 100 a 300 microsegundos em média, ao contrário de Deeplearning4j que se mostrou mais devagar com o uso da GPU. Apesar da GPU ser em geral mais rápida na execução de modelos pelas suas características, um dos motivos para este cenário acontecer é a presença de sobrecarga adicional de tempo ao transferir dados da CPU para a GPU, mais significativa quando o tempo de execução do Deeplearning4j na CPU é em média de duas a três vezes menor comparado com as outras bibliotecas.
 

@@ -2,14 +2,17 @@ Este capítulo apresenta conceitos básicos fundamentais para o melhor entendime
 
 São introduzidos detalhes do funcionamento de simulações de EONs e a relevância deles para o trabalho, aprofundados são aprofundados conceitos de machine learning como suas aplicações, seu funcionamento e sua relevância para EONs. Por fim, na seção \ref{ft_dl_run}, são discutidos detalhes da execução de modelos de \textit{deep learning} importantes para o entendimento de considerações feitas neste trabalho.
 
+\section{Simulações de EONs}%
+\label{ft_eon}
+
 \section{Aprendizagem de Máquina}
 \label{ml}
 
 \textit{Machine Learning} (ML), ou aprendizagem de máquina é o estudo de algoritmos de computação que se auto-otimizam de acordo com um critério de desempenho, usando dados de exemplo ou a própria experiência \cite{mitchell1997ml, alpaydin2020introduction}.
 
-Em sua forma mais básica, o método de ML é a coleta de um grande número de dados do domínio do problema a ser resolvido e o uso deles em um algoritmo de aprendizagem, o modelo. Este modelo é definido com parâmetros iniciais que são otimizados com o consumo do dos dados. O objetivo do modelo pode ser tanto preditivo, para realizar predições no futuro sobre dados potencialmente desconhecidos, descritivo, para obter-se conhecimento novo acerca dos dados, ou ambos. O processo de obter resultados de um modelo é chamado de inferência, sejam eles preditivos ou descritivos.
+Em sua forma mais básica, o método de ML é a coleta de um grande número de dados do domínio do problema a ser resolvido e o uso deles em um algoritmo de aprendizagem, o modelo. Este modelo é definido com parâmetros iniciais que são otimizados com o consumo do dos dados. O objetivo do modelo pode ser tanto preditivo, para realizar predições no futuro sobre dados potencialmente desconhecidos, descritivo, para obter-se conhecimento novo acerca dos dados, ou ambos.
 
-Há dois grandes desafios no campo de ML: primeiramente, são necessários algoritmos eficientes para o problema de otimização do modelo inicial, de modo que a fase de treinamento seja completada em tempo viável; segundamente, uma vez que um modelo tenha sido aprendido, sua representação e solução algorítimica para a inferência também devem ser eficientes. \cite{alpaydin2020introduction} \cite{brief_introduction_to_ml}
+Há dois grandes desafios no campo de ML: primeiramente, são necessários algoritmos eficientes para o problema de otimização do modelo inicial, de modo que a fase de treinamento seja completada em tempo viável; segundamente, uma vez que um modelo tenha sido aprendido, sua representação e solução algorítimica também devem ser eficientes \cite{alpaydin2020introduction, brief_introduction_to_ml}.
 
 Normalmente, o campo de ML é dividido em três principais categorias: \textit{supervised learning}; \textit{unsupervised learning}; e \textit{reinforcement learning}.
 
@@ -35,9 +38,6 @@ Esta técnica é comumente usada em aplicações como robótica, área de finan�
 
 \section{Aprendizagem profunda}
 
-
-\section{Simulações de EONs}%
-\label{ft_eon}
 
 \section{Avaliações de Desempenho}
 \label{performance_analysis_theory}
