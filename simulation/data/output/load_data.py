@@ -23,11 +23,14 @@ for filename in json_files:
     with open(path.join(DIR, filename), "r") as f:
         parsed = json.load(f)
         for idx, run in enumerate(parsed):
+            if int(run["iid"]) < 3000:
+                continue
+
             run["lang"] = lang
             run["lib"] = lib
             run["gpu"] = gpu
             run["it"] = int(it)
-            run["i"] = idx
+            run["i"] = int(run["iid"])
 
             if run["du"] != expected_delta_unit:
                 print(f"{run} does not have expected du us")

@@ -6,6 +6,8 @@ import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
 
+matplotlib.use("TKagg")
+
 plt.rc("text", usetex=True)
 # font = {'family':'serif','size':16}
 font = {"family": "sans-serif", "size": 18, "serif": ["computer modern roman"]}
@@ -52,6 +54,10 @@ def plot_lines(df, queries=[], groupby=["lang", "lib", "gpu"], kind="line"):
 
         ax = grp.plot(ax=ax, kind=kind, x="i", y="d", label=get_label(key))
 
+    ticks = []
+    for i in range(3000, 97301, 6000):
+        ticks.append(i)
+    plt.xticks(ticks)
     plt.xlabel("Execução")
     plt.ylabel("Tempo de execução (µs)")
     plt.show()
