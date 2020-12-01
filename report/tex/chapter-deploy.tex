@@ -34,9 +34,9 @@ Dentre estes parâmetros, foram selecionados três fatores:
 
 A medição será a técnica de avaliação de desempenho escolhida pelo fato do autor se especializar em programação. Assim, as diferentes alternativas de sistemas a serem comparadas serão implementadas e instrumentadas na execução da análise de desempenho, sendo cada uma das implementações um programa desenvolvido em Python ou Java.
 
-Para a simulação, um classificador de estratégias de RSA em EONs, baseado em \textit{deep learning}, será utilizado para comparação. Este modelo recebe como entrada o estado de uma EON e tem como saída a classificação da estratégia RSA em utilização, de acordo com o estado. O modelo possui como saída uma classificação da estratégia de alocação identificada pelo estado como ruim, média ou boa.
+Para a simulação, um classificador de estratégias de RSA em EONs, baseado em \textit{deep learning}, será utilizado para comparação. Este modelo recebe como entrada o estado de uma EON e tem como saída a classificação da estratégia RSA em utilização, de acordo com o estado. O modelo possui como saída um inteiro no intervalo $[0, 2]$, uma classificação da estratégia de alocação identificada a partir do estado como ruim (0), média (1) ou boa (2).
 
-A carga de trabalho é formada por 97301 requisições onde os dados de cada entrada correspondem a estados de rede coletados em execuções do ONS, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}. As primeiras 3000 requisições possuem o propósito de \textit{aquecer} os ambientes de execução, isto é, garantir que todo o código a ser executado já está compilado pelo ambiente de execução, que os recursos apropriados já foram alocados, que o lixo de memória inicial da aplicação já foi coletado, entre outros. Portanto, os resultados das primeiras 3000 requisições serão descartados na análise final.
+A carga de trabalho é formada por 97301 requisições onde os dados de cada entrada correspondem a estados de rede coletados em execuções do ONS, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}. Esta carga de trabalho é o mesmo conjunto de dados utilizado para treinamento e validação do modelo usado nesta análise assim como em outras pesquisas do \acrfull{COMNET-UnB} \cite{eon_ml_classifier_2020}. As primeiras 3000 requisições possuem o propósito de \textit{aquecer} os ambientes de execução, isto é, garantir que todo o código a ser executado já está compilado pelo ambiente de execução, que os recursos apropriados já foram alocados, que o lixo de memória inicial da aplicação já foi coletado, entre outros. Portanto, os resultados das primeiras 3000 requisições serão descartados na análise final.
 
 Os experimentos a serem realizados consistem em um desenho fatorial fracionário, onde diversas combinações foram descartadas por incompatibilidade de fatores, como o uso de Deeplearning4j em Python, ou motivos diversos detalhados no capítulo \ref{chapter-literature}. Assim, serão realizadas as seguintes combinações de experimentos:
 
@@ -53,8 +53,6 @@ Os experimentos a serem realizados consistem em um desenho fatorial fracionário
   \item Python, ONNX Runtime, com GPU, modelo convertido para o formato ONNX.
 \end{itemize}
 
-Cada elemento da carga de trabalho foi executado 5 vezes por todas as combinações de simulação, sendo selecionada a mediana de cada uma destas 5 execuções com o objetivo de remover ruídos arbitrários causados pela máquina durante a execução.
-
 \section{Ambiente de Execução}
 
 Para a realização das medições, 10 programas foram desenvolvidos considerando todas as combinações descritas anteriormente. Estes programas realizam o mesmo conjunto de tarefas: 1. inicializar o sistema ao carregar o modelo; 2. inicializar procedimentos necessários para a execução da carga de trabalho; 3. carregar a carga de trabalho usada como entrada do modelo; 4. realizar as chamadas de serviço com as entradas carregadas para executar o modelo, registrando o tempo de execução e o resultado. Cada programa trata de medir apenas o intervalo de tempo em que a execução do modelo ocorre. A execução de um dos programas foi orquestrada por \textit{scripts} auxiliares feitos em Python, responsáveis por instalar dependências, e executar os programas de simulação.
@@ -63,15 +61,9 @@ As simulações foram realizadas em uma máquina com processador Intel Core i3-8
 
 \section{Resultados}
 
-Após as medições, observa-se que a execução do modelo em um programa Java, sem o uso de GPU e com a biblioteca Deeplearning4j exibe os melhores resultados possuindo tempos de execução menores do que sua alternativa com GPU e pelo menos duas vezes mais rápido que qualquer uma das ouutras bibliotecas avaliadas, como é possível observar na figura \ref{fig:all} e na tabela \ref{tab:all}.
+Devido a outros processos de sistema sendo executados durante a medição, o desempenho das bibliotecas foi ocasionalmente afetado por fatores externos, o que ocasionou em picos de tempo de execução ao longo das medições. Para mitigar este fenômeno, cada experimento foi executado com a carga de trabalho 5 vezes. Após as execuções, a métrica final de tempo de execução para cada uma das 94301 entradas foi definida como a mediana dos 5 tempos de execução coletados. A mediana foi escolhida como índice pelo fato de os dados serem quantitativos, o total das execuções não ser de interesse e que a média seria altamente enviesada pela presença destes picos.
 
-\begin{figure}[h]
-  \centerline{\includegraphics[width=\paperwidth]{img/all.pdf}}
-  \caption{Tempo de execução de execuções sequenciais do modelo para cada combinação}
-  \label{fig:all}
-\end{figure}
-
-De acordo com a tabela \ref{tab:all}, a execução do modelo com a biblioteca Deeplearning4j em Java é a mais rápida em média, de modo que a execução sem uso de GPU é em média 270 microsegundos mais rápida que a execução com GPU, porém possui um desvio padrão muito maior devido a diversas limitações deste caso de uso: execuções em CPU estão mais sujeitas a interrupções externas, como por exemplo o coletor de lixo da JVM ou trocas de contexto do sistema operacional. O mesmo comportamento de alta variância em CPU é observável nas execuções de ONNX Runtime em Java.
+Para cada um dos experimentos, foram calculados os dados de média das amostras das execuções, o desvio padrão, o mínimo e o máximo. Devido ao alto número de amostras (94301), é possível calcular a média da população, o tempo de execução da configuração especificada para o modelo definido, com um alto intervalo de confiança. A tabela \ref{tab:ci} exibe o intervalo de confiança de 99.98\% da média da população.
 
 \begin{table}
   \centering
@@ -93,14 +85,43 @@ De acordo com a tabela \ref{tab:all}, a execução do modelo com a biblioteca De
 
     \bottomrule
   \end{tabular}
-  \caption{Estatísticas descritivas acerca do tempo de execução (microsegundos) do modelo em todas as combinações.}
+  \caption{Estatísticas descritivas acerca da amostra do tempo de execução (microsegundos) do modelo para cada um dos experimentos.}
   \label{tab:all}
 \end{table}
 
-A simulação com a biblioteca ONNX Runtime, sendo a única presente em programas Java e Python, foi importante para observar o melhor desempenho de programas Python em versões que utilizam e não utilizam a GPU na execução de modelos.
+\begin{table}
+  \centering
+  \begin{tabular}{llll}
+    \toprule
+    ling.  & biblioteca      & GPU & intervalo de confiança \\
+    \midrule
+    Python & OpenCV          & sem & (1772.99, 1773.29)     \\
+           & TensorFlow      & sem & (2988.72, 2989.20)     \\
+           &                 & com & (2885.32, 2885.78)     \\
+           & TensorFlow Lite & sem & (2083.60, 2083.90)     \\
+           & ONNX Runtime    & sem & (2105.86, 2106.16)     \\
+           &                 & com & (1767.71, 1767.97)     \\
+    Java   & ONNX Runtime    & sem & (2364.16, 2367.88)     \\
+           &                 & com & (2067.49, 2067.79)     \\
+           & Deeplearning4j  & sem & (762.60, 764.28)       \\
+           &                 & com & (1026.10, 1026.92)     \\
 
-As simulações com bibliotecas da família TensorFlow mostram um desempenho expressivamente maior da biblioteca TensorFlow Lite, evidenciando o fato de que Tensorflow Lite é uma biblioteca desenvolvida especificamente para melhores desempenhos em execuções de modelos, comparada com TensorFlow.
+    \bottomrule
+  \end{tabular}
+  \caption{Intervalo de confiança de 99.98\% para a média da população do tempo de execução (microsegundos) do modelo para cada um dos experimentos.}
+  \label{tab:ci}
+\end{table}
 
-As simulações de ambas bibliotecas ONNX Runtime e TensorFlow mostram uma melhora de desempenho significativa ao utilizar a GPU da máquina para a execução dos modelos, com ganhos que variam de 100 a 300 microsegundos em média, ao contrário de Deeplearning4j que se mostrou mais devagar com o uso da GPU. Apesar da GPU ser em geral mais rápida na execução de modelos pelas suas características, um dos motivos para este cenário acontecer é a presença de sobrecarga adicional de tempo ao transferir dados da CPU para a GPU, mais significativa quando o tempo de execução do Deeplearning4j na CPU é em média de duas a três vezes menor comparado com as outras bibliotecas.
+De acordo com os dados presentes na tabela \ref{tab:ci}, é possível afirmar que o desempenho da biblioteca Deeplearning4j sem GPU apresenta o melhor desempenho com o modelo utilizado, seguido por sua alternativa que utiliza a GPU na execução dos modelos, em média aproximadamente 34\% mais lenta.
 
-Também é possível observar que o tempo de execução para as combinações "Python, ONNX Runtime, sem GPU", "Python, TensorFlow Lite, sem GPU" e "Java, ONNX Runtime, com GPU" é virtualmente igual. Assim como os tempos das combinações "Python, OpenCV, sem GPU" e "Python, ONNX Runtime, com GPU", apesar deste último par possuir 300 microsegundos a menos de tempo de execução em média. Após estudos e experimentos adicionais, não foi possível achar uma explicação satisfatória para a inesperada similaridade entre combinações tão diversas.
+Após Deeplearning4j, as duas combinações com melhor desempenho correspondem por ONNX Runtime executado em Python com o uso de GPU, seguido por OpenCV executado em Python sem o uso de GPU. Nesta comparação, apesar da biblioteca ONNX Runtime apresentar um melhor desempenho em média, a diferença entre o intervalo de confiança das duas alternativas é de apenas 5 microsegundos, uma quantidade de tempo negligível ao considerar o tempo total de execução e o contexto de simuladores de EONs em que o modelo está inserido.
+
+O uso de ONNX Runtime em Java com GPU é o quarto com maior desempenho. Aproximadamente 200 microsegundos mais lento que sua alternativa executada em Python. Esta combinação é seguida por TensorFlow Lite e por ONNX Runtime em Python sem GPU. Aqui, o fenômeno de desempenhos claramente melhores mas negligíveis se repete, onde ONNX Runtime em Java com GPU é apenas 40 microsegundos em média mais rápido do que sua alternativa em Python sem GPU.
+
+A execução de ONNX Runtime em Java sem GPU é aproximadamente 260 microsegundos mais lenta que sua alternativa em Python, similar à diferença observada na comparação com uso de GPU.
+
+Por fim, a biblioteca TensorFlow apresenta o pior desempenho, sendo quase quatro vezes mais lenta sem o uso de GPU, ao comparada com Deeplearning4j. Este resultado demonstra o fato da biblioteca núcleo de TensorFlow não ser otimizada para execução de modelos, sendo esta tarefa delegada para outros produtos da organização TensorFlow, como TensorFlow Lite que obteve um desempenho significativamente melhor.
+
+Além disso, é possível observar que a ONNX Runtime possui melhor desempenho geral em Python ao comparada com Java. Uma hipótese plausível diz respeito à maior popularidade da biblioteca para Python, o que resulta em maiores esforços de engenharia e consequentemente melhores desempenhos. A priorização de suporte a Python não é um caso isolado, como observado no capítulo \ref{chapter-literature}, onde bibliotecas como TensorFlow e OpenCV que apesar de possuírem versões de suas bibliotecas para uso em Java, elas possuem grandes limitações ao comparadas com suas alternativas para Python.
+
+Não é possível realizar análises conclusivas acerca dos benefícios de uso ou não da GPU para execução de modelos. Como visto no capítulo \ref{chapter-theory}, o tempo de transferência de dados da CPU para GPU pode ser significativo para grandes quantidades e este fenômeno explicaria os resultados desta avaliação, onde Deeplearning4j com curtos tempos de execução mostrou melhor desempenho sem o uso da GPU e outras bibliotecas, com maiores tempos de execução, tiveram uma menor porcentagem de tempo gasto com transferência de dados ao comparada com o tempo total de execução. Porém, novos estudos são necessários para isolar o tempo de transferência e validar esta hipótese.
