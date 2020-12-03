@@ -42,7 +42,7 @@ A biblioteca possui suporte para Python e conta com ampla documentação de dive
 
 \textit{Scitkit-learn} é uma biblioteca de código-aberto desenvolvida em Python que integra diversos algoritmos de ML para problemas supervisionados e não-supervisionados de média escala com ênfase em trazer ML para não-especialistas \cite{scikit-learn}. É uma biblioteca extremamente popular, principalmente entre iniciantes na área de ML, com desenvolvimento ativo na comunidade.
 
-A biblioteca, com suporte apenas para Python, possui extensa documentação de modo a melhor auxiliar iniciantes. Pelo seu foco em simplicidade, a biblioteca não possui suporte para uso de GPU em treinos ou execuções de modelos. Para importação e exportação de modelos, a biblioteca conta apenas com serialização nativa de Python por meio da biblioteca \textit{pickle}, não sendo possível importar modelos de outros formatos.
+A biblioteca, com suporte apenas à Python, possui extensa documentação de modo a melhor auxiliar iniciantes. Pelo seu foco em simplicidade, a biblioteca não possui suporte para uso de GPU em treinos ou execuções de modelos. Para importação e exportação de modelos, a biblioteca conta apenas com serialização nativa de Python por meio da biblioteca \textit{pickle}, não sendo possível importar modelos de outros formatos.
 
 Apesar da facilidade de se desenvolver modelos de ML com \textit{Scikit Learn}, o uso da biblioteca foi descartado pela falta de suporte ao uso de GPU e de importação de modelos pré-treinados salvos em formatos diversos.
 
@@ -60,7 +60,7 @@ O suporte para Python é a base da implementação da biblioteca, logo a bibliot
 
 \section{Keras}
 
-Keras \cite{chollet2015keras} é uma biblioteca de \textit{deep learning} de alto nível, desenvolvida usando a plataforma Tensorflow como base, sendo seu foco principal foco a capacidade de fácil experimentação.
+Keras \cite{chollet2015keras} é uma biblioteca de \textit{deep learning} de alto nível, desenvolvida usando a plataforma Tensorflow como base, sendo seu foco principal a capacidade de fácil experimentação.
 
 A biblioteca é uma interface de alto nível para a criação e execução de modelos, instalada por meio da biblioteca do TensorFlow, sendo então utilizada como interface para a implementação do programa de simulação responsável por avaliar o desempenho da biblioteca TensorFlow.
 
@@ -69,7 +69,7 @@ A biblioteca é uma interface de alto nível para a criação e execução de mo
 
 TensorFlow Lite \cite{ml_site_tensorflow_lite} é uma \textit{framework} de aprendizagem profunda para execução de modelos em dispositivos. Se trata da versão da popular \textit{framework} TensorFlow que é projetada para execuções em dispositivos com menor poder computacional.
 
-A importação de gráficos é limitada apenas a arquivos do tipo TFLite, porém existem ferramentas para realizar a conversão de formatos comuns em Tensorflow, como Keras e SavedModel. Atualmente, a biblioteca não fornece suporte a execução com uso de GPUs NVIDIA \cite{ml_site_tensorflow_lite_gpus}.
+A importação de gráficos é limitada apenas a arquivos do tipo TFLite, porém existem ferramentas para realizar a conversão de formatos comuns em Tensorflow, como Keras e SavedModel. Atualmente, a biblioteca não fornece suporte à execução com uso de GPUs NVIDIA \cite{ml_site_tensorflow_lite_gpus}.
 
 Tendo os fatores acima em consideração, a instalação e uso da biblioteca são simples e amplamente documentados para programas Python. Para a instalação, é necessário instalar a versão do pacote específica para a versão do interpretador Python instalado na máquina, sendo possível configurar uma detecção automática. A biblioteca não possui versões para uso em programas Java que não sejam voltados para Android.
 
@@ -77,7 +77,7 @@ Apesar da limitação de importação de modelos e a impossibilidade de uso em p
 
 \section{ONNX Runtime}
 
-A ONNX Runtime \cite{ml_site_onnx_runtime} se trata de um acelerador de treinamento e execução de modelos de ML salvos em formatos ONNX \cite{ml_site_onnx}. \acrfull{ONNX} é um formato aberto construído para ser uma representação comum de modelos de ML, possuindo amplo suporte em s bibliotecas de ML.
+A ONNX Runtime \cite{ml_site_onnx_runtime} se trata de um acelerador de treinamento e execução de modelos de ML salvos em formatos ONNX \cite{ml_site_onnx}. \acrfull{ONNX} é um formato aberto construído para ser uma representação comum de modelos de ML, possuindo amplo suporte da comunidade de modo que diversas bibliotecas populares de aprendizagem de máquina oferecem a capacidade de exportar modelos em formato ONNX.
 
 A ONNX Runtime é desenvolvida com foco em suporte cross-plataforma, fornecendo uma \acrshort{API} comum para diversas linguagens como C, C++, Java e Python. Seu desenvolvimento é apoiado por diversas empresas como Microsoft, Facebook, IBM, Intel, NVIDIA, entre outras.
 
@@ -93,7 +93,7 @@ Eclipse Deeplearning4j \cite{ml_site_deeplearning4j} é uma biblioteca de códig
 
 A biblioteca possui ampla documentação da \acrshort{API} e diversos tutoriais que explicam os diferentes usos da biblioteca. É possível importar modelos no formato ONNX, HDF5 e TensorFlow, além de seu próprio formato.
 
-A instalação da biblioteca é extremamente simples para uso de CPU e se dá por meio do gerenciador de pacotes Maven, sendo necessário apenas adicionar apenas algumas linhas na configuração do projeto para que seja possível executar o Deeplearning4j. Para uso de GPU, apenas máquinas com placas de vídeo NVIDIA e com \acrshort{CUDA} configurado são suportadas. Neste caso, o processo de instalação é quase o mesmo, tendo como diferença o identificador da biblioteca que depende da versão da GPU instalada na máquina.
+A instalação da biblioteca é extremamente simples para uso de CPU e se dá por meio do gerenciador de pacotes Maven, sendo necessário apenas adicionar algumas linhas na configuração do projeto para que seja possível executar o Deeplearning4j. Para uso de GPU, apenas máquinas com placas de vídeo NVIDIA e com \acrshort{CUDA} configurado são suportadas. Neste caso, o processo de instalação é quase o mesmo, tendo como diferença o identificador da biblioteca que depende da versão da GPU instalada na máquina.
 
 A biblioteca Deeplearning4j será avaliada em um programa Java com uso de ambas CPU e GPU.
 
@@ -103,7 +103,7 @@ A biblioteca MXNet \cite{ml_site_mxnet} é uma \textit{framework} de código-abe
 
 Entretanto, o suporte para Java é limitado primeiramente no quesito disponibilidade de bibliotecas. Alguns arquivos binários presentes no pacote possuem licenças incompatíveis com a licença Apache 2, resultado na retirada dos pacotes de Java do repositório Maven. Assim, para utilizar uma versão atualizada da biblioteca é necessário compilar o código-fonte. Além disso, a documentação para Java também é quase vazia, tendo apenas dois tutoriais simples e a publicação da referência da API. Pela dificuldade de instalação e a falta de tutoriais e suporte da comunidade, o uso de MXNet para Java foi descartado.
 
-A versão em Python da biblioteca MXNet é bastante completa, contando com diversos tutoriais para diferentes casos de uso, além de prover uma fácil instalação por meio do gerenciador de pacotes \textit{pip}. Entretanto, em testes iniciais para avaliar a viabilidade de uso da biblioteca, foi descoberto que a bibliteca dispara erros ao tentar executar o modelo usado pelo autor \cite{eon_ml_classifier_2020} para a comparação de desempenho entre as bibliotecas, logo o uso de MXNet para Python também foi descartado.
+A versão em Python da biblioteca MXNet é bastante completa, contando com diversos tutoriais para diferentes casos de uso, além de prover uma fácil instalação por meio do gerenciador de pacotes \textit{pip}. Entretanto, em testes iniciais para avaliar a viabilidade de uso da biblioteca, foi descoberto que a biblioteca dispara erros ao tentar executar o modelo usado pelo autor \cite{eon_ml_classifier_2020} para a comparação de desempenho entre as bibliotecas, logo o uso de MXNet para Python também foi descartado.
 
 \section{Outras tecnologias}
 

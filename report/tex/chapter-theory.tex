@@ -1,17 +1,15 @@
-Este capítulo apresenta conceitos básicos fundamentais para o melhor entendimento do trabalho. Na seção \ref{ml} são introduzidos conceitos fundamentais de aprendizagem de máquina e uma breve descrição de suas principais categorias.
-
-São introduzidos detalhes do funcionamento de simulações de EONs e a relevância deles para o trabalho, aprofundados são aprofundados conceitos de machine learning como suas aplicações, seu funcionamento e sua relevância para EONs. Por fim, na seção \ref{ft_dl_run}, são discutidos detalhes da execução de modelos de \textit{deep learning} importantes para o entendimento de considerações feitas neste trabalho.
+Este capítulo apresenta conceitos básicos fundamentais para o melhor entendimento do trabalho. Na seção \ref{ft_eon} são introduzidos breves conceitos acerca de simulações de EONs e a magnitude de trabalho normalmente envolvida. Na seção \ref{ml} são introduzidos conceitos fundamentais de aprendizagem de máquina e uma breve descrição de suas principais categorias. Por fim, na seção \ref{performance_analysis_theory} é apresentada a metodologia de avaliação de desempenha utilizada nesse trabalho.
 
 \section{Simulações de EONs}%
 \label{ft_eon}
 
-A instalação e gerenciamento de redes ópticas elásticas envolve o uso de dispositivos óticos e infraestruturas de comunicação extremamente caros. Além disso, a maioria dos equipamentos utilizados são protegidos por leis de propriedade intelectual e não são amigáveis a modificações na programação de seu funcionamento.
+A instalação e gerenciamento de redes ópticas elásticas envolve o uso de dispositivos óticos e infraestruturas de comunicação extremamente caros. Além disso, a maioria dos equipamentos utilizados são protegidos por leis de propriedade intelectual e não disponibilizam meios para modificações na programação de seu funcionamento.
 
 Pelo alto custo, o uso de equipamentos e redes reais para o desenvolvimento de pesquisas na área de redes ópticas elásticas se tornou inviável, tornando necessária a busca por outras alternativas. Sua dinamicidade e complexidade não permite uma modelagem analítica precisa \cite{costa2016ons}, já a simulação se mostra uma excelente alternativa pelo fato de permitir que pesquisadores validem e avaliem de forma fácil e barata o uso de novos protocolos e algoritmos \cite{simulnet2009}.
 
 Para auxiliar pesquisadores com ferramentas que agilizam suas pesquisas, diversos simuladores de redes ópticas elásticas têm sido publicados nos últimos anos. Como por exemplo, \acrfull{ONS} \cite{costa2016ons}, \textit{ElasticO++} \cite{TESSINARI201695}, \acrfull{CEONS} \cite{ceons2015} e \textit{Net2Plan} \cite{net2plan}. Também é válido mencionar a existência de simuladores de redes ópticas não-elásticas, como SimulNet \cite{simulnet2009} e SIMTON \cite{chaves2010}.
 
-Dentre os diferentes simuladores de EONs existem vastas diferenças de arquitetura, funcionalidades e portabilidade. Porém, todas seguem um mesmo fluxo básico: dado uma requisição e o estado atual da rede, um algoritmo de alocação é executado para que seja decidido se a requisição será aceita ou não, e caso aceita quais recursos lhe serão alocados.
+Dentre os diferentes simuladores de EONs existem vastas diferenças de arquitetura, funcionalidades e portabilidade. Entretanto, todas seguem um mesmo fluxo básico: dado uma requisição e o estado atual da rede, um algoritmo de alocação é executado para que seja decidido se a requisição será aceita ou não, e caso aceita quais recursos lhe serão alocados.
 
 Em uma simulação de ONS, é comum que o número de requisições processadas chegue até a magnitude de centenas de milhares. Em \cite{eon_ml_rsa_dl_2019}, Yu et al. utilizam um conjunto de dados de $3 * 10^4$ estados de rede e requisições para o treinamento de uma rede neural utilizada para um algoritmo RSA. Costa et al  \cite{rmlsaacosta2020} utilizam simulações que geram $10^5$ eventos por execução em um estudo que propõe um novo algoritmo RMLSA.
 
@@ -22,9 +20,9 @@ Devido a esta alta quantidade de eventos processados em simulações, é importa
 
 \textit{Machine Learning} (ML), ou aprendizagem de máquina é o estudo de algoritmos de computação que se auto-otimizam de acordo com um critério de desempenho, usando dados de exemplo ou a própria experiência \cite{mitchell1997ml, alpaydin2020introduction}.
 
-Em sua forma mais básica, o método de ML é a coleta de um grande número de dados do domínio do problema a ser resolvido e o uso deles em um algoritmo de aprendizagem, o modelo. Este modelo é definido com parâmetros iniciais que são otimizados com o consumo do dos dados. O objetivo do modelo pode ser tanto preditivo, para realizar predições no futuro sobre dados potencialmente desconhecidos, descritivo, para obter-se conhecimento novo acerca dos dados, ou ambos.
+Em sua forma mais básica, o método de ML é a coleta de um grande número de dados do domínio do problema a ser resolvido e o uso deles em um algoritmo de aprendizagem, o modelo. Este modelo é definido com parâmetros iniciais que são otimizados com o consumo dos dados. O objetivo do modelo pode ser tanto preditivo, para realizar predições no futuro sobre dados potencialmente desconhecidos, descritivo, para obter-se conhecimento novo acerca dos dados, ou ambos.
 
-Há dois grandes desafios no campo de ML: primeiramente, são necessários algoritmos eficientes para o problema de otimização do modelo inicial, de modo que a fase de treinamento seja completada em tempo viável; segundamente, uma vez que um modelo tenha sido aprendido, sua representação e solução algorítimica também devem ser eficientes \cite{alpaydin2020introduction, brief_introduction_to_ml}.
+Há dois grandes desafios no campo de ML: em primeiro lugar, são necessários algoritmos eficientes para o problema de otimização do modelo inicial, de modo que a fase de treinamento seja completada em tempo viável; em segundo lugar, uma vez que um modelo tenha sido aprendido, sua representação e solução algorítimica também devem ser eficientes \cite{alpaydin2020introduction, brief_introduction_to_ml}.
 
 Normalmente, o campo de ML é dividido em três principais categorias: \textit{supervised learning}; \textit{unsupervised learning}; e \textit{reinforcement learning}.
 
@@ -34,7 +32,7 @@ Em inglês, \textit{supervised learning} é a categoria em que o conjunto de dad
 
 \subsection{Aprendizado não-supervisionado}
 
-Em inglês, \textit{unsupervised learning} é a categoria em que existe apenas o conjunto de dados de entrada e o objetivo é encontrar regularidades presentes nos mesmos \cite{alpaydin2020introduction}. Este tipo de aprendizagem é capaz de desempanhar várias tarefas, porém a mais comum é \textit{clustering} \cite{8527529}.
+Em inglês, \textit{unsupervised learning} é a categoria em que existe apenas o conjunto de dados de entrada e o objetivo é encontrar regularidades presentes nos mesmos \cite{alpaydin2020introduction}. Este tipo de aprendizagem é capaz de desempenhar várias tarefas, porém a mais comum é \textit{clustering} \cite{8527529}.
 
 \textit{Clustering} é o processo de agrupar dados de modo que a similaridade de dados nos grupos (\textit{clusters}) é alta, porém a similaridade de dados entre grupos diferentes é baixa. Esta similaridade é tipicamente expressada como uma função de distância, que depende do tipo de dados presente no conjunto \cite{8527529}.
 
@@ -119,7 +117,7 @@ Ao definir a lista de fatores é necessário decidir uma sequência de experimen
 
 Em um desenho simples, o primeiro experimento é realizado com uma configuração comum do sistema e um fator é variado de cada vez. Este desenho não é eficiente estatisticamente e se os fatores interagirem entre si, pode levar a conclusões erradas.
 
-Em um desenho fatorial completo, todas as combinações possíveis de t odos os níveis de todos os fatores são considerados. A principal vantagem é que todas as combinações são examinadas permitindo a análise do impacto de cada fator, incluindo fatores secundários e suas interações. A principal desvantagem é o custo do estudo pelo alto número de experimentos a serem realizados. É comum a utilização de técnicas para reduzir o número de combinações e consequentemente o custo.
+Em um desenho fatorial completo, todas as combinações possíveis de todos os níveis de todos os fatores são considerados. A principal vantagem é que todas as combinações são examinadas permitindo a análise do impacto de cada fator, incluindo fatores secundários e suas interações. A principal desvantagem é o custo do estudo pelo alto número de experimentos a serem realizados. É comum a utilização de técnicas para reduzir o número de combinações e consequentemente o custo.
 
 Desenhos fatorial fracionário são utilizados quando o número de experimentos necessário para a realização do fatorial completo é muito alto. Este desenho consiste em escolher um subconjunto (fração) das combinações de um fatorial completo, levando em conta o fato de que experimentos de um desenho fatorial completo são normalmente redundantes.
 
