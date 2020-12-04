@@ -1,0 +1,349 @@
+Neste apêndice são exibidos trechos de códigos referentes às contribuições feitas ao código-fonte do \acrfull{ONS}.
+
+\section{Interface genérica de modelos}
+\label{appendix-ons-model}
+
+A interface Model (\ref{lst:model}) foi criada com o objetivo de representar uma interface genérica que deve ser utilizada para a representação de qualquer modelo, em qualquer biblioteca. Assim, outros módulos do código podem executar modelos de aprendizagem de máquina de forma abstraída, sem precisar detalhar detalhes do modelo além dos tipos de entrada e saída esperados.
+
+A interface possui dois parâmetros genéricos, nomeados \texttt{IT} (\textit{InputType}, ou tipo de entrada) e \texttt{OT} (\textit{OutputType}, ou tipo de saída). Estes parâmetros devem representar os tipos de entrada e saída definidos pelo modelo que seria utilizado
+
+A interface possui dois métodos: implementações de \texttt{predict} devem receber como parâmetro uma variável \texttt{ìnput} (entrada) do tipo \texttt{IT} e devem retornar um valor do tipo \texttt{OT}. A definição de \texttt{predict} também indica que a execução do método pode lançar exceções. O método \texttt{getModelFramework} (obter a \textit{framework} do modelo), deve retornar um valor do tipo \texttt{ModelFramework}, explicado na seção \ref{appendix-ons-enums}. A implementação deste método deve apenas retornar o valor correspondente à \textit{framework} utilizada para a execução do modelo.
+
+\begin{lstlisting}[language=Java, caption=Implementação da interface Model, label={lst:model}]
+package ons.util.ml;
+
+public interface Model<IT, OT> {
+    OT predict(IT input) throws Exception;
+    ModelFramework getModelFramework();
+}
+\end{lstlisting}
+
+\section{Valores constantes}
+\label{appendix-ons-enums}
+
+Foram criadas duas classes do tipo \texttt{enum}, ou enumeração, em que são definidos valores constantes para as \textit{frameworks} ou bibliotecas usadas, no \textit{enum} \texttt{ModelFramework} (\ref{lst:modelfr}), e valores constantes para diferentes tipos de formatos de modelos, como ONNX e HDF5, no \textit{enum} \texttt{ModelFormat} (\ref{lst:modelfrm}).
+
+\begin{lstlisting}[language=Java, caption=Implementação do \textit{enum} ModelFormat, label={lst:modelfr}]
+package ons.util.ml;
+
+public enum ModelFormat {
+    ONNX,
+    HDF5,
+};  
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption=Implementação do \textit{enum} ModelFramework, label={lst:modelfrm}]
+package ons.util.ml;
+
+public enum ModelFramework {
+    ONNX_RUNTIME,
+    DEEPLEARNING4J,
+    UNKNOWN,
+};
+\end{lstlisting}
+
+\section{Modelos nativos}
+\label{appendix-ons-native-model}
+
+Foram escritas implementações de classes para a execução de modelos de forma nativa, isto é, modelos que são executados pelo programa do ONS.
+
+A classe \texttt{NativeModel}, exibida na listagem \ref{lst:native-model}, implementa a interface \texttt{Model} com as seguintes adições: definição de 4 métodos públicos abstratos nomeados \texttt{load}, responsáveis por carregar o modelo em memória; definição de um método protegido abstrato nomeado \texttt{\_predict}, responsável por executar de fato o modelo; implementação do método público \texttt{predict}, definido pela interface \texttt{Model}, com o objetivo de garantir que o modelo foi carregado antes de executar de fato o modelo por meio do método \texttt{\_predict}.
+
+\begin{lstlisting}[language=Java, caption=Implementação da classe abstrata NativeModel, label={lst:native-model}]
+package ons.util.ml;
+
+import java.io.InputStream;
+
+public abstract class NativeModel<IT, OT> implements Model<IT, OT> {
+    protected final ModelFramework modelFramework;
+    protected boolean ready;
+
+    protected NativeModel(final ModelFramework modelFramework) {
+        this.modelFramework = modelFramework;
+        this.ready = false;
+    }
+
+    public abstract void load(String path) throws Exception;
+    public abstract void load(String path, ModelFormat format) throws Exception;
+    public abstract void load(InputStream inputStream) throws Exception;
+    public abstract void load(InputStream inputStream, ModelFormat format) throws Exception;
+
+    protected abstract OT _predict(IT input) throws Exception;
+
+    public OT predict(IT input) throws Exception {
+        if (!ready) {
+            throw new IllegalStateException("Must load local model before predicting");
+        }
+
+        return _predict(input);
+    }
+
+    public ModelFramework getModelFramework() {
+        return modelFramework;
+    }
+}
+\end{lstlisting}
+
+A listagem \ref{lst:onnx-native-model} exibe a implementação da classe \texttt{OnnxNativeModel}, responsável por implementar os métodos de carregamento de modelos do formato ONNX em memória utilizando a biblioteca ONNX Runtime. A listagem \ref{lst:dl4j-native-model} se refere à implementação da classe \texttt{Dl4jNativeModel}, responsável por implementar os mesmos métodos que a anterior, porém com o apoio da biblioteca Deeplearning4j.
+
+\begin{lstlisting}[language=Java, caption=Implementação da classe OnnxNativeModel, label={lst:onnx-native-model}]
+package ons.util.ml;
+
+import ai.onnxruntime.OrtEnvironment;
+import ai.onnxruntime.OrtException;
+import ai.onnxruntime.OrtSession;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+public abstract class OnnxNativeModel<IT, OT> extends NativeModel<IT, OT> {
+    protected OrtSession session;
+    protected OrtEnvironment environment;
+    protected String inputName;
+
+    public OnnxNativeModel() {
+        super(ModelFramework.ONNX_RUNTIME);
+    }
+
+    public void load(String path) throws IOException, OrtException {
+        load(path, ModelFormat.ONNX);
+    }
+
+    public void load(String path, ModelFormat format) throws IOException, OrtException {
+        InputStream targetStream = new FileInputStream(path);
+        load(targetStream, format);
+    }
+
+    public void load(InputStream inputStream) throws IOException, OrtException {
+        load(inputStream, ModelFormat.ONNX);
+    }
+
+    public void load(InputStream is, ModelFormat format) throws IOException, OrtException {
+        if (format != ModelFormat.ONNX) {
+            throw new UnsupportedOperationException("Unsupported format");
+        }
+
+        environment = OrtEnvironment.getEnvironment();
+        session = environment.createSession(is.readAllBytes());
+        inputName = session.getInputNames().iterator().next();
+        ready = true;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption=Implementação da classe Dl4jNativeModel, label={lst:dl4j-native-model}]
+package ons.util.ml;
+
+import org.deeplearning4j.nn.modelimport.keras.KerasModelImport;
+import org.deeplearning4j.nn.modelimport.keras.exceptions.InvalidKerasConfigurationException;
+import org.deeplearning4j.nn.modelimport.keras.exceptions.UnsupportedKerasConfigurationException;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+public abstract class Dl4jNativeModel<IT, OT> extends NativeModel<IT, OT> {
+    protected MultiLayerNetwork model;
+
+    public Dl4jNativeModel() {
+        super(ModelFramework.DEEPLEARNING4J);
+    }
+
+    public void load(String path) throws IOException, InvalidKerasConfigurationException, UnsupportedKerasConfigurationException {
+        load(path, ModelFormat.HDF5);
+    }
+
+    public void load(String path, ModelFormat format) throws IOException, UnsupportedKerasConfigurationException, InvalidKerasConfigurationException {
+        InputStream targetStream = new FileInputStream(path);
+        load(targetStream, format);
+    }
+
+    public void load(InputStream inputStream) throws IOException, InvalidKerasConfigurationException, UnsupportedKerasConfigurationException {
+        load(inputStream, ModelFormat.HDF5);
+    }
+
+    public void load(InputStream is, ModelFormat format) throws UnsupportedKerasConfigurationException, IOException, InvalidKerasConfigurationException {
+        if (format == ModelFormat.HDF5) {
+            this.model = KerasModelImport.importKerasSequentialModelAndWeights(is);
+            ready = true;
+        } else {
+            throw new UnsupportedOperationException("Unsupported format");
+        }
+    }
+}
+\end{lstlisting}
+
+As listagens \ref{lst:dl4j-classifier} e \ref{lst:onnx-classifier} exibem as implementações dos classificadores que utilizam Deeplearning4j e ONNX Runtime respectivamente. Nelas, é possível observar como ambas herdam de suas respectivas classes que herdam de \texttt{NativeModel} e necessitam implementar apenas uma simples função específica do modelo.
+
+\begin{lstlisting}[language=Java, caption=Implementação da classe Dl4jClassifier, label={lst:dl4j-classifier}]
+package ons.tools;
+
+import ons.util.ml.Dl4jNativeModel;
+import org.nd4j.linalg.factory.Nd4j;
+
+public class Dl4jClassifier extends Dl4jNativeModel<float[][], Number> {
+    protected Integer _predict(float[][] testData) {
+        var input = Nd4j.create(testData);
+        var x = this.model.output(input);
+        if (x.getColumn(0).getDouble(0) >= x.getColumn(1).getDouble(0) && x.getColumn(0).getDouble(0) >= x.getColumn(2).getDouble(0)) return 0;
+        if (x.getColumn(1).getDouble(0) >= x.getColumn(0).getDouble(0) && x.getColumn(1).getDouble(0) >= x.getColumn(2).getDouble(0)) return 1;
+        return 2;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption=Implementação da classe OnnxClassifier, label={lst:onnx-classifier}]
+package ons.tools;
+
+import ai.onnxruntime.OnnxTensor;
+import ai.onnxruntime.OrtException;
+import ai.onnxruntime.OrtSession;
+import ons.util.ml.OnnxNativeModel;
+
+import java.util.Collections;
+
+public class OnnxClassifier extends OnnxNativeModel<float[][], Number> {
+    public Integer _predict(float[][] testData) throws OrtException {
+        try (OnnxTensor test = OnnxTensor.createTensor(this.environment, testData);
+             OrtSession.Result output = this.session.run(Collections.singletonMap(this.inputName, test))) {
+            var x = (float[][])output.get(0).getValue();
+            if (x[0][0] >= x[0][1] && x[0][0] >= x[0][2]) return 0;
+            if (x[0][1] >= x[0][0] && x[0][1] >= x[0][2]) return 1;
+            return 2;
+        }
+    }
+}
+\end{lstlisting}
+
+
+
+\section{Modelos remotos}
+\label{appendix-ons-remote-model}
+
+Para permitir a execução de modelos de forma flexível, como elencado na seção \ref{flexible}, a classe \texttt{HttpRemoteModel} (\ref{lst:http-remote-model}) foi implementada. Ela implementa a interface \texttt{Model} de modo que a execução do modelo é realizada por meio de uma requisição HTTP POST: os dados de entrada são serializados em JSON, a requisição é feita, a resposta em JSON é desserializada e retornada para onde a função foi chamada.
+
+\begin{lstlisting}[language=Java, caption=Implementação da classe Dl4jNativeModel, label={lst:http-remote-model}]
+package ons.util.ml;
+
+import com.google.gson.Gson;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+
+public class HttpRemoteModel<IT, OT> implements Model<IT, OT> {
+    private final HttpClient httpClient;
+    private final String endpointUrl;
+    private final Gson gson;
+
+    public HttpRemoteModel(String endpointUrl) {
+        this.httpClient = HttpClientBuilder.create().build();
+        this.endpointUrl = endpointUrl;
+        this.gson = new Gson();
+    }
+
+    private class Request {
+        IT input;
+    }
+
+    private class Response {
+        OT output;
+    }
+
+    public OT predict(IT input) throws Exception {
+        var request = new Request();
+        request.input = input;
+
+        var httpPost = new HttpPost(endpointUrl);
+        var entity = new StringEntity(gson.toJson(request));
+
+        httpPost.setEntity(entity);
+        httpPost.setHeader("Content-type", "application/json");
+
+        var response = httpClient.execute(httpPost);
+
+        var statusCode = response.getStatusLine().getStatusCode();
+
+        if (200 > statusCode || statusCode >= 300){
+            throw new HttpResponseException(statusCode, response.getStatusLine().getReasonPhrase());
+        }
+
+        var jsonString = EntityUtils.toString(response.getEntity());
+        var responseObj = gson.fromJson(jsonString, Response.class);
+
+        return (OT)responseObj.output;
+    }
+
+    public ModelFramework getModelFramework() {
+        return ModelFramework.UNKNOWN;
+    }
+}
+\end{lstlisting}
+
+\section{Servidor HTTP para servir execuções de modelos}
+\label{appendix-ons-http-server}
+
+Para realizar testes acerca do funcionamento da implementação das classes descritas no apêndice \ref{appendix-ons-remote-model}, um simples servidor HTTP foi implementado, exibido na listagem \ref{lst:http}. Seu papel é reduzido a ouvir por requisições POST, ler e desserializar o corpo da requisição em formato JSON, executar o modelo utilizando o corpo da requisição como entrada, responder a requisição com o resultado do modelo serializado em JSON. O modelo é executado pela biblioteca ONNX Runtime, como pode ser visto na listagem \ref{lst:onnx_http}.
+
+\begin{lstlisting}[language=python, caption=Simples servidor HTTP para testes de integração, label={lst:http}]
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from classifier import Classifier
+import json
+import os
+
+classifier = Classifier(os.getenv("MODEL_PATH"))
+
+
+class Handler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        content_length = int(self.headers["Content-Length"])
+        post_data = self.rfile.read(content_length)
+
+        inp = json.loads(post_data.decode("utf-8"))["input"]
+        res = classifier.classify(inp)
+
+        self.send_response(200)
+        self.send_header("Content-type", "application/json")
+        self.end_headers()
+        self.wfile.write(json.dumps({"output": res}).encode("utf-8"))
+
+
+def run(server_class=HTTPServer, port=8080):
+    server_address = ("", port)
+    httpd = server_class(server_address, Handler)
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    httpd.server_close()
+
+
+if __name__ == "__main__":
+    from sys import argv
+
+    if len(argv) == 2:
+        run(port=int(argv[1]))
+    else:
+        run()
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=python, caption=Classificador usado nas medições e pelo servidor HTTP, label={lst:onnx_http}]
+import numpy
+import onnxruntime as rt
+
+
+class Classifier:
+    def __init__(self, model_path: str):
+        self.session = rt.InferenceSession(model_path)
+
+    def classify(self, values: list):
+        input_name = self.session.get_inputs()[0].name
+        prediction = self.session.run(None, {input_name: values})
+
+        return int(numpy.argmax(prediction))
+\end{lstlisting}

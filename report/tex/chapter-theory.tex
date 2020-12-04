@@ -1,9 +1,9 @@
-Este capítulo apresenta conceitos básicos fundamentais para o melhor entendimento do trabalho. Na seção \ref{ft_eon} são introduzidos breves conceitos acerca de simulações de EONs e a magnitude de trabalho normalmente envolvida. Na seção \ref{ml} são introduzidos conceitos fundamentais de aprendizagem de máquina e uma breve descrição de suas principais categorias. Por fim, na seção \ref{performance_analysis_theory} é apresentada a metodologia de avaliação de desempenha utilizada nesse trabalho.
+Este capítulo apresenta conceitos básicos fundamentais para o melhor entendimento do trabalho. Na seção \ref{ft_eon} são introduzidos breves conceitos acerca de simulações de EONs e a magnitude de trabalho normalmente envolvida. Na seção \ref{ml} são introduzidos conceitos fundamentais de aprendizagem de máquina e uma breve descrição de suas principais categorias. Por fim, na seção \ref{performance_analysis_theory} é apresentada a metodologia de avaliação de desempenho utilizada neste trabalho.
 
 \section{Simulações de EONs}%
 \label{ft_eon}
 
-A instalação e gerenciamento de redes ópticas elásticas envolve o uso de dispositivos óticos e infraestruturas de comunicação extremamente caros. Além disso, a maioria dos equipamentos utilizados são protegidos por leis de propriedade intelectual e não disponibilizam meios para modificações na programação de seu funcionamento.
+A instalação e gerenciamento de redes ópticas elásticas envolve o uso de dispositivos óticos e infraestruturas de comunicação normalmente caros. Além disso, a maioria dos equipamentos utilizados são protegidos por leis de propriedade intelectual e não disponibilizam meios para modificações na programação de seu funcionamento.
 
 Pelo alto custo, o uso de equipamentos e redes reais para o desenvolvimento de pesquisas na área de redes ópticas elásticas se tornou inviável, tornando necessária a busca por outras alternativas. Sua dinamicidade e complexidade não permite uma modelagem analítica precisa \cite{costa2016ons}, já a simulação se mostra uma excelente alternativa pelo fato de permitir que pesquisadores validem e avaliem de forma fácil e barata o uso de novos protocolos e algoritmos \cite{simulnet2009}.
 
@@ -11,7 +11,7 @@ Para auxiliar pesquisadores com ferramentas que agilizam suas pesquisas, diverso
 
 Dentre os diferentes simuladores de EONs existem vastas diferenças de arquitetura, funcionalidades e portabilidade. Entretanto, todas seguem um mesmo fluxo básico: dado uma requisição e o estado atual da rede, um algoritmo de alocação é executado para que seja decidido se a requisição será aceita ou não, e caso aceita quais recursos lhe serão alocados.
 
-Em uma simulação de ONS, é comum que o número de requisições processadas chegue até a magnitude de centenas de milhares. Em \cite{eon_ml_rsa_dl_2019}, Yu et al. utilizam um conjunto de dados de $3 * 10^4$ estados de rede e requisições para o treinamento de uma rede neural utilizada para um algoritmo RSA. Costa et al  \cite{rmlsaacosta2020} utilizam simulações que geram $10^5$ eventos por execução em um estudo que propõe um novo algoritmo RMLSA.
+Em uma simulação executada pelo \acrfull{ONS}, é comum que o número de requisições processadas chegue até a magnitude de centenas de milhares. Em \cite{leia2019}, Leia et al. utilizam simulações que geram $10^5$ eventos por execução em um estudo que propõe um novo algoritmo RSA. Costa et al. também utilizam simulações que geram $10^5$ eventos por execução em \cite{rmlsaacosta2020}, onde propõem um novo algoritmo RMLSA.
 
 Devido a esta alta quantidade de eventos processados em simulações, é importante que algoritmos usados para processar estes eventos sejam eficientes. Por isto, ao buscar adicionar suporte de execução de modelos de aprendizagem de máquina em simuladores, é importante considerar o desempenho das tecnologias usadas de modo a não se tornarem um gargalo no desempenho geral de simulações.
 
@@ -36,7 +36,7 @@ Em inglês, \textit{unsupervised learning} é a categoria em que existe apenas o
 
 \textit{Clustering} é o processo de agrupar dados de modo que a similaridade de dados nos grupos (\textit{clusters}) é alta, porém a similaridade de dados entre grupos diferentes é baixa. Esta similaridade é tipicamente expressada como uma função de distância, que depende do tipo de dados presente no conjunto \cite{8527529}.
 
-Dentre os usos de aprendizagem não-supervisionada, pode-se destacar análise de redes sociais, agrupamento de genes e pesquisa de mercado como aplicações bem-sucedidas \cite{8527529}.
+Dentre os usos de aprendizagem não-supervisionada, pode-se destacar análise de redes sociais, agrupamento de genes e pesquisas de mercado como análises de aplicações bem-sucedidas \cite{8527529}.
 
 \subsection{Aprendizado por reforço}
 
@@ -58,7 +58,7 @@ Esta técnica é comumente usada em aplicações como robótica, área de finan�
 
 Avaliações são importantes na busca pelo melhor desempenho de um sistema com os recursos disponíveis. Seus resultados auxiliam tanto nas decisões de escolhas entre diferentes sistemas ou simplesmente entender o funcionamento de um sistema já existente. Devido à grande diversidade de sistemas, não existe um procedimento padrão comum em que seja possível analisar eficientemente um sistema qualquer, sendo necessário conhecer o sistema a ser avaliado e escolher as métricas, carga de trabalho e técnicas de avaliação apropriadas \cite{jain1991art}.
 
-Uma simulação executada por simuladores de EONs costuma envolver dezenas de milhares de eventos como requisições de conexões. Tamanha magnitude do número de eventos representa a importância de um bom desempenho na execução de modelos, como por exemplo em propostas de soluções para problemas de alocação de recursos (e.g. RSA) cujos modelos seriam executados em cada evento. Assim, uma análise quantitativa do desempenho de bibliotecas de ML é importante na busca por uma solução de integração de ML com simuladores que seja flexível de acordo com as necessidades de cada pesquisa e que possua um bom desempenho de modo a acelerar a obtenção de resultados.
+Uma simulação executada por simuladores de EONs costuma envolver dezenas de milhares de eventos, como requisições de conexões. Tamanha magnitude do número de eventos representa a importância de um bom desempenho na execução de modelos, como por exemplo em propostas de soluções para problemas de alocação de recursos (e.g. RSA) cujos modelos seriam executados em cada evento. Assim, uma análise quantitativa do desempenho de bibliotecas de ML é importante na busca por uma solução de integração de ML com simuladores que seja flexível de acordo com as necessidades de cada pesquisa e que possua um bom desempenho de modo a acelerar a obtenção de resultados.
 
 Raj Jain em seu livro \cite{jain1991art} propôs uma abordagem sistemática para a realização de análises de desempenho, descrita passo a passo nas próximas subseções.
 
@@ -66,7 +66,7 @@ Raj Jain em seu livro \cite{jain1991art} propôs uma abordagem sistemática para
 
 A primeira etapa se trata de definir o objetivo do estudo e os limites do sistema a ser analisado. A definição do sistema consiste em delinear os limites do sistema, como por exemplo uma biblioteca de serialização em JSON cujos serviços são funções para serializar e desserializar um conjunto de dados.
 
-Definir o sistema e os objetivos do estudo é importante pois as métricas de desempenho e as cargas de trabalho usuadas na análise de desempenho depende da definição do sistema.
+Definir o sistema e os objetivos do estudo é importante pois as métricas de desempenho e as cargas de trabalho usadas na análise de desempenho depende da definição do sistema.
 
 \subsection{Listar serviços e resultados}
 
@@ -119,7 +119,7 @@ Em um desenho simples, o primeiro experimento é realizado com uma configuraçã
 
 Em um desenho fatorial completo, todas as combinações possíveis de todos os níveis de todos os fatores são considerados. A principal vantagem é que todas as combinações são examinadas permitindo a análise do impacto de cada fator, incluindo fatores secundários e suas interações. A principal desvantagem é o custo do estudo pelo alto número de experimentos a serem realizados. É comum a utilização de técnicas para reduzir o número de combinações e consequentemente o custo.
 
-Desenhos fatorial fracionário são utilizados quando o número de experimentos necessário para a realização do fatorial completo é muito alto. Este desenho consiste em escolher um subconjunto (fração) das combinações de um fatorial completo, levando em conta o fato de que experimentos de um desenho fatorial completo são normalmente redundantes.
+Desenhos fatorial fracionário são utilizados quando o número de experimentos necessário para a realização do fatorial completo é muito alto. Este desenho consiste em escolher um subconjunto (fração) das combinações de um fatorial completo, uma vez que é comum haverem experimentos redundantes em um desenho fatorial completo.
 
 \subsection{Apresentação de resultados}
 

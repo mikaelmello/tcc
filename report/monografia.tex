@@ -13,6 +13,16 @@
 \usepackage{xcolor}
 \usepackage{ifthen}
 \usepackage{booktabs}
+
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  frame=single,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
 \newcommand{\todo}[1][]{%
   \ifthenelse{\equal{#1}{}}
     {\textcolor{red}{TODO }}
@@ -25,7 +35,7 @@
 \orientador{\prof \dr André Costa Drummond}{CIC/UnB}%
 %\coorientador{\prof \dr José Ralha}{CIC/UnB}
 \coordenador{\prof \dr Marcelo Grandi Mandelli}{CIC/UnB}%
-\diamesano{5}{dezembro}{2020}%
+\diamesano{7}{dezembro}{2020}%
 
 \membrobanca{\prof \dr Eduardo Adilio Pelinson Alchieri}{CIC/UnB}%
 \membrobanca{\prof \dr Marcelo Antonio Marotta}{CIC/UnB}%
@@ -49,5 +59,8 @@
 \capitulo{chapter-deploy}{Avaliação de Desempenho}%
 \capitulo{chapter-analysis}{Propostas de Integração}%
 \capitulo{chapter-conclusion}{Conclusão}%
+
+\apendice{Apendice_Simulacao}{Códigos usados para medição}%
+\apendice{Apendice_ONS}{Modificações de código no ONS}%
 
 \end{document}%

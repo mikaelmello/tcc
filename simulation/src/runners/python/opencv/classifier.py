@@ -7,7 +7,7 @@ class Classifier:
         self.net = cv2.dnn.readNetFromONNX(model_path)
         self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 
-        if gpu:
+        if gpu:  # does not work
             self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
         else:
             self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)

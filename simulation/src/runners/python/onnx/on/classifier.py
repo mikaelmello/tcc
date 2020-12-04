@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 import onnxruntime as rt
 
 
@@ -10,4 +10,4 @@ class Classifier:
         input_name = self.session.get_inputs()[0].name
         prediction = self.session.run(None, {input_name: values})
 
-        return int(numpy.argmax(prediction))
+        return int(np.argmax(prediction))

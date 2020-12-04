@@ -1,9 +1,5 @@
 import tensorflow as tf
-import time
 import numpy as np
-from pathlib import Path
-from tensorflow.keras.models import load_model
-import numpy
 
 
 class Classifier:
@@ -18,4 +14,4 @@ class Classifier:
         self.interpreter.set_tensor(self.input_tensor, input_data)
         self.interpreter.invoke()
         output_data = self.interpreter.get_tensor(self.output_tensor)
-        return int(numpy.argmax(output_data))
+        return int(np.argmax(output_data))

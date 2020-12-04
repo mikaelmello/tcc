@@ -1,0 +1,496 @@
+A seguir são exibidos os principais arquivos e trechos de código utilizados na medição de desempenho dos classificadores implementados.
+
+\section{Medições em Java}
+
+\begin{lstlisting}[caption=Dependências Maven comuns a todas medições em Java]
+<dependency>
+    <groupId>commons-cli</groupId>
+    <artifactId>commons-cli</artifactId>
+    <version>1.4</version>
+</dependency>
+<dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.8.6</version>
+</dependency>
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption=Classe principal de execução das medições em Java]
+package br.unb.cic;
+
+import com.google.gson.Gson;
+import org.apache.commons.cli.*;
+
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.zip.ZipInputStream;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        // create the command line parser
+        var parser = new DefaultParser();
+
+        var options = new Options();
+        options.addRequiredOption("i", "input-path", true, "");
+        options.addRequiredOption("o", "output-path", true, "");
+        options.addRequiredOption("m", "model-path", true, "");
+
+
+        var line = parser.parse(options, args);
+
+        var inputPath = line.getOptionValue("i");
+        var outputPath = line.getOptionValue("o");
+        var modelPath = line.getOptionValue("m");
+
+        var classifier = new Classifier(modelPath);
+        var zis = new ZipInputStream(new FileInputStream(inputPath));
+
+        var outputGson = new Gson();
+        var outputList = new ArrayList<>();
+
+        var zipEntry = zis.getNextEntry();
+        while (zipEntry != null) {
+            var bytes = zis.readAllBytes();
+            var gson = new Gson();
+            var workload = gson.fromJson(new String(bytes), Workload.class);
+
+            for (int i = 0; i < workload.count; i++) {
+                var input = workload.inputs.get(i);
+                var data = input.data;
+
+                var startTime = System.nanoTime();
+
+                var output = classifier.classify(data);
+
+                var stopTime = System.nanoTime();
+                var usDuration = (stopTime - startTime) / 1000;
+
+                var outputObj = new Output();
+                outputObj.o = output;
+                outputObj.d = usDuration;
+                outputObj.du = "us";
+                outputObj.eo = input.expected_output;
+                outputObj.iid = input.id;
+                outputList.add(outputObj);
+
+                if (outputList.size() % 1000 == 0) {
+                    System.out.print(String.format("\r%d registered...", outputList.size()));
+                }
+            }
+
+            zipEntry = zis.getNextEntry();
+        }
+        zis.closeEntry();
+        zis.close();
+
+        System.out.println("\nSaving!");
+        var writer = new FileWriter(outputPath);
+        outputGson.toJson(outputList, writer);
+        writer.flush();
+        writer.close();
+
+        System.out.println("Done!");
+    }
+}
+\end{lstlisting}
+
+\subsection{ONNX Runtime}
+
+A biblioteca ONNX Runtime exige modificações no código para uso ou não de GPU. Para uso de GPU, a dependência \texttt{onnxruntime\_gpu} deve ser utilizada, caso contrário, \texttt{onnxruntime}. Além disso, a sessão criada por meio da API da ONNX Runtime deve adicionar explicitamente a GPU (dispositivo CUDA) para uso.
+
+\begin{lstlisting}[caption=Dependências Maven para uso de ONNX Runtime sem GPU]
+<dependency>
+    <groupId>com.microsoft.onnxruntime</groupId>
+    <artifactId>onnxruntime</artifactId>
+    <version>1.5.2</version>
+</dependency>
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Dependências Maven para uso de ONNX Runtime com GPU]
+<dependency>
+    <groupId>com.microsoft.onnxruntime</groupId>
+    <artifactId>onnxruntime_gpu</artifactId>
+    <version>1.4.0</version>
+</dependency>
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption=Classificador implementado em Java utilizando ONNX Runtime sem GPU]
+package br.unb.cic;
+
+import ai.onnxruntime.NodeInfo;
+import ai.onnxruntime.OnnxTensor;
+import ai.onnxruntime.OrtEnvironment;
+import ai.onnxruntime.OrtException;
+import ai.onnxruntime.OrtSession;
+import ai.onnxruntime.OrtSession.Result;
+
+import java.nio.file.Paths;
+import java.util.Collections;
+
+import static java.lang.Math.round;
+
+public class Classifier {
+   private final OrtSession session;
+   private final OrtEnvironment environment;
+   private final String inputName;
+
+    public Classifier(String modelDir) throws Exception {
+        var modelPath = Paths.get(modelDir, "model.onnx").toString();
+        environment = OrtEnvironment.getEnvironment();
+        session = environment.createSession(modelPath);
+        inputName = session.getInputNames().iterator().next();
+    }
+
+    public int classify(float[][] testData) throws OrtException {
+        try (OnnxTensor test = OnnxTensor.createTensor(environment, testData);
+             Result output = session.run(Collections.singletonMap(inputName, test))) {
+            var x = (float[][])output.get(0).getValue();
+            if (x[0][0] >= x[0][1] && x[0][0] >= x[0][2]) return 0;
+            if (x[0][1] >= x[0][0] && x[0][1] >= x[0][2]) return 1;
+            return 2;
+        }
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption=Classificador implementado em Java utilizando ONNX Runtime com GPU]
+package br.unb.cic;
+
+import ai.onnxruntime.NodeInfo;
+import ai.onnxruntime.OnnxTensor;
+import ai.onnxruntime.OrtEnvironment;
+import ai.onnxruntime.OrtException;
+import ai.onnxruntime.OrtSession;
+import ai.onnxruntime.OrtSession.Result;
+
+import java.nio.file.Paths;
+import java.util.Collections;
+
+import static java.lang.Math.round;
+
+public class Classifier {
+   private final OrtSession session;
+   private final OrtEnvironment environment;
+   private final String inputName;
+
+    public Classifier(String modelDir) throws Exception {
+        var modelPath = Paths.get(modelDir, "model.onnx").toString();
+        environment = OrtEnvironment.getEnvironment();
+        int gpuDeviceId = 0; // The GPU device ID to execute on
+        var sessionOptions = new OrtSession.SessionOptions();
+        sessionOptions.addCUDA(gpuDeviceId);
+        session = environment.createSession(modelPath, sessionOptions);
+        inputName = session.getInputNames().iterator().next();
+    }
+
+    public int classify(float[][] testData) throws OrtException {
+        try (OnnxTensor test = OnnxTensor.createTensor(environment, testData);
+             Result output = session.run(Collections.singletonMap(inputName, test))) {
+            var x = (float[][])output.get(0).getValue();
+            if (x[0][0] >= x[0][1] && x[0][0] >= x[0][2]) return 0;
+            if (x[0][1] >= x[0][0] && x[0][1] >= x[0][2]) return 1;
+            return 2;
+        }
+    }
+}
+\end{lstlisting}
+
+\subsection{Deeplearning4j}
+
+A biblioteca Deeplearning4j não exige modificações no código para uso ou não de GPU, sendo esta variável controlada por meio da dependência instalada. Caso se queira usar a GPU, a dependência \texttt{nd4j-cuda-<cuda\_version>-platform} deve ser utilizada, caso contrário, \texttt{deeplearning4j-core}.
+
+\begin{lstlisting}[caption=Dependências Maven para uso de Deeplearning4j sem GPU]
+<dependency>
+    <groupId>org.nd4j</groupId>
+    <artifactId>nd4j-native-platform</artifactId>
+    <version>1.0.0-beta7</version>
+</dependency>
+<dependency>
+    <groupId>org.deeplearning4j</groupId>
+    <artifactId>deeplearning4j-core</artifactId>
+    <version>1.0.0-beta7</version>
+</dependency>
+<dependency>
+    <groupId>org.deeplearning4j</groupId>
+    <artifactId>deeplearning4j-modelimport</artifactId>
+    <version>1.0.0-beta7</version>
+</dependency>
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Dependências Maven para uso de Deeplearning4j com GPU]
+<dependency>
+    <groupId>org.nd4j</groupId>
+    <artifactId>nd4j-native-platform</artifactId>
+    <version>1.0.0-beta7</version>
+</dependency>
+<dependency>
+    <groupId>org.nd4j</groupId>
+    <artifactId>nd4j-cuda-10.1-platform</artifactId>
+    <version>1.0.0-beta7</version>
+</dependency>
+<dependency>
+    <groupId>org.deeplearning4j</groupId>
+    <artifactId>deeplearning4j-modelimport</artifactId>
+    <version>1.0.0-beta7</version>
+</dependency>
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption=Classificador implementado em Java utilizando Deeplearning4j]
+package br.unb.cic;
+
+import org.deeplearning4j.nn.modelimport.keras.KerasModelImport;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.nd4j.linalg.factory.Nd4j;
+
+import java.nio.file.Paths;
+
+public class Classifier {
+    private final MultiLayerNetwork model;
+
+    public Classifier(String modelDir) throws Exception {
+        var modelPath = Paths.get(modelDir, "model.h5").toString();
+        this.model = KerasModelImport.importKerasSequentialModelAndWeights(modelPath);
+    }
+
+    public int classify(float[][] testData) {
+        var input = Nd4j.create(testData);
+        var x = model.output(input);
+        if (x.getColumn(0).getDouble(0) >= x.getColumn(1).getDouble(0) && x.getColumn(0).getDouble(0) >= x.getColumn(2).getDouble(0)) return 0;
+        if (x.getColumn(1).getDouble(0) >= x.getColumn(0).getDouble(0) && x.getColumn(1).getDouble(0) >= x.getColumn(2).getDouble(0)) return 1;
+        return 2;
+    }
+}
+\end{lstlisting}
+
+\section{Medições em Python}
+
+A listagem \ref{lst:main_python} exibe o arquivo principal de execução das medições em Python. Algumas medições utilizam uma versão levemente modificada onde o argumento \texttt{gpu} do programa é ignorado.
+
+\begin{lstlisting}[language=Python, caption=Arquivo principal de execução das medições em Python, label={lst:main_python}]
+import time
+import os
+import argparse
+import json
+from classifier import Classifier
+from zipfile import ZipFile
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model-path", "-m", required=True, type=str)
+    parser.add_argument("--input-path", "-i", required=True, type=str)
+    parser.add_argument("--output-path", "-o", required=True, type=str)
+    parser.add_argument("--gpu", "-g", action="store_true", default=False)
+
+    args = vars(parser.parse_args())
+    return args
+
+
+class Input:
+    def __init__(self, input_path):
+        self.input_zip = ZipFile(input_path)
+        self.to_open = self.input_zip.namelist()
+        self.open = False
+
+    def get_next(self):
+        while True:
+            if not self.open:
+                if not self.to_open:
+                    return
+
+                filename = self.to_open[0]
+                self.to_open = self.to_open[1:]
+                content = self.input_zip.read(filename)
+                self.cur_file = json.loads(content.decode("utf8"))
+                self.open = True
+                self.cur_index = 0
+
+            inputs = self.cur_file["inputs"]
+            count = self.cur_file["count"]
+            payload = inputs[self.cur_index]
+
+            self.cur_index += 1
+            if self.cur_index == count:
+                self.open = False
+
+            yield payload
+
+
+class Output:
+    def __init__(self, output_path):
+        self.output_path = output_path
+        self.results = []
+
+    def register_result(self, td, output, inp):
+        output_payload = {
+            "iid": inp["id"],
+            "o": output,
+            "eo": inp["expected_output"],
+            "d": td,
+            "du": "us",
+        }
+
+        self.results.append(output_payload)
+
+    def save(self):
+        with open(self.output_path, "w") as f:
+            json.dump(self.results, f, separators=(",", ":"))
+
+
+def classify(classifier, data):
+    start = time.time()
+    res = classifier.classify(data)
+    end = time.time()
+
+    microseconds = int((end - start) * 1e6)
+    return (res, microseconds)
+
+
+if __name__ == "__main__":
+    args = parse_args()
+
+    model_path = os.path.join(args["model_path"], "model.onnx")
+    input_path = args["input_path"]
+    output_path = args["output_path"]
+
+    classifier = Classifier(model_path, args["gpu"])
+    data = Input(input_path)
+    output = Output(output_path)
+
+    count = 0
+    for inp in data.get_next():
+        if count % 1000 == 0:
+            print(f"\r{count} registered...", end="")
+        result = classify(classifier, inp["data"])
+        output.register_result(result[1], result[0], inp)
+        count += 1
+
+    print("\nSaving!")
+    output.save()
+    print("Done!")
+\end{lstlisting}
+
+\subsection{OpenCV}
+
+A biblioteca OpenCV exige \textit{builds} customizadas do código-fonte para ser compatível com o uso de GPU. Por este motivo foram realizadas apenas medições com uso de CPU. A versão \textit{headless} da biblioteca foi utilizada pois não era necessária a utilização de nenhuma funcionalidade visual.
+
+\begin{lstlisting}[language=Python, caption=Dependências PIP para uso de OpenCV sem GPU]
+opencv_python_headless==4.4.0.44
+numpy==1.18.5
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, caption=Classificador implementado em Python utilizando OpenCV]
+import cv2
+import numpy as np
+
+
+class Classifier:
+    def __init__(self, model_path: str, gpu: bool):
+        self.net = cv2.dnn.readNetFromONNX(model_path)
+        self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
+
+        if gpu:  # should not be used
+            self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+        else:
+            self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
+
+    def classify(self, values: list):
+        self.net.setInput(np.array(values))
+        prediction = self.net.forward()
+
+        return int(np.argmax(prediction))
+\end{lstlisting}
+
+\subsection{TensorFlow}
+
+Em TensorFlow, o código é o mesmo para executar com o uso de GPU ou não. O uso de GPU é controlado por meio da variável de ambiente \texttt{CUDA\_VISIBLE\_DEVICES}, igual a -1 quando a GPU não deve ser utilizada e 0 quando a GPU de ID 0 está disponível para ser utilizada.
+
+\begin{lstlisting}[language=Python, caption=Dependências PIP para uso de TensorFlow]
+numpy==1.18.5
+tensorflow==2.3.1
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, caption=Classificador implementado em Python utilizando TensorFlow]
+import tensorflow as tf
+import numpy as np
+from tensorflow.keras.models import load_model
+
+
+class Classifier:
+    def __init__(self, model_path: str):
+        self.model = load_model(model_path)
+
+    def classify(self, values: list):
+
+        input_data = np.asarray(values, dtype=np.float32)
+        output_data = self.model.__call__(
+            tf.convert_to_tensor(input_data), training=False
+        )
+        return int(np.argmax(output_data))
+\end{lstlisting}
+
+\subsection{TensorFlow Lite}
+
+A instalação da biblioteca TensorFlow Lite depende da versão de Python utilizada para testes. Por este motivo, foram adicionadas condições no arquivo de dependências para que seja compatível com pelo menos 3 diferentes versões de Python.
+
+\begin{lstlisting}[language=Python, caption=Dependências PIP para uso de TensorFlow Lite sem GPU]
+numpy==1.18.5
+tensorflow==2.3.1
+https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp36-cp36m-linux_x86_64.whl ; python_version == '3.6'
+https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_x86_64.whl ; python_version == '3.7'
+https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp38-cp38-linux_x86_64.whl ; python_version == '3.8'
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, caption=Classificador implementado em Python utilizando TensorFlow Lite]
+import tensorflow as tf
+import numpy as np
+
+
+class Classifier:
+    def __init__(self, model_path: str):
+        self.interpreter = tf.lite.Interpreter(model_path=model_path)
+        self.interpreter.allocate_tensors()
+        self.input_tensor = self.interpreter.get_input_details()[0]["index"]
+        self.output_tensor = self.interpreter.get_output_details()[0]["index"]
+
+    def classify(self, values: list):
+        input_data = np.array(values, dtype=np.float32)
+        self.interpreter.set_tensor(self.input_tensor, input_data)
+        self.interpreter.invoke()
+        output_data = self.interpreter.get_tensor(self.output_tensor)
+        return int(np.argmax(output_data))
+\end{lstlisting}
+
+\subsection{ONNX Runtime}
+
+Para o uso de ONNX Runtime em Python, o código necessário para execução dos modelos é o mesmo seja para uso de GPU ou não. Entretanto, é necessário o uso de uma biblioteca diferente chamada \texttt{onnxruntime-gpu} caso se queira utilizar a GPU. Além disso, é necessário se atentar à versão da biblioteca \texttt{onnxruntime-gpu} para que ela seja compatível com a versão da CUDA instalada na máquina, como a máquina utilizada na avaliação de desempenho possuía a CUDA versão 10.1 instalada, a versão 1.4.0 da biblioteca foi utilizada ao invés da versão 1.5.2, como no uso de CPU.
+
+\begin{lstlisting}[language=Python, caption=Dependências PIP para uso de ONNX Runtime sem GPU]
+numpy==1.18.5
+onnxruntime==1.5.2
+onnx==1.7.0
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, caption=Dependências PIP para uso de ONNX Runtime com GPU]
+numpy==1.18.5
+onnxruntime-gpu==1.4.0
+onnx==1.7.0
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, caption=Classificador implementado em Python utilizando ONNX Runtime]
+import numpy as np
+import onnxruntime as rt
+
+
+class Classifier:
+    def __init__(self, model_path: str):
+        self.session = rt.InferenceSession(model_path)
+
+    def classify(self, values: list):
+        input_name = self.session.get_inputs()[0].name
+        prediction = self.session.run(None, {input_name: values})
+
+        return int(np.argmax(prediction))
+\end{lstlisting}

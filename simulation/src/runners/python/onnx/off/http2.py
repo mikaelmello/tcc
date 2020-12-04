@@ -1,47 +1,18 @@
-#!/usr/bin/env python3
-"""
-Very simple HTTP server in python for logging requests
-Usage::
-    ./server.py [<port>]
-"""
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from classifier import Classifier
-import logging
 import json
+import os
 
-classifier = Classifier(
-    "/home/mikael/Projects/tcc/simulation/resources/models/model.onnx"
-)
+classifier = Classifier(os.getenv("MODEL_PATH"))
 
 
-class S(BaseHTTPRequestHandler):
-    def _set_response(self):
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
-
-    def do_GET(self):
-        logging.info(
-            "GET request,\nPath: %s\nHeaders:\n%s\n", str(self.path), str(self.headers)
-        )
-        self._set_response()
-        self.wfile.write("GET request for {}".format(self.path).encode("utf-8"))
-
+class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
-        content_length = int(
-            self.headers["Content-Length"]
-        )  # <--- Gets the size of data
-        post_data = self.rfile.read(content_length)  # <--- Gets the data itself
+        content_length = int(self.headers["Content-Length"])
+        post_data = self.rfile.read(content_length)
 
         inp = json.loads(post_data.decode("utf-8"))["input"]
         res = classifier.classify(inp)
-
-        logging.info(
-            "POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
-            str(self.path),
-            str(self.headers),
-            res,
-        )
 
         self.send_response(200)
         self.send_header("Content-type", "application/json")
@@ -49,17 +20,14 @@ class S(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps({"output": res}).encode("utf-8"))
 
 
-def run(server_class=HTTPServer, handler_class=S, port=8080):
-    logging.basicConfig(level=logging.INFO)
+def run(server_class=HTTPServer, port=8080):
     server_address = ("", port)
-    httpd = server_class(server_address, handler_class)
-    logging.info("Starting httpd...\n")
+    httpd = server_class(server_address, Handler)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
     httpd.server_close()
-    logging.info("Stopping httpd...\n")
 
 
 if __name__ == "__main__":

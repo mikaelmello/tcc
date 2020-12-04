@@ -12,9 +12,9 @@ Pela visão de auxiliar pesquisadores em suas integrações de modelos de ML com
 
 Nesta análise, apenas tecnologias com licenças de código aberto serão consideradas de modo que os pesquisadores tenham livre acesso às recomendações e sejam capazes de manipulá-las em seus projetos, caso seja necessário. Dentre essas, apenas tecnologias disponíveis para uso em programas Java ou Python serão consideradas.
 
-A linguagem Java é amplamente utilizada para a implementação de simuladores de redes ópticas elásticas, como em \cite{costa2016ons}, \cite{ceons2015} e \cite{net2plan}, por isto, a integração de modelos de ML de forma embutida no simulador permite uma integração performática ao excluir-se a necessidade de comunicação com outros serviços ou processos para executar os modelos.
+A linguagem Java é amplamente utilizada para a implementação de simuladores de redes ópticas elásticas, como em \cite{costa2016ons}, \cite{ceons2015} e \cite{net2plan}, por isto, a integração de modelos de ML de forma embutida no simulador permite uma integração de melhor desempenho ao excluir-se a necessidade de comunicação com outros sistemas para executar os modelos.
 
-A linguagem Python é a mais usada e priorizada para desenvolvimento em ML entre trabalhadores da área \cite{developer_nation_q1_2017}. Assim, uma integração de simuladores com um processo ou serviço independente escrito em Python, responsável por executar os modelos, pode estar sob um maior domínio de um pesquisador de ML na área de EONs, apesar do custo de tempo da execução graças ao tempo necessário para comunicação entre os processos ou serviços.
+A linguagem Python é a mais usada e priorizada para desenvolvimento em ML entre trabalhadores da área \cite{developer_nation_q1_2017}. Assim, uma integração de simuladores com um sistema independente escrito em Python, responsável por executar os modelos, pode estar sob um maior domínio de um pesquisador de ML na área de EONs, apesar da sobrecarga no tempo total de execução de modelos, graças ao tempo tomado apenas para comunicação entre os sistemas.
 
 As tecnologias também devem ser fáceis de serem instaladas, configuradas e manipuladas de acordo com as necessidades de cada pesquisador. Para isto, é fundamental que suas \acrshort{API}s sejam bem documentadas e que a instalação exija o mínimo de modificações de configurações da máquina, externas ao simulador.
 
@@ -44,7 +44,7 @@ A biblioteca possui suporte para Python e conta com ampla documentação de dive
 
 A biblioteca, com suporte apenas à Python, possui extensa documentação de modo a melhor auxiliar iniciantes. Pelo seu foco em simplicidade, a biblioteca não possui suporte para uso de GPU em treinos ou execuções de modelos. Para importação e exportação de modelos, a biblioteca conta apenas com serialização nativa de Python por meio da biblioteca \textit{pickle}, não sendo possível importar modelos de outros formatos.
 
-Apesar da facilidade de se desenvolver modelos de ML com \textit{Scikit Learn}, o uso da biblioteca foi descartado pela falta de suporte ao uso de GPU e de importação de modelos pré-treinados salvos em formatos diversos.
+Apesar da facilidade de se desenvolver modelos de ML com \textit{Scikit Learn}, o uso da biblioteca foi descartado pela falta de suporte à importação de modelos pré-treinados salvos em formatos diversos.
 
 \section{TensorFlow}
 
@@ -56,7 +56,7 @@ O uso de TensorFlow Extended está fora do escopo desta pesquisa pelo objetivo d
 
 O suporte para Java está em uma fase de transição, onde a biblioteca antiga está deprecada para uso e a biblioteca nova ainda está em fase experimental. O uso da biblioteca em fase experimental é complexo e não existe quase nenhuma documentação, sendo encontrada até uma recomendação de ler os testes unitários da implementação para aprender como usar certos elementos da \acrshort{API} \cite{tensorflow-unit-test-recommendation}. Por estes motivos, o uso de TensorFlow em Java foi descartado.
 
-O suporte para Python é a base da implementação da biblioteca, logo a biblioteca de Python satisfaz todos os requisitos de nossa análise qualitativa, pelo que mencionado anteriormente nesta seção, sendo considerada para execução de modelos com e sem GPU, utilizando a biblioteca Keras como a \acrshort{API} de alto nível para implementação do programa de simulação.
+O suporte para Python é o principal foco de TensorFlow, de modo que a biblioteca para Python satisfaz todos os requisitos de nossa análise qualitativa: possui ótima documentação; é capaz de importar modelos HDF5 e é possível converter outros modelos para HDF5; possui fácil utilização; entre outros. Logo, será considerada para execução de modelos com e sem GPU, utilizando a biblioteca Keras como a \acrshort{API} de alto nível para implementação do programa de simulação.
 
 \section{Keras}
 
@@ -103,7 +103,7 @@ A biblioteca MXNet \cite{ml_site_mxnet} é uma \textit{framework} de código-abe
 
 Entretanto, o suporte para Java é limitado primeiramente no quesito disponibilidade de bibliotecas. Alguns arquivos binários presentes no pacote possuem licenças incompatíveis com a licença Apache 2, resultado na retirada dos pacotes de Java do repositório Maven. Assim, para utilizar uma versão atualizada da biblioteca é necessário compilar o código-fonte. Além disso, a documentação para Java também é quase vazia, tendo apenas dois tutoriais simples e a publicação da referência da API. Pela dificuldade de instalação e a falta de tutoriais e suporte da comunidade, o uso de MXNet para Java foi descartado.
 
-A versão em Python da biblioteca MXNet é bastante completa, contando com diversos tutoriais para diferentes casos de uso, além de prover uma fácil instalação por meio do gerenciador de pacotes \textit{pip}. Entretanto, em testes iniciais para avaliar a viabilidade de uso da biblioteca, foi descoberto que a biblioteca dispara erros ao tentar executar o modelo usado pelo autor \cite{eon_ml_classifier_2020} para a comparação de desempenho entre as bibliotecas, logo o uso de MXNet para Python também foi descartado.
+A versão em Python da biblioteca MXNet é bastante completa, contando com diversos tutoriais para diferentes casos de uso, além de prover uma fácil instalação por meio do gerenciador de pacotes \textit{pip}. Entretanto, em testes iniciais para avaliar a viabilidade de uso da biblioteca, foi descoberto que a biblioteca dispara erros ao tentar executar o modelo usado pelo autor para a comparação de desempenho entre as bibliotecas. Após não haver sucesso em resolvê-los, o uso de MXNet para Python também foi descartado.
 
 \section{Outras tecnologias}
 
