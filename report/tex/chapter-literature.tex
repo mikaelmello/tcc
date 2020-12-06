@@ -1,13 +1,13 @@
 Pela visão de auxiliar pesquisadores em suas integrações de modelos de ML com simuladores de redes ópticas elásticas, as análises aqui feitas devem buscar o aumento de produtividade do pesquisador. Para isto, as tecnologias de ML analisadas serão avaliadas de forma qualitativa, sendo esta avaliação guiada pelas seguintes questões:
 
 \begin{itemize}
-  \item Há algum custo para usar a tecnologia?
-  \item O código da tecnologia é aberto?
-  \item A tecnologia é ativamente mantida por \textit{maintainers} e/ou pela comunidade?
-  \item O uso da tecnologia é amplamente documentado?
-  \item A instalação e uso da tecnologia é simples?
-  \item A tecnologia permite a execução de modelos pré-treinados?
-  \item A tecnologia permite a execução de modelos pré-treinados com outras tecnologias?
+    \item Há algum custo para usar a tecnologia?
+    \item O código da tecnologia é aberto?
+    \item A tecnologia é ativamente mantida por \textit{maintainers} e/ou pela comunidade?
+    \item O uso da tecnologia é amplamente documentado?
+    \item A instalação e uso da tecnologia é simples?
+    \item A tecnologia permite a execução de modelos pré-treinados?
+    \item A tecnologia permite a execução de modelos pré-treinados com outras tecnologias?
 \end{itemize}
 
 Nesta análise, apenas tecnologias com licenças de código aberto serão consideradas de modo que os pesquisadores tenham livre acesso às recomendações e sejam capazes de manipulá-las em seus projetos, caso seja necessário. Dentre essas, apenas tecnologias disponíveis para uso em programas Java ou Python serão consideradas.
@@ -52,7 +52,7 @@ TensorFlow é uma interface para a expressão de algoritmos de ML e uma implemen
 
 TensorFlow é uma das bibliotecas mais populares na área de ML, sua biblioteca principal possui ampla documentação além de diversos guias e tutoriais desenvolvidos pela comunidade. Está em ativo desenvolvimento e tem o apoio de diversas empresas de tecnologia reconhecidas.
 
-O uso de TensorFlow Extended está fora do escopo desta pesquisa pelo objetivo de integração com a execução de um simulador e não um sistema de larga-escala. TensorFlow Lite será avaliado de forma mais profunda na seção \ref{tensorflow-lite} e TensorFlow.js também está fora do escopo por ser exclusivo para JavaScript. Restando apenas considerar a biblioteca principal, que possui suporte para Python, C, Go e Java.
+O uso de TensorFlow Extended está fora do escopo desta pesquisa pelo objetivo de integração com a execução de um simulador e não um sistema de larga-escala. TensorFlow Lite será avaliado de forma mais profunda na Seção \ref{tensorflow-lite} e TensorFlow.js também está fora do escopo por ser exclusivo para JavaScript. Restando apenas considerar a biblioteca principal, que possui suporte para Python, C, Go e Java.
 
 O suporte para Java está em uma fase de transição, onde a biblioteca antiga está deprecada para uso e a biblioteca nova ainda está em fase experimental. O uso da biblioteca em fase experimental é complexo e não existe quase nenhuma documentação, sendo encontrada até uma recomendação de ler os testes unitários da implementação para aprender como usar certos elementos da \acrshort{API} \cite{tensorflow-unit-test-recommendation}. Por estes motivos, o uso de TensorFlow em Java foi descartado.
 

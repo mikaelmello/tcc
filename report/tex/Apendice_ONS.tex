@@ -7,7 +7,7 @@ A interface Model (\ref{lst:model}) foi criada com o objetivo de representar uma
 
 A interface possui dois parâmetros genéricos, nomeados \texttt{IT} (\textit{InputType}, ou tipo de entrada) e \texttt{OT} (\textit{OutputType}, ou tipo de saída). Estes parâmetros devem representar os tipos de entrada e saída definidos pelo modelo que seria utilizado
 
-A interface possui dois métodos: implementações de \texttt{predict} devem receber como parâmetro uma variável \texttt{ìnput} (entrada) do tipo \texttt{IT} e devem retornar um valor do tipo \texttt{OT}. A definição de \texttt{predict} também indica que a execução do método pode lançar exceções. O método \texttt{getModelFramework} (obter a \textit{framework} do modelo), deve retornar um valor do tipo \texttt{ModelFramework}, explicado na seção \ref{appendix-ons-enums}. A implementação deste método deve apenas retornar o valor correspondente à \textit{framework} utilizada para a execução do modelo.
+A interface possui dois métodos: implementações de \texttt{predict} devem receber como parâmetro uma variável \texttt{ìnput} (entrada) do tipo \texttt{IT} e devem retornar um valor do tipo \texttt{OT}. A definição de \texttt{predict} também indica que a execução do método pode lançar exceções. O método \texttt{getModelFramework} (obter a \textit{framework} do modelo), deve retornar um valor do tipo \texttt{ModelFramework}, explicado na Seção \ref{appendix-ons-enums}. A implementação deste método deve apenas retornar o valor correspondente à \textit{framework} utilizada para a execução do modelo.
 
 \begin{lstlisting}[language=Java, caption=Implementação da interface Model, label={lst:model}]
 package ons.util.ml;
@@ -47,7 +47,7 @@ public enum ModelFramework {
 
 Foram escritas implementações de classes para a execução de modelos de forma nativa, isto é, modelos que são executados pelo programa do ONS.
 
-A classe \texttt{NativeModel}, exibida na listagem \ref{lst:native-model}, implementa a interface \texttt{Model} com as seguintes adições: definição de 4 métodos públicos abstratos nomeados \texttt{load}, responsáveis por carregar o modelo em memória; definição de um método protegido abstrato nomeado \texttt{\_predict}, responsável por executar de fato o modelo; implementação do método público \texttt{predict}, definido pela interface \texttt{Model}, com o objetivo de garantir que o modelo foi carregado antes de executar de fato o modelo por meio do método \texttt{\_predict}.
+A classe \texttt{NativeModel}, exibida na Listagem \ref{lst:native-model}, implementa a interface \texttt{Model} com as seguintes adições: definição de 4 métodos públicos abstratos nomeados \texttt{load}, responsáveis por carregar o modelo em memória; definição de um método protegido abstrato nomeado \texttt{\_predict}, responsável por executar de fato o modelo; implementação do método público \texttt{predict}, definido pela interface \texttt{Model}, com o objetivo de garantir que o modelo foi carregado antes de executar de fato o modelo por meio do método \texttt{\_predict}.
 
 \begin{lstlisting}[language=Java, caption=Implementação da classe abstrata NativeModel, label={lst:native-model}]
 package ons.util.ml;
@@ -84,7 +84,7 @@ public abstract class NativeModel<IT, OT> implements Model<IT, OT> {
 }
 \end{lstlisting}
 
-A listagem \ref{lst:onnx-native-model} exibe a implementação da classe \texttt{OnnxNativeModel}, responsável por implementar os métodos de carregamento de modelos do formato ONNX em memória utilizando a biblioteca ONNX Runtime. A listagem \ref{lst:dl4j-native-model} se refere à implementação da classe \texttt{Dl4jNativeModel}, responsável por implementar os mesmos métodos que a anterior, porém com o apoio da biblioteca Deeplearning4j.
+A Listagem \ref{lst:onnx-native-model} exibe a implementação da classe \texttt{OnnxNativeModel}, responsável por implementar os métodos de carregamento de modelos do formato ONNX em memória utilizando a biblioteca ONNX Runtime. A Listagem \ref{lst:dl4j-native-model} se refere à implementação da classe \texttt{Dl4jNativeModel}, responsável por implementar os mesmos métodos que a anterior, porém com o apoio da biblioteca Deeplearning4j.
 
 \begin{lstlisting}[language=Java, caption=Implementação da classe OnnxNativeModel, label={lst:onnx-native-model}]
 package ons.util.ml;
@@ -175,7 +175,7 @@ public abstract class Dl4jNativeModel<IT, OT> extends NativeModel<IT, OT> {
 }
 \end{lstlisting}
 
-As listagens \ref{lst:dl4j-classifier} e \ref{lst:onnx-classifier} exibem as implementações dos classificadores que utilizam Deeplearning4j e ONNX Runtime respectivamente. Nelas, é possível observar como ambas herdam de suas respectivas classes que herdam de \texttt{NativeModel} e necessitam implementar apenas uma simples função específica do modelo.
+As Listagens \ref{lst:dl4j-classifier} e \ref{lst:onnx-classifier} exibem as implementações dos classificadores que utilizam Deeplearning4j e ONNX Runtime respectivamente. Nelas, é possível observar como ambas herdam de suas respectivas classes que herdam de \texttt{NativeModel} e necessitam implementar apenas uma simples função específica do modelo.
 
 \begin{lstlisting}[language=Java, caption=Implementação da classe Dl4jClassifier, label={lst:dl4j-classifier}]
 package ons.tools;
@@ -222,7 +222,7 @@ public class OnnxClassifier extends OnnxNativeModel<float[][], Number> {
 \section{Modelos remotos}
 \label{appendix-ons-remote-model}
 
-Para permitir a execução de modelos de forma flexível, como elencado na seção \ref{flexible}, a classe \texttt{HttpRemoteModel} (\ref{lst:http-remote-model}) foi implementada. Ela implementa a interface \texttt{Model} de modo que a execução do modelo é realizada por meio de uma requisição HTTP POST: os dados de entrada são serializados em JSON, a requisição é feita, a resposta em JSON é desserializada e retornada para onde a função foi chamada.
+Para permitir a execução de modelos de forma flexível, como elencado na Seção \ref{flexible}, a classe \texttt{HttpRemoteModel} (\ref{lst:http-remote-model}) foi implementada. Ela implementa a interface \texttt{Model} de modo que a execução do modelo é realizada por meio de uma requisição HTTP POST: os dados de entrada são serializados em JSON, a requisição é feita, a resposta em JSON é desserializada e retornada para onde a função foi chamada.
 
 \begin{lstlisting}[language=Java, caption=Implementação da classe Dl4jNativeModel, label={lst:http-remote-model}]
 package ons.util.ml;
@@ -287,7 +287,7 @@ public class HttpRemoteModel<IT, OT> implements Model<IT, OT> {
 \section{Servidor HTTP para servir execuções de modelos}
 \label{appendix-ons-http-server}
 
-Para realizar testes acerca do funcionamento da implementação das classes descritas no apêndice \ref{appendix-ons-remote-model}, um simples servidor HTTP foi implementado, exibido na listagem \ref{lst:http}. Seu papel é reduzido a ouvir por requisições POST, ler e desserializar o corpo da requisição em formato JSON, executar o modelo utilizando o corpo da requisição como entrada, responder a requisição com o resultado do modelo serializado em JSON. O modelo é executado pela biblioteca ONNX Runtime, como pode ser visto na listagem \ref{lst:onnx_http}.
+Para realizar testes acerca do funcionamento da implementação das classes descritas no Apêndice \ref{appendix-ons-remote-model}, um simples servidor HTTP foi implementado, exibido na Listagem \ref{lst:http}. Seu papel é reduzido a ouvir por requisições POST, ler e desserializar o corpo da requisição em formato JSON, executar o modelo utilizando o corpo da requisição como entrada, responder a requisição com o resultado do modelo serializado em JSON. O modelo é executado pela biblioteca ONNX Runtime, como pode ser visto na Listagem \ref{lst:onnx_http}.
 
 \begin{lstlisting}[language=python, caption=Simples servidor HTTP para testes de integração, label={lst:http}]
 from http.server import BaseHTTPRequestHandler, HTTPServer

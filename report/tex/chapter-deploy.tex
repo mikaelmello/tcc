@@ -2,34 +2,34 @@ Este capítulo tem como objetivo apresentar a metodologia da avaliação de dese
 
 \section{Metodologia}
 
-A avaliação de desempenho seguirá a abordagem sistemática para a realização de avaliações de desempenho, proposta por Raj Jain e descrita na seção \ref{performance_analysis_theory}.
+A avaliação de desempenho seguirá a abordagem sistemática para a realização de avaliações de desempenho, proposta por Raj Jain e descrita na Seção \ref{performance_analysis_theory}.
 
 O objetivo desta análise consiste em comparar diversas bibliotecas de aprendizagem de máquina, utilizadas em programas Java e Python, de modo a escolher a melhor alternativa no quesito velocidade na execução de modelos de ML.
 
-O sistema a ser avaliado consiste de um módulo de programação, programado em Python ou Java de acordo com a análise realizada no capítulo \ref{chapter-literature}, que fornece um serviço de execução de modelos pré-treinados e carregados em memória, onde ao receber dados de entrada de um tipo especificado pelo modelo, executa o modelo com a entrada recebida e retorna o resultado da execução do modelo.
+O sistema a ser avaliado consiste de um módulo de programação, programado em Python ou Java de acordo com a análise realizada no Capítulo \ref{chapter-literature}, que fornece um serviço de execução de modelos pré-treinados e carregados em memória, onde ao receber dados de entrada de um tipo especificado pelo modelo, executa o modelo com a entrada recebida e retorna o resultado da execução do modelo.
 
 Nesta análise, erros e falhas durante a execução do serviço não serão consideradas. Em cada execução do serviço, serão registrados o tempo total de execução e o resultado da mesma. As alternativas serão comparadas de acordo com o tempo de execução por chamada, devido ao interesse em diminuir o tempo de execução de modelos. Além disso, os resultados das execuções realizadas por cada alternativa serão comparados entre si para verificar se há perda ou ganho de precisão do modelo, de acordo com o formato em que se encontra serializado e a biblioteca de ML utilizada para a execução.
 
 Assim, diversos parâmetros influenciam o desempenho do sistema:
 
 \begin{itemize}
-  \item Velocidade da CPU da máquina;
-  \item Velocidade e funcionalidades da GPU da máquina, em execuções de modelo que utilizam a GPU na execução;
-  \item Formato de serialização em que o modelo está salvo;
-  \item Biblioteca utilizada para a execução do modelo;
-  \item Uso ou não da GPU para a execução do modelo;
-  \item Número, tamanho e valor dos dados de entrada de uma execução de modelo;
-  \item Número e tamanho dos dados de saída de uma execução de modelo;
-  \item Ambiente de execução, ou \textit{runtime environment} em que o programa é executado.
+    \item Velocidade da CPU da máquina;
+    \item Velocidade e funcionalidades da GPU da máquina, em execuções de modelo que utilizam a GPU na execução;
+    \item Formato de serialização em que o modelo está salvo;
+    \item Biblioteca utilizada para a execução do modelo;
+    \item Uso ou não da GPU para a execução do modelo;
+    \item Número, tamanho e valor dos dados de entrada de uma execução de modelo;
+    \item Número e tamanho dos dados de saída de uma execução de modelo;
+    \item Ambiente de execução, ou \textit{runtime environment} em que o programa é executado.
 \end{itemize}
 
 Dentre estes parâmetros, foram selecionados três fatores:
 
 \begin{itemize}
-  \item Ambiente de execução. Serão executados programas escritos em Python, executados com a \textit{runtime} Python 3.8.5, e em Java, executados com a \textit{runtime} OpenJDK 11.0.7+10.
-  \item Biblioteca utilizada para a execução do modelo. Como avaliado na seção \ref{chapter-literature}, serão consideradas as bibliotecas ONNX Runtime, Tensorflow Lite, TensorFlow, OpenCV e Deeplearning4j.
-  \item Uso de GPU. Haverão experimentos com uso de GPU na execução dos modelos e sem o uso de GPU.
-  \item Formato de serialização em que o modelo está salvo. Onde será utilizado preferencialmente o arquivo original do modelo, em formato HDF5, e outros arquivos convertidos quando necessário, em formatos ONNX e TensorFlow Lite.
+    \item Ambiente de execução. Serão executados programas escritos em Python, executados com a \textit{runtime} Python 3.8.5, e em Java, executados com a \textit{runtime} OpenJDK 11.0.7+10.
+    \item Biblioteca utilizada para a execução do modelo. Como avaliado na Seção \ref{chapter-literature}, serão consideradas as bibliotecas ONNX Runtime, Tensorflow Lite, TensorFlow, OpenCV e Deeplearning4j.
+    \item Uso de GPU. Haverão experimentos com uso de GPU na execução dos modelos e sem o uso de GPU.
+    \item Formato de serialização em que o modelo está salvo. Onde será utilizado preferencialmente o arquivo original do modelo, em formato HDF5, e outros arquivos convertidos quando necessário, em formatos ONNX e TensorFlow Lite.
 \end{itemize}
 
 A medição será a técnica de avaliação de desempenho escolhida pelo fato do autor se especializar em programação. Assim, as diferentes alternativas de sistemas a serem comparadas serão implementadas e instrumentadas na execução da análise de desempenho, sendo cada uma das implementações um programa desenvolvido em Python ou Java.
@@ -38,81 +38,81 @@ Para a simulação, um classificador de estratégias de RSA em EONs, baseado em 
 
 A carga de trabalho é formada por 97301 requisições onde os dados de cada entrada correspondem a estados de rede coletados em execuções do ONS, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}. Esta entrada é representada por um vetor de 27520 valores de ponto flutuante de precisão simples, possuindo um tamanho total de aproximadamente 107,5 kB. Esta carga de trabalho é o mesmo conjunto de dados utilizado para treinamento e validação do modelo usado nesta análise e similar às utilizadas em outras pesquisas do \acrfull{COMNET-UnB}, como em \cite{eon_ml_classifier_2020}. As primeiras 3000 requisições possuem o propósito de \textit{aquecer} os ambientes de execução, isto é, garantir que todo o código a ser executado já está compilado pelo ambiente de execução, que os recursos apropriados já foram alocados, que o lixo de memória inicial da aplicação já foi coletado, entre outros. Portanto, os resultados das primeiras 3000 requisições serão descartados na análise final.
 
-Os experimentos a serem realizados consistem em um desenho fatorial fracionário, onde diversas combinações foram descartadas por incompatibilidade de fatores, como o uso de Deeplearning4j em Python, ou motivos diversos detalhados no capítulo \ref{chapter-literature}. Assim, serão realizadas as seguintes combinações de experimentos:
+Os experimentos a serem realizados consistem em um desenho fatorial fracionário, onde diversas combinações foram descartadas por incompatibilidade de fatores, como o uso de Deeplearning4j em Python, ou motivos diversos detalhados no Capítulo \ref{chapter-literature}. Assim, serão realizadas as seguintes combinações de experimentos:
 
 \begin{itemize}
-  \item Java, Deeplearning4j, sem GPU, modelo original no formato HDF5 (TensorFlow);
-  \item Java, Deeplearning4j, com GPU, modelo original no formato HDF5 (TensorFlow);
-  \item Java, ONNX Runtime, sem GPU, modelo convertido para o formato ONNX;
-  \item Java, ONNX Runtime, com GPU, modelo convertido para o formato ONNX;
-  \item Python, OpenCV, sem GPU, modelo convertido para o formato ONNX;
-  \item Python, Tensorflow Lite, sem GPU, modelo convertido para o formato TFLite;
-  \item Python, Tensorflow, sem GPU, modelo original no formato HDF5 (TensorFlow);
-  \item Python, Tensorflow, com GPU, modelo original no formato HDF5 (TensorFlow);
-  \item Python, ONNX Runtime, sem GPU, modelo convertido para o formato ONNX;
-  \item Python, ONNX Runtime, com GPU, modelo convertido para o formato ONNX.
+    \item Java, Deeplearning4j, sem GPU, modelo original no formato HDF5 (TensorFlow);
+    \item Java, Deeplearning4j, com GPU, modelo original no formato HDF5 (TensorFlow);
+    \item Java, ONNX Runtime, sem GPU, modelo convertido para o formato ONNX;
+    \item Java, ONNX Runtime, com GPU, modelo convertido para o formato ONNX;
+    \item Python, OpenCV, sem GPU, modelo convertido para o formato ONNX;
+    \item Python, Tensorflow Lite, sem GPU, modelo convertido para o formato TFLite;
+    \item Python, Tensorflow, sem GPU, modelo original no formato HDF5 (TensorFlow);
+    \item Python, Tensorflow, com GPU, modelo original no formato HDF5 (TensorFlow);
+    \item Python, ONNX Runtime, sem GPU, modelo convertido para o formato ONNX;
+    \item Python, ONNX Runtime, com GPU, modelo convertido para o formato ONNX.
 \end{itemize}
 
 \section{Ambiente de Execução}
 
 Para a realização das medições, 10 programas foram desenvolvidos considerando todas as combinações descritas anteriormente. Estes programas realizam o mesmo conjunto de tarefas: 1. inicializar o sistema ao carregar o modelo; 2. inicializar procedimentos necessários para a execução da carga de trabalho; 3. carregar a carga de trabalho usada como entrada do modelo; 4. realizar as chamadas de serviço com as entradas carregadas para executar o modelo, registrando o tempo real tomado pela execução e o resultado. Cada programa trata de medir apenas o intervalo de tempo em que a execução do modelo ocorre. A execução de um dos programas foi orquestrada por \textit{scripts} auxiliares feitos em Python, responsáveis por instalar dependências, e executar os programas de simulação.
 
-As simulações foram realizadas em uma máquina com processador Intel Core i3-8100, placa de vídeo GeForce RTX 2060 e memória RAM de 32 GB (2x16GB 3000Mhz DDR4). Trechos e arquivos do código-fonte dos programas de simulação são mostrados no apêndice \ref{Apendice_Simulacao}. O repositório completo pode ser encontrado na URL \url{http://tcc.mikaelmello.com}.
+As simulações foram realizadas em uma máquina com processador Intel Core i3-8100, placa de vídeo GeForce RTX 2060 e memória RAM de 32 GB (2x16GB 3000Mhz DDR4). Trechos e arquivos do código-fonte dos programas de simulação são mostrados no Apêndice \ref{Apendice_Simulacao}. O repositório completo pode ser encontrado na URL \url{http://tcc.mikaelmello.com}.
 
 \section{Resultados}
 
 Devido a outros processos de sistema sendo executados durante a medição, o desempenho das bibliotecas foi ocasionalmente afetado por fatores externos, resultando em picos de tempo de execução ao longo das medições. Para mitigar este fenômeno, cada experimento foi executado com a carga de trabalho 5 vezes. Após as execuções, a métrica final de tempo de execução para cada uma das 94301 entradas foi definida como a mediana dos 5 tempos de execução coletados. A mediana foi escolhida como índice pelo fato de os dados serem quantitativos, o total das execuções não ser de interesse e que a média seria altamente enviesada pela presença destes picos.
 
-Para cada um dos experimentos, foram calculados os dados de média das amostras das execuções, o desvio padrão, o mínimo e o máximo, exibidos na tabela \ref{tab:all}. Devido ao alto número de amostras (94301), é possível calcular a média da população, o tempo de execução da configuração especificada para o modelo definido, com um alto intervalo de confiança. A tabela \ref{tab:ci} exibe o intervalo de confiança de 99.98\% da média da população.
+Para cada um dos experimentos, foram calculados os dados de média das amostras das execuções, o desvio padrão, o mínimo e o máximo, exibidos na Tabela \ref{tab:all}. Devido ao alto número de amostras (94301), é possível calcular a média da população, o tempo de execução da configuração especificada para o modelo definido, com um alto intervalo de confiança. A Tabela \ref{tab:ci} exibe o intervalo de confiança de 99.98\% da média da população.
 
 \begin{table}
-  \centering
-  \begin{tabular}{lllrrrrrr}
-    \toprule
-           &                 &     & média   & desvio padrão & mínimo & máximo \\
-    ling.  & biblioteca      & GPU &         &               &        &        \\
-    \midrule
-    Python & OpenCV          & sem & 1773.14 & 12.42         & 1729   & 1972   \\
-           & TensorFlow      & sem & 2988.96 & 19.54         & 2940   & 3332   \\
-           &                 & com & 2885.55 & 18.72         & 2827   & 3219   \\
-           & TensorFlow Lite & sem & 2083.75 & 12.21         & 2043   & 2218   \\
-           & ONNX Runtime    & sem & 2106.01 & 12.31         & 2060   & 2276   \\
-           &                 & com & 1767.84 & 10.62         & 1729   & 1902   \\
-    Java   & ONNX Runtime    & sem & 2366.02 & 153.21        & 2322   & 23961  \\
-           &                 & com & 2067.64 & 12.67         & 2041   & 2383   \\
-           & Deeplearning4j  & sem & 763.44  & 69.23         & 722    & 11749  \\
-           &                 & com & 1026.51 & 33.67         & 990    & 1629   \\
+    \centering
+    \begin{tabular}{lllrrrrrr}
+        \toprule
+               &                 &     & média   & desvio padrão & mínimo & máximo \\
+        ling.  & biblioteca      & GPU &         &               &        &        \\
+        \midrule
+        Python & OpenCV          & sem & 1773.14 & 12.42         & 1729   & 1972   \\
+               & TensorFlow      & sem & 2988.96 & 19.54         & 2940   & 3332   \\
+               &                 & com & 2885.55 & 18.72         & 2827   & 3219   \\
+               & TensorFlow Lite & sem & 2083.75 & 12.21         & 2043   & 2218   \\
+               & ONNX Runtime    & sem & 2106.01 & 12.31         & 2060   & 2276   \\
+               &                 & com & 1767.84 & 10.62         & 1729   & 1902   \\
+        Java   & ONNX Runtime    & sem & 2366.02 & 153.21        & 2322   & 23961  \\
+               &                 & com & 2067.64 & 12.67         & 2041   & 2383   \\
+               & Deeplearning4j  & sem & 763.44  & 69.23         & 722    & 11749  \\
+               &                 & com & 1026.51 & 33.67         & 990    & 1629   \\
 
-    \bottomrule
-  \end{tabular}
-  \caption{Estatísticas descritivas acerca da amostra do tempo de execução (microssegundos) do modelo para cada um dos experimentos.}
-  \label{tab:all}
+        \bottomrule
+    \end{tabular}
+    \caption{Estatísticas descritivas acerca da amostra do tempo de execução (microssegundos) do modelo para cada um dos experimentos.}
+    \label{tab:all}
 \end{table}
 
 \begin{table}
-  \centering
-  \begin{tabular}{llll}
-    \toprule
-    ling.  & biblioteca      & GPU & intervalo de confiança \\
-    \midrule
-    Python & OpenCV          & sem & (1772.99, 1773.29)     \\
-           & TensorFlow      & sem & (2988.72, 2989.20)     \\
-           &                 & com & (2885.32, 2885.78)     \\
-           & TensorFlow Lite & sem & (2083.60, 2083.90)     \\
-           & ONNX Runtime    & sem & (2105.86, 2106.16)     \\
-           &                 & com & (1767.71, 1767.97)     \\
-    Java   & ONNX Runtime    & sem & (2364.16, 2367.88)     \\
-           &                 & com & (2067.49, 2067.79)     \\
-           & Deeplearning4j  & sem & (762.60, 764.28)       \\
-           &                 & com & (1026.10, 1026.92)     \\
+    \centering
+    \begin{tabular}{llll}
+        \toprule
+        ling.  & biblioteca      & GPU & intervalo de confiança \\
+        \midrule
+        Python & OpenCV          & sem & (1772.99, 1773.29)     \\
+               & TensorFlow      & sem & (2988.72, 2989.20)     \\
+               &                 & com & (2885.32, 2885.78)     \\
+               & TensorFlow Lite & sem & (2083.60, 2083.90)     \\
+               & ONNX Runtime    & sem & (2105.86, 2106.16)     \\
+               &                 & com & (1767.71, 1767.97)     \\
+        Java   & ONNX Runtime    & sem & (2364.16, 2367.88)     \\
+               &                 & com & (2067.49, 2067.79)     \\
+               & Deeplearning4j  & sem & (762.60, 764.28)       \\
+               &                 & com & (1026.10, 1026.92)     \\
 
-    \bottomrule
-  \end{tabular}
-  \caption{Intervalo de confiança de 99.98\% para a média da população do tempo de execução (microssegundos) do modelo para cada um dos experimentos.}
-  \label{tab:ci}
+        \bottomrule
+    \end{tabular}
+    \caption{Intervalo de confiança de 99.98\% para a média da população do tempo de execução (microssegundos) do modelo para cada um dos experimentos.}
+    \label{tab:ci}
 \end{table}
 
-De acordo com os dados presentes na tabela \ref{tab:ci}, é possível afirmar que o desempenho da biblioteca Deeplearning4j sem GPU apresenta o melhor desempenho com o modelo utilizado, seguido por sua alternativa que utiliza a GPU na execução dos modelos, em média aproximadamente 34\% mais lenta.
+De acordo com os dados presentes na Tabela \ref{tab:ci}, é possível afirmar que o desempenho da biblioteca Deeplearning4j sem GPU apresenta o melhor desempenho com o modelo utilizado, seguido por sua alternativa que utiliza a GPU na execução dos modelos, em média aproximadamente 34\% mais lenta.
 
 Após Deeplearning4j, as duas combinações com melhor desempenho correspondem à ONNX Runtime executada em Python com o uso de GPU, seguida por OpenCV executada em Python sem o uso de GPU. Nesta comparação, apesar da biblioteca ONNX Runtime apresentar um melhor desempenho em média, a diferença entre o intervalo de confiança das duas alternativas é de apenas 5 microssegundos, uma quantidade de tempo negligenciável ao considerar o tempo total de execução e o contexto de simuladores de EONs em que o modelo está inserido.
 
@@ -122,7 +122,7 @@ A execução de ONNX Runtime em Java sem GPU é aproximadamente 260 microssegund
 
 A biblioteca TensorFlow apresenta o pior desempenho, sendo quase quatro vezes mais lenta sem o uso de GPU, ao ser comparada com Deeplearning4j. Este resultado demonstra o fato da biblioteca \textit{core} de TensorFlow não ser otimizada para execução de modelos, sendo esta tarefa delegada para outros produtos da organização TensorFlow, como TensorFlow Lite que obteve um desempenho significativamente melhor.
 
-Além disso, é possível observar que a ONNX Runtime possui melhor desempenho geral em Python ao ser comparada com Java. Uma hipótese plausível diz respeito à maior popularidade da biblioteca para Python, o que resulta em maiores esforços de engenharia e consequentemente melhores desempenhos. A priorização de suporte à Python não é um caso isolado, como observado no capítulo \ref{chapter-literature}, onde bibliotecas como TensorFlow e OpenCV, cujas bibliotecas desenvolvidas para uso em Java possuem grandes limitações ao serem comparadas com suas alternativas para Python.
+Além disso, é possível observar que a ONNX Runtime possui melhor desempenho geral em Python ao ser comparada com Java. Uma hipótese plausível diz respeito à maior popularidade da biblioteca para Python, o que resulta em maiores esforços de engenharia e consequentemente melhores desempenhos. A priorização de suporte à Python não é um caso isolado, como observado no Capítulo \ref{chapter-literature}, onde bibliotecas como TensorFlow e OpenCV, cujas bibliotecas desenvolvidas para uso em Java possuem grandes limitações ao serem comparadas com suas alternativas para Python.
 
 Não é possível realizar análises conclusivas acerca dos benefícios de uso ou não da GPU para execução de modelos.
 
