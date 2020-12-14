@@ -13,8 +13,11 @@
 \usepackage{xcolor}
 \usepackage{ifthen}
 \usepackage{booktabs}
-
+\usepackage{siunitx}
 \usepackage{listings}
+
+\sisetup{math-micro=\text{µ},text-micro=µ}
+
 \lstset{
   basicstyle=\ttfamily,
   columns=fullflexible,
@@ -53,6 +56,7 @@
 % Texto
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}%
+
 \capitulo{chapter-introduction}{Introdução}%
 \capitulo{chapter-theory}{Fundamentação Teórica}%
 \capitulo{chapter-literature}{Análise de Bibliotecas}

@@ -63,29 +63,29 @@ As simulações foram realizadas em uma máquina com processador Intel Core i3-8
 
 Devido a outros processos de sistema sendo executados durante a medição, o desempenho das bibliotecas foi ocasionalmente afetado por fatores externos, resultando em picos de tempo de execução ao longo das medições. Para mitigar este fenômeno, cada experimento foi executado com a carga de trabalho 5 vezes. Após as execuções, a métrica final de tempo de execução para cada uma das 94301 entradas foi definida como a mediana dos 5 tempos de execução coletados. A mediana foi escolhida como índice pelo fato de os dados serem quantitativos, o total das execuções não ser de interesse e que a média seria altamente enviesada pela presença destes picos.
 
-Para cada um dos experimentos, foram calculados os dados de média das amostras das execuções, o desvio padrão, o mínimo e o máximo, exibidos na Tabela \ref{tab:all}. Devido ao alto número de amostras (94301), é possível calcular a média da população, o tempo de execução da configuração especificada para o modelo definido, com um alto intervalo de confiança. A Tabela \ref{tab:ci} exibe o intervalo de confiança de 99.98\% da média da população.
+Para cada um dos experimentos, foram calculados os dados de média das amostras das execuções, o desvio padrão, o mínimo e o máximo, exibidos na Tabela \ref{tab:all}. Devido ao alto número de amostras (94301), é possível estimar a média populacional com um alto intervalo de confiança. A Tabela \ref{tab:ci} exibe a estimativa da média populacional com um intervalo de confiança de 99.98\%.
 
 \begin{table}
     \centering
     \begin{tabular}{lllrrrrrr}
         \toprule
-               &                 &     & média   & desvio padrão & mínimo & máximo \\
-        ling.  & biblioteca      & GPU &         &               &        &        \\
+               &                 &     & média         & desvio padrão & mínimo        & máximo        \\
+        ling.  & biblioteca      & GPU & (\si\micro s) & (\si\micro s) & (\si\micro s) & (\si\micro s) \\
         \midrule
-        Python & OpenCV          & sem & 1773.14 & 12.42         & 1729   & 1972   \\
-               & TensorFlow      & sem & 2988.96 & 19.54         & 2940   & 3332   \\
-               &                 & com & 2885.55 & 18.72         & 2827   & 3219   \\
-               & TensorFlow Lite & sem & 2083.75 & 12.21         & 2043   & 2218   \\
-               & ONNX Runtime    & sem & 2106.01 & 12.31         & 2060   & 2276   \\
-               &                 & com & 1767.84 & 10.62         & 1729   & 1902   \\
-        Java   & ONNX Runtime    & sem & 2366.02 & 153.21        & 2322   & 23961  \\
-               &                 & com & 2067.64 & 12.67         & 2041   & 2383   \\
-               & Deeplearning4j  & sem & 763.44  & 69.23         & 722    & 11749  \\
-               &                 & com & 1026.51 & 33.67         & 990    & 1629   \\
+        Python & OpenCV          & sem & 1773.14       & 12.42         & 1729          & 1972          \\
+               & TensorFlow      & sem & 2988.96       & 19.54         & 2940          & 3332          \\
+               &                 & com & 2885.55       & 18.72         & 2827          & 3219          \\
+               & TensorFlow Lite & sem & 2083.75       & 12.21         & 2043          & 2218          \\
+               & ONNX Runtime    & sem & 2106.01       & 12.31         & 2060          & 2276          \\
+               &                 & com & 1767.84       & 10.62         & 1729          & 1902          \\
+        Java   & ONNX Runtime    & sem & 2366.02       & 153.21        & 2322          & 23961         \\
+               &                 & com & 2067.64       & 12.67         & 2041          & 2383          \\
+               & Deeplearning4j  & sem & 763.44        & 69.23         & 722           & 11749         \\
+               &                 & com & 1026.51       & 33.67         & 990           & 1629          \\
 
         \bottomrule
     \end{tabular}
-    \caption{Estatísticas descritivas acerca da amostra do tempo de execução (microssegundos) do modelo para cada um dos experimentos.}
+    \caption{Estatísticas descritivas acerca da amostra do tempo de execução do modelo para cada um dos experimentos.}
     \label{tab:all}
 \end{table}
 
@@ -93,22 +93,22 @@ Para cada um dos experimentos, foram calculados os dados de média das amostras 
     \centering
     \begin{tabular}{llll}
         \toprule
-        ling.  & biblioteca      & GPU & intervalo de confiança \\
+        ling.  & biblioteca      & GPU & intervalo de confiança (\si\micro s) \\
         \midrule
-        Python & OpenCV          & sem & (1772.99, 1773.29)     \\
-               & TensorFlow      & sem & (2988.72, 2989.20)     \\
-               &                 & com & (2885.32, 2885.78)     \\
-               & TensorFlow Lite & sem & (2083.60, 2083.90)     \\
-               & ONNX Runtime    & sem & (2105.86, 2106.16)     \\
-               &                 & com & (1767.71, 1767.97)     \\
-        Java   & ONNX Runtime    & sem & (2364.16, 2367.88)     \\
-               &                 & com & (2067.49, 2067.79)     \\
-               & Deeplearning4j  & sem & (762.60, 764.28)       \\
-               &                 & com & (1026.10, 1026.92)     \\
+        Python & OpenCV          & sem & (1772.99, 1773.29)                   \\
+               & TensorFlow      & sem & (2988.72, 2989.20)                   \\
+               &                 & com & (2885.32, 2885.78)                   \\
+               & TensorFlow Lite & sem & (2083.60, 2083.90)                   \\
+               & ONNX Runtime    & sem & (2105.86, 2106.16)                   \\
+               &                 & com & (1767.71, 1767.97)                   \\
+        Java   & ONNX Runtime    & sem & (2364.16, 2367.88)                   \\
+               &                 & com & (2067.49, 2067.79)                   \\
+               & Deeplearning4j  & sem & \textbf{(762.60, 764.28)}            \\
+               &                 & com & (1026.10, 1026.92)                   \\
 
         \bottomrule
     \end{tabular}
-    \caption{Intervalo de confiança de 99.98\% para a média da população do tempo de execução (microssegundos) do modelo para cada um dos experimentos.}
+    \caption{Estimativa da média populacional, o tempo de execução do modelo, com 99.98\% de confiança.}
     \label{tab:ci}
 \end{table}
 
