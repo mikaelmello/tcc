@@ -20,6 +20,32 @@ As tecnologias também devem ser fáceis de serem instaladas, configuradas e man
 
 Por fim, é ideal que a análise considere a flexibilidade das bibliotecas à respeito dos diversos tipos de modelos de \textit{machine learning}, uma vez que pesquisas sobre o uso de ML em EONs são diversas e podem utilizar diferentes técnicas \cite{eon_ml_survey_2020}.
 
+O resultado da análise detalhada nas próximas seções pode ser observado de forma resumida na tabela \ref{tab:literature}
+
+
+\begin{table}
+    \centering
+    \begin{tabular}{lcccc}
+        \toprule
+                        & Python &     & Java &     \\
+        Biblioteca      & GPU    & CPU & GPU  & CPU \\
+        \midrule
+        OpenCV          & -      & X   & -    & -   \\
+        PyTorch         & -      & -   & -    & -   \\
+        Scikit Learn    & -      & -   & -    & -   \\
+        TensorFlow      & X      & X   & -    & -   \\
+        TensorFlow Lite & -      & X   & -    & -   \\
+        ONNX Runtime    & X      & X   & X    & X   \\
+        Deeplearning4j  & -      & -   & X    & X   \\
+        MXNet           & -      & -   & -    & -   \\
+        Caffe2          & -      & -   & -    & -   \\
+        Paddle Lite     & -      & -   & -    & -   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Bibliotecas de ML e seus respectivos casos de uso selecionados para avaliação quantitativa.}
+    \label{tab:literature}
+\end{table}
+
 \section{OpenCV}
 
 OpenCV (Open Source Computer Vision Library) é uma biblioteca de código aberto voltada para visão computacional e aprendizagem de máquina, construída para fornecer uma infraestrutura comum para aplicações de visão computacional e acelerar o uso de percepção de máquina em produtos comerciais \cite{ml_site_opencv}.
