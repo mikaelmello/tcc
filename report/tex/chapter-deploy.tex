@@ -19,6 +19,7 @@ Assim, diversos parâmetros influenciam o desempenho do sistema:
     \item Biblioteca utilizada para a execução do modelo;
     \item Uso ou não da GPU para a execução do modelo;
     \item Número, tamanho e valor dos dados de entrada de uma execução de modelo;
+    \item O modelo executado;
     \item Número e tamanho dos dados de saída de uma execução de modelo;
     \item Ambiente de execução, ou \textit{runtime environment} em que o programa é executado.
 \end{itemize}
@@ -34,7 +35,7 @@ Dentre estes parâmetros, foram selecionados três fatores:
 
 A experimentação será a técnica de avaliação de desempenho escolhida. Apesar de o objetivo de estudo deste trabalho se tratar do uso de ML em simuladores, as bibliotecas terão seus respectivos desempenhos medidos em programas isolados. Assim, as diferentes alternativas de sistemas a serem comparadas serão implementadas e instrumentadas na execução da análise de desempenho, sendo cada uma das implementações um programa desenvolvido em Python ou Java.
 
-Para a simulação, um classificador de estratégias de RSA em EONs, baseado em \textit{deep learning}, será utilizado para comparação. Este modelo recebe como entrada o estado de uma EON e tem como saída a classificação da estratégia RSA em utilização, de acordo com o estado. O modelo possui como saída um inteiro no intervalo $[0, 2]$, uma classificação da estratégia de alocação identificada a partir do estado como ruim (0), média (1) ou boa (2).
+Para a experimentação, será utilizado um modelo representativo de pesquisas existentes acerca do uso de ML em EONs, desenvolvido pelo \acrfull{COMNET-UnB}. Neste trabalho, o modelo utilizado se trata de um classificador de estratégias de RSA em EONs, baseado em \textit{deep learning}. Este modelo recebe como entrada o estado de uma EON e tem como saída a classificação da estratégia RSA em utilização, de acordo com o estado. O modelo possui como saída um inteiro no intervalo $[0, 2]$, uma classificação da estratégia de alocação identificada a partir do estado como ruim (0), média (1) ou boa (2).
 
 A carga de trabalho é formada por 97301 requisições onde os dados de cada entrada correspondem a estados de rede coletados em execuções do ONS, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}. Esta entrada é representada por um vetor de 27520 valores de ponto flutuante de precisão simples, possuindo um tamanho total de aproximadamente 107,5 kB. Esta carga de trabalho é o mesmo conjunto de dados utilizado para treinamento e validação do modelo usado nesta análise e similar às utilizadas em outras pesquisas do \acrfull{COMNET-UnB}, como em \cite{eon_ml_classifier_2020}. As primeiras 3000 requisições possuem o propósito de \textit{aquecer} os ambientes de execução, isto é, garantir que todo o código a ser executado já está compilado pelo ambiente de execução, que os recursos apropriados já foram alocados, que o lixo de memória inicial da aplicação já foi coletado, entre outros. Portanto, os resultados das primeiras 3000 requisições serão descartados na análise final.
 
