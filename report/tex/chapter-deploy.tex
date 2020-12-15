@@ -32,7 +32,7 @@ Dentre estes parâmetros, foram selecionados três fatores:
     \item Formato de serialização em que o modelo está salvo. Onde será utilizado preferencialmente o arquivo original do modelo, em formato HDF5, e outros arquivos convertidos quando necessário, em formatos ONNX e TensorFlow Lite.
 \end{itemize}
 
-A medição será a técnica de avaliação de desempenho escolhida pelo fato do autor se especializar em programação. Assim, as diferentes alternativas de sistemas a serem comparadas serão implementadas e instrumentadas na execução da análise de desempenho, sendo cada uma das implementações um programa desenvolvido em Python ou Java.
+A experimentação será a técnica de avaliação de desempenho escolhida. Apesar de o objetivo de estudo deste trabalho se tratar do uso de ML em simuladores, as bibliotecas terão seus respectivos desempenhos medidos em programas isolados. Assim, as diferentes alternativas de sistemas a serem comparadas serão implementadas e instrumentadas na execução da análise de desempenho, sendo cada uma das implementações um programa desenvolvido em Python ou Java.
 
 Para a simulação, um classificador de estratégias de RSA em EONs, baseado em \textit{deep learning}, será utilizado para comparação. Este modelo recebe como entrada o estado de uma EON e tem como saída a classificação da estratégia RSA em utilização, de acordo com o estado. O modelo possui como saída um inteiro no intervalo $[0, 2]$, uma classificação da estratégia de alocação identificada a partir do estado como ruim (0), média (1) ou boa (2).
 
