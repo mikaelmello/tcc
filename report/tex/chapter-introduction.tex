@@ -30,18 +30,18 @@ Como o crescimento do uso de ML em pesquisas no campo de EONs é recente, simula
 \section{Problema}
 \label{intro-problem}
 
-Devido ao recente crescimento do uso de ML em pesquisas no campo de EONs, simuladores de redes ópticas elásticas disponíveis na literatura ainda não possuem suporte nativo à execução de modelos de ML para uso durante as simulações. Assim, pesquisas que envolvem o uso de ML para a solução de problemas como RSA não possuem um \textit{framework} definido para analisar o desempenho de seus algoritmos ou soluções.
+Devido ao recente crescimento do uso de ML em pesquisas no campo de EONs, simuladores de redes ópticas elásticas disponíveis na literatura ainda não possuem suporte nativo à execução de modelos de ML para uso durante as simulações. Assim, pesquisas que envolvem o uso de ML para a solução de problemas como RSA não possuem um \textit{framework} definido para analisar o desempenho de seus algoritmos ou soluções, sendo necessárioas soluções \textit{ad-hoc} para a análise de resultados.
 
 \section{Objetivos}
 \label{intro-goals}
 
-O objetivo geral deste trabalho é a análise das bibliotecas de ML disponíveis na literatura, com foco na capacidade de execução de modelos de ML pré-treinados em simulações de EONs executadas por simuladores conhecidos na literatura, como o ONS \cite{costa2016ons}. Além disso, o trabalho visa realizar contribuições ao \acrfull{ONS} por meio de implementações que adicionam o suporte de integração de modelos de ML com simulações de EONs.
+O objetivo geral deste trabalho é possibilitar que pesquisas que envolvem ML em EONs usem simuladores de EONs para a análise, validação e comparação de resultados de modelos desenvolvidos, dado que um dos objetivos de simuladores é fornecer uma \textit{framework} comum para a realização destas atividades.
 
-Estes objetivos gerais serão atingidos por meio dos seguintes objetivos específicos:
+Este objetivo geral será atingido por meio dos seguintes objetivos específicos:
 
 \begin{itemize}
-  \item Estudar as bibliotecas existentes na literatura capazes de executar modelos de ML;
-  \item Selecionar bibliotecas apropriadas para o caso de uso de integração com simuladores de EONs;
+  \item Estudar as bibliotecas de código existentes na literatura capazes de executar modelos de ML;
+  \item Analisar qualitativamente bibliotecas e realizar uma seleção contendo escolhas apropriadas para o caso de uso de integração com simuladores de EONs;
   \item Avaliar de forma quantitativa o desempenho das bibliotecas com métricas e parâmetros pré-definidos;
   \item Analisar os resultados das avaliações e elencar as bibliotecas recomendadas para diferentes casos de uso;
   \item Realizar implementações de integração de ML com o ONS como prova de conceito e contribuição para a comunidade acadêmica.
