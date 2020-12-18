@@ -1,6 +1,6 @@
 Este capítulo apresenta conceitos básicos fundamentais para o melhor entendimento do trabalho. Na Seção \ref{ft_eon} são introduzidos breves conceitos acerca de simulações de EONs e a magnitude de trabalho normalmente envolvida. Na Seção \ref{ml} são introduzidos conceitos fundamentais de aprendizagem de máquina e uma breve descrição de suas principais categorias. Por fim, na Seção \ref{performance_analysis_theory} é apresentada a metodologia de avaliação de desempenho utilizada neste trabalho.
 
-\section{Simulações de EONs}%
+\section{Usos de Simulações de EONs}%
 \label{ft_eon}
 
 A instalação e gerenciamento de redes ópticas elásticas envolve o uso de dispositivos óticos e infraestruturas de comunicação normalmente caros. Além disso, a maioria dos equipamentos utilizados são protegidos por leis de propriedade intelectual e não disponibilizam meios para modificações na programação de seu funcionamento.
@@ -11,7 +11,11 @@ Para auxiliar pesquisadores com ferramentas que agilizam suas pesquisas, diverso
 
 Dentre os diferentes simuladores de EONs existem vastas diferenças de arquitetura, funcionalidades e portabilidade. Entretanto, todas seguem um mesmo fluxo básico: dado uma requisição e o estado atual da rede, um algoritmo de alocação é executado para que seja decidido se a requisição será aceita ou não, e caso aceita quais recursos lhe serão alocados.
 
-Em uma simulação executada pelo \acrfull{ONS}, é comum que o número de requisições processadas chegue até a magnitude de centenas de milhares. Em \cite{leia2019}, Leia et al. utilizam simulações que geram $10^5$ eventos por execução em um estudo que propõe um novo algoritmo RSA. Costa et al. também utilizam simulações que geram $10^5$ eventos por execução em \cite{rmlsaacosta2020}, onde propõem um novo algoritmo RMLSA.
+Em pesquisas que utilizam o ONS para a realização das simulações, é comum que apenas os resultados finais de um relatório envolvam a execução de dezenas de simulações, possivelmente cem ou mais.
+
+Em uma simulação executada pelo \acrfull{ONS}, é comum que o número de requisições processadas chegue até a magnitude de centenas de milhares, podendo chegar a milhões. Em \cite{leia2019}, Leia et al. utilizam simulações que geram $10^5$ eventos por execução em um estudo que propõe um novo algoritmo RSA. Costa et al. também utilizam simulações que geram $10^5$ eventos por execução em \cite{rmlsaacosta2020}, onde propõem um novo algoritmo RMLSA.
+
+Assim, a execução de simulações para a elaboração dos resultados finais de um trabalho pode envolver um total de execuções perto da magnitude de $10^8$. Além disso, um processo de pesquisa envolve múltiplas iterações na etapa de desenvolvimento, acarretando em constantes repetições de diversas simulações.
 
 Devido a esta alta quantidade de eventos processados em simulações, é importante que algoritmos usados para processar estes eventos sejam eficientes. Por isto, ao buscar adicionar suporte de execução de modelos de aprendizagem de máquina em simuladores, é importante considerar o desempenho das tecnologias usadas de modo a não se tornarem um gargalo no desempenho geral de simulações.
 

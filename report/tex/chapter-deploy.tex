@@ -4,13 +4,15 @@ Este capítulo tem como objetivo apresentar a metodologia da avaliação de dese
 
 A avaliação de desempenho seguirá a abordagem sistemática para a realização de avaliações de desempenho, proposta por Raj Jain e descrita na Seção \ref{performance_analysis_theory}.
 
-O objetivo desta análise consiste em comparar diversas bibliotecas de aprendizagem de máquina, utilizadas em programas Java e Python, de modo a escolher a melhor alternativa no quesito velocidade na execução de modelos de ML.
+Em primeiro lugar, o objetivo desta análise consiste em comparar diversas bibliotecas de aprendizagem de máquina, utilizadas em programas Java e Python, de modo a escolher a melhor alternativa no quesito velocidade na execução de modelos de ML.
 
 O sistema a ser avaliado consiste de um módulo de programação, programado em Python ou Java de acordo com a análise realizada no Capítulo \ref{chapter-literature}, que fornece um serviço de execução de modelos pré-treinados e carregados em memória, onde ao receber dados de entrada de um tipo especificado pelo modelo, executa o modelo com a entrada recebida e retorna o resultado da execução do modelo.
 
-Nesta análise, erros e falhas durante a execução do serviço não serão consideradas. Em cada execução do serviço, serão registrados o tempo total de execução e o resultado da mesma. As alternativas serão comparadas de acordo com o tempo de execução por chamada, devido ao interesse em diminuir o tempo de execução de modelos. Além disso, os resultados das execuções realizadas por cada alternativa serão comparados entre si para verificar se há perda ou ganho de precisão do modelo, de acordo com o formato em que se encontra serializado e a biblioteca de ML utilizada para a execução.
+Nesta análise, erros e falhas durante a execução do serviço não serão consideradas. Em cada execução do serviço, serão registrados o tempo total de execução e o resultado da mesma.
 
-Assim, diversos parâmetros influenciam o desempenho do sistema:
+A principal métrica de desempenho será o tempo de execução de um modelo. Este tempo de execução é medido ao consultar o tempo de sistema pré e pós execução, sendo o tempo de execução o módulo da diferença dos resultados. Este método de medição do tempo de execução foi escolhido devido a complexidade de medir tempos de operações na GPU, onde é necessário o uso de instrumentações específicas de cada biblioteca, nem sempre disponíveis como no caso de ONNX Runtime para Java. Além disso, os resultados das execuções realizadas por cada alternativa serão comparados entre si para verificar se há perda ou ganho de precisão do modelo, de acordo com o formato em que se encontra serializado e a biblioteca de ML utilizada para a execução.
+
+Definidos os objetivos, sistema, serviços, resultados e métricas, os parâmetros são listados a seguir:
 
 \begin{itemize}
     \item Velocidade da CPU da máquina;
@@ -39,7 +41,7 @@ Para a experimentação, será utilizado um modelo representativo de pesquisas e
 
 A carga de trabalho é formada por 97301 requisições onde os dados de cada entrada correspondem a estados de rede coletados em execuções do ONS, sendo cada estado representado por uma matriz de 86 linhas e 320 colunas, a representação da topologia USANet com 24 nós e 86 enlaces em que cada enlace contém 320 \textit{slots}. Esta entrada é representada por um vetor de 27520 valores de ponto flutuante de precisão simples, possuindo um tamanho total de aproximadamente 107,5 kB. Esta carga de trabalho é o mesmo conjunto de dados utilizado para treinamento e validação do modelo usado nesta análise e similar às utilizadas em outras pesquisas do \acrfull{COMNET-UnB}, como em \cite{eon_ml_classifier_2020}. As primeiras 3000 requisições possuem o propósito de \textit{aquecer} os ambientes de execução, isto é, garantir que todo o código a ser executado já está compilado pelo ambiente de execução, que os recursos apropriados já foram alocados, que o lixo de memória inicial da aplicação já foi coletado, entre outros. Portanto, os resultados das primeiras 3000 requisições serão descartados na análise final.
 
-Os experimentos a serem realizados consistem em um desenho fatorial fracionário, onde diversas combinações foram descartadas por incompatibilidade de fatores, como o uso de Deeplearning4j em Python, ou motivos diversos detalhados no Capítulo \ref{chapter-literature}. Assim, serão realizadas as seguintes combinações de experimentos:
+Os experimentos a serem realizados consistem em um desenho fatorial fracionário, onde diversas combinações foram descartadas por incompatibilidade de fatores, como o uso de Deeplearning4j em Python, ou motivos diversos detalhados no Capítulo \ref{chapter-literature}. Assim, serão realizadas as seguintes combinações de experimentos, como resumido na tabela \ref{tab:literature}:
 
 \begin{itemize}
     \item Java, Deeplearning4j, sem GPU, modelo original no formato HDF5 (TensorFlow);
@@ -114,6 +116,8 @@ Para cada um dos experimentos, foram calculados os dados de média das amostras 
 \end{table}
 
 De acordo com os dados presentes na Tabela \ref{tab:ci}, é possível afirmar que o desempenho da biblioteca Deeplearning4j sem GPU apresenta o melhor desempenho com o modelo utilizado, seguido por sua alternativa que utiliza a GPU na execução dos modelos, em média aproximadamente 34\% mais lenta.
+
+Como elencado na seção \ref{ft_eon}, o desenvolvimento de uma pesquisa pode exigir o processamento de um grande número de eventos, podendo ser na ordem de $10^9$ eventos em casos extremos porém comumente $10^8$. Assim, considerando que o modelo seja executado em cada processamento de evento, 1 milissegundo a menos no tempo de sua execução representa uma economia de $10^5$ segundos, ou em torno de 28 horas, de tempo total de simulações durante o desenvolvimento de uma pesquisa. Estes números demonstram a importância de escolher bibliotecas com foco em desempenho.
 
 Após Deeplearning4j, as duas combinações com melhor desempenho correspondem à ONNX Runtime executada em Python com o uso de GPU, seguida por OpenCV executada em Python sem o uso de GPU. Nesta comparação, apesar da biblioteca ONNX Runtime apresentar um melhor desempenho em média, a diferença entre o intervalo de confiança das duas alternativas é de apenas 5 microssegundos, uma quantidade de tempo negligenciável ao considerar o tempo total de execução e o contexto de simuladores de EONs em que o modelo está inserido.
 
